@@ -39,7 +39,7 @@ Contents
 --------
 
 *   [1 Guidelines on versioning plug-ins](#Guidelines_on_versioning_plug-ins)
-    *   [1.1 When to change the major segment](#When_to_change_the_major_segment)
+    *   [1.1 When to change the major segment](#when-to-change-the-major-segment)
     *   [1.2 When to change the minor segment](#When_to_change_the_minor_segment)
     *   [1.3 When to change the service segment](#When_to_change_the_service_segment)
     *   [1.4 Overall example](#Overall_example)
