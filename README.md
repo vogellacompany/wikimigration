@@ -3,6 +3,22 @@ Version Numbering
 
 These guidelines have been [revised](/Version_Numbering_Europa_Update "Version Numbering Europa Update") in 2006 for the [Europa Simultaneous Release](/Europa_Simultaneous_Release "Europa Simultaneous Release"), and [revised](/Version_Numbering_Galileo_Update "Version Numbering Galileo Update") again in 2009 for the [Galileo Simultaneous Release](/Galileo_Simultaneous_Release "Galileo Simultaneous Release").
 
+	* 1. [When to change the major segment](#Whentochangethemajorsegment)
+	* 2. [When to change the minor segment](#Whentochangetheminorsegment)
+	* 3. [When to change the service segment](#Whentochangetheservicesegment)
+	* 4. [Overall example](#Overallexample)
+	* 5. [When to change the qualifier segment](#Whentochangethequalifiersegment)
+	* 6. [Plug-ins with no API](#Plug-inswithnoAPI)
+	* 7. [Versioning plug-ins that wrap external libraries](#Versioningplug-insthatwrapexternallibraries)
+	* 8. [How to specify versions when plug-ins re-export other plug-ins](#Howtospecifyversionswhenplug-insre-exportotherplug-ins)
+	* 9. [How to version packages](#Howtoversionpackages)
+	* 10. [Which version to use in Javadoc tags](#WhichversiontouseinJavadoctags)
+	* 11. [To require features or to require bundles](#Torequirefeaturesortorequirebundles)
+		* 11.1. [Require bundles](#Requirebundles)
+		* 11.2. [Require features](#Requirefeatures)
+	* 12. [Feature includes](#Featureincludes)
+	* 13. [Patch features](#Patchfeatures)
+ 
 Contents
 --------
 
