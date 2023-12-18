@@ -2,6 +2,38 @@ Version Numbering
 =================
 
 These guidelines have been [revised](/Version_Numbering_Europa_Update "Version Numbering Europa Update") in 2006 for the [Europa Simultaneous Release](/Europa_Simultaneous_Release "Europa Simultaneous Release"), and [revised](/Version_Numbering_Galileo_Update "Version Numbering Galileo Update") again in 2009 for the [Galileo Simultaneous Release](/Galileo_Simultaneous_Release "Galileo Simultaneous Release").
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Contents](#contents)
+- [Guidelines on versioning plug-ins](#guidelines-on-versioning-plug-ins)
+  - [1. <a name='Whentochangethemajorsegment'></a>When to change the major segment](#1-a-namewhentochangethemajorsegmentawhen-to-change-the-major-segment)
+  - [2. <a name='Whentochangetheminorsegment'></a>When to change the minor segment](#2-a-namewhentochangetheminorsegmentawhen-to-change-the-minor-segment)
+  - [3. <a name='Whentochangetheservicesegment'></a>When to change the service segment](#3-a-namewhentochangetheservicesegmentawhen-to-change-the-service-segment)
+  - [4. <a name='Overallexample'></a>Overall example](#4-a-nameoverallexampleaoverall-example)
+  - [5. <a name='Whentochangethequalifiersegment'></a>When to change the qualifier segment](#5-a-namewhentochangethequalifiersegmentawhen-to-change-the-qualifier-segment)
+  - [6. <a name='Plug-inswithnoAPI'></a>Plug-ins with no API](#6-a-nameplug-inswithnoapiaplug-ins-with-no-api)
+  - [7. <a name='Versioningplug-insthatwrapexternallibraries'></a>Versioning plug-ins that wrap external libraries](#7-a-nameversioningplug-insthatwrapexternallibrariesaversioning-plug-ins-that-wrap-external-libraries)
+- [How to specify plug-in requirements](#how-to-specify-plug-in-requirements)
+  - [8. <a name='Howtospecifyversionswhenplug-insre-exportotherplug-ins'></a>How to specify versions when plug-ins re-export other plug-ins](#8-a-namehowtospecifyversionswhenplug-insre-exportotherplug-insahow-to-specify-versions-when-plug-ins-re-export-other-plug-ins)
+  - [9. <a name='Howtoversionpackages'></a>How to version packages](#9-a-namehowtoversionpackagesahow-to-version-packages)
+  - [10. <a name='WhichversiontouseinJavadoctags'></a>Which version to use in Javadoc tags](#10-a-namewhichversiontouseinjavadoctagsawhich-version-to-use-in-javadoc-tags)
+- [Versioning features](#versioning-features)
+  - [11. <a name='Torequirefeaturesortorequirebundles'></a>To require features or to require bundles](#11-a-nametorequirefeaturesortorequirebundlesato-require-features-or-to-require-bundles)
+    - [11.1. <a name='Requirebundles'></a>Require bundles](#111-a-namerequirebundlesarequire-bundles)
+    - [11.2. <a name='Requirefeatures'></a>Require features](#112-a-namerequirefeaturesarequire-features)
+  - [12. <a name='Featureincludes'></a>Feature includes](#12-a-namefeatureincludesafeature-includes)
+  - [13. <a name='Patchfeatures'></a>Patch features](#13-a-namepatchfeaturesapatch-features)
+- [API Baseline in API Tools](#api-baseline-in-api-tools)
+- [pom.xml Versions](#pomxml-versions)
+- [Further reading](#further-reading)
+- [Eclipse Foundation](#eclipse-foundation)
+- [Legal](#legal)
+- [Useful Links](#useful-links)
+- [Other](#other)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 Contents
 --------
