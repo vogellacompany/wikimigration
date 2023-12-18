@@ -42,7 +42,7 @@ Each segment captures a different intent:
 *   the service segment indicates bug fixes and the change of development stream (the semantics attached to development stream is new to this proposal, see below)
 *   the qualifier segment indicates a particular build
 
-# When to change the major segment
+### When to change the major segment
 
 The major segment number must be increased when a plug-in makes breaking changes to its API. When the major segment is changed the minor and service segments are reset to 0. See [Evolving Java-based APIs](/Evolving_Java-based_APIs "Evolving Java-based APIs") for details on what constitutes a breaking change.
 
