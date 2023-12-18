@@ -5,7 +5,7 @@ import 'package:html2md/html2md.dart' as html2md;
 import 'dart:io';
 
 Future<void> main() async {
-  var wikiPageUrl = 'https://wiki.eclipse.org/Version_Numbering';
+  var wikiPageUrl = 'https://wiki.eclipse.org/JFaceSnippets';
   final imagePageUrl = 'https://wiki.eclipse.org';
 
   try {
@@ -14,6 +14,8 @@ Future<void> main() async {
     if (response.statusCode == 200) {
       final htmlDocument = htmlParser.parse(response.body);
 
+      convertPreTo2CodeBlocks(htmlDocument.body);
+      // extract and load images
       List<htmlDom.Element> images =
           htmlDocument.getElementsByClassName("image");
 
@@ -26,12 +28,40 @@ Future<void> main() async {
         download(imageUrl);
       }
       // Use html2md to convert HTML to markdown
-      final markdownContent =
+      final String markdownContent =
           html2md.convert(htmlDocument.body?.innerHtml ?? '');
 
+      // replace the header understore with hythen
+      RegExp pattern = RegExp(r'\(#(.*?)\)');
+
+      String headerReplaced =
+          markdownContent.replaceAllMapped(pattern, (match) {
+        return match.group(0)!.replaceAll(RegExp(r'[_]'), '-');
+      });
+
+      // // Fix image link
+
+      RegExp imagePattern =
+          RegExp(r'\[\!\[(.*?)\]\((/images/.*?/)([^/]+\.png)\)\]');
+
+      String imagesLinksAdjusted = headerReplaced.replaceAllMapped(
+        imagePattern,
+        (match) {
+          String altText = match.group(1)!; // Alt text inside the first ![...]
+          String fileName = match.group(3)!; // Filename with the extension .jpg
+
+          // Create the modified substring
+          String modifiedSubstring = '[![$altText](/images/$fileName)]';
+
+          return modifiedSubstring;
+        },
+      );
+
+      final filename = 'file.md';
+      var file = await File(filename).writeAsString(imagesLinksAdjusted);
+      // Do something with the file.
       // The variable `markdownContent` now contains the markdown
       // representation of the Wiki page content
-      print(markdownContent);
     } else {
       print(
           'Failed to load the Wiki page. Status code: ${response.statusCode}');
@@ -54,4 +84,45 @@ void download(String URL) {
       fileSave.writeAsBytes(_downloadData);
     });
   });
+}
+
+void convertPreToCodeBlocks(htmlDom.Element? element) {
+  if (element == null) return;
+
+  // Find all <pre> elements
+  final preElements = element.querySelectorAll('pre');
+
+  // Process each <pre> element
+  for (final preElement in preElements) {
+    // Create a new parent element, e.g., <div>
+    final newParentElement = htmlDom.Element.tag('div');
+
+    // Create a new <code> element
+    final codeBlock = htmlDom.Element.tag('code')..text = preElement.text;
+
+    // Add the <code> element within the new parent element
+    newParentElement.children.add(codeBlock);
+
+    // Replace the original <pre> element with the new structure
+    preElement.replaceWith(newParentElement);
+    print(preElement);
+  }
+}
+
+void convertPreTo2CodeBlocks(htmlDom.Element? element) {
+  if (element == null) return;
+
+  // Find all <pre> elements
+  final preElements = element.querySelectorAll('pre');
+
+  // Process each <pre> element
+  for (final preElement in preElements) {
+    // Create a new <code> element
+    final codeBlock = htmlDom.Element.tag('code')..text = preElement.text;
+
+    // Add the <code> element within the original <pre> element
+    preElement.children.add(codeBlock);
+    // preElement.replaceWith(codeBlock);
+    print(preElement);
+  }
 }
