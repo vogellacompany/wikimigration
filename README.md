@@ -1,252 +1,722 @@
-Version Numbering
-=================
+JFaceSnippets
+=============
 
-These guidelines have been [revised](/Version_Numbering_Europa_Update "Version Numbering Europa Update") in 2006 for the [Europa Simultaneous Release](/Europa_Simultaneous_Release "Europa Simultaneous Release"), and [revised](/Version_Numbering_Galileo_Update "Version Numbering Galileo Update") again in 2009 for the [Galileo Simultaneous Release](/Galileo_Simultaneous_Release "Galileo Simultaneous Release").
+JFace-Snippets are small and easy understandable programming examples of how to use the JFace API. To browse the examples, navigate to the [examples GIT repository](https://github.com/eclipse-platform/eclipse.platform.ui/tree/master/examples/org.eclipse.jface.snippets).
+
+Copy Paste
+
+The header section of each snippet is a link to the plain source. You can copy the source and paste it directly on the source folder or package in an eclipse project. The package and the class will be created automatically.  
+\* [Click here for a visual explanation](/JfaceSnippets/Instructions#Copy_Paste "JfaceSnippets/Instructions").
+
+  
 
 Contents
 --------
 
-*   [1 Guidelines on versioning plug-ins](#Guidelines-on-versioning-plug-ins)
-    *   [1.1 When to change the major segment](#when-to-change-the-major-segment)
-    *   [1.2 When to change the minor segment](#When_to_change_the_minor_segment)
-    *   [1.3 When to change the service segment](#When_to_change_the_service_segment)
-    *   [1.4 Overall example](#Overall_example)
-    *   [1.5 When to change the qualifier segment](#When_to_change_the_qualifier_segment)
-    *   [1.6 Plug-ins with no API](#Plug-ins_with_no_API)
-    *   [1.7 Versioning plug-ins that wrap external libraries](#Versioning_plug-ins_that_wrap_external_libraries)
-*   [2 How to specify plug-in requirements](#How_to_specify_plug-in_requirements)
-    *   [2.1 How to specify versions when plug-ins re-export other plug-ins](#How_to_specify_versions_when_plug-ins_re-export_other_plug-ins)
-    *   [2.2 How to version packages](#How_to_version_packages)
-    *   [2.3 Which version to use in Javadoc tags](#Which_version_to_use_in_Javadoc_tags)
-*   [3 Versioning features](#Versioning_features)
-    *   [3.1 To require features or to require bundles](#To_require_features_or_to_require_bundles)
-        *   [3.1.1 Require bundles](#Require_bundles)
-        *   [3.1.2 Require features](#Require_features)
-    *   [3.2 Feature includes](#Feature_includes)
-    *   [3.3 Patch features](#Patch_features)
-*   [4 API Baseline in API Tools](#API_Baseline_in_API_Tools)
-*   [5 pom.xml Versions](#pom.xml_Versions)
-*   [6 Further reading](#Further_reading)
+*   [1 Dialogs](#Dialogs)
+    *   [1.1 Snippet012 - Dialog with Image Buttons](#Snippet012---Dialog-with-Image-Buttons)
+    *   [1.2 Snippet082 - Color Selector](#Snippet082---Color-Selector)
+*   [2 Notification](#Notification)
+    *   [2.1 Snippet081 - Notication API](#Snippet081---Notication-API)
+*   [3 Layout](#Layout)
+    *   [3.1 Snippet013 - Grid Layout Factory](#Snippet013---Grid-Layout-Factory)
+    *   [3.2 Snippet016 - Table Layout](#Snippet016---Table-Layout)
+    *   [3.3 Snippet027 - Tree Layout](#Snippet027---Tree-Layout)
+*   [4 Viewers](#Viewers)
+    *   [4.1 Snippet001 - Table Viewer](#Snippet001---Table-Viewer)
+    *   [4.2 Snippet002 - Tree Viewer](#Snippet002---Tree-Viewer)
+    *   [4.3 Snippet003 - Table Label Provider](#Snippet003---Table-Label-Provider)
+    *   [4.4 Snippet004 - Hide Selection](#Snippet004---Hide-Selection)
+    *   [4.5 Snippet005 - Tree Custom Menu](#Snippet005---Tree-Custom-Menu)
+    *   [4.6 Snippet006 - Table Multi Line Cells](#Snippet006---Table-Multi-Line-Cells)
+    *   [4.7 Snippet007 - Full Selection](#Snippet007---Full-Selection)
+    *   [4.8 Snippet008 - Reveal Element](#Snippet008---Reveal-Element)
+    *   [4.9 Snippet009 - Cell Editors](#Snippet009---Cell-Editors)
+    *   [4.10 Snippet010 - Owner Draw](#Snippet010---Owner-Draw)
+    *   [4.11 Snippet011 - Custom Tooltips](#Snippet011---Custom-Tooltips)
+    *   [4.12 Snippet013 - Table Viewer No Mandatory Label Provider\]](#Snippet013---Table-Viewer-No-Mandatory-Label-Provider.5D)
+    *   [4.13 Snippet014 - Tree Viewer No Mandatory Label Provider\]](#Snippet014---Tree-Viewer-No-Mandatory-Label-Provider.5D)
+    *   [4.14 Snippet015 - Custom Tooltips For Tree](#Snippet015---Custom-Tooltips-For-Tree)
+    *   [4.15 Snippet017 - Table Viewer Hide Show Columns](#Snippet017---Table-Viewer-Hide-Show-Columns)
+    *   [4.16 Snippet019 - Table Viewer Add Remove Columns With Editing](#Snippet019---Table-Viewer-Add-Remove-Columns-With-Editing)
+    *   [4.17 Snippet024 - Table Viewer Explore](#Snippet024---Table-Viewer-Explore)
+    *   [4.18 Snippet025 - Tab Editing](#Snippet025---Tab-Editing)
+    *   [4.19 Snippet026 - Tree Viewer Tab Editing](#Snippet026---Tree-Viewer-Tab-Editing)
+    *   [4.20 Snippet027 - Combo Box Cell Editors](#Snippet027---Combo-Box-Cell-Editors)
+    *   [4.21 Snippet029 - Virtual Table Viewer](#Snippet029---Virtual-Table-Viewer)
+    *   [4.22 Snippet030 - Virtual Lazy Table Viewer](#Snippet030---Virtual-Lazy-Table-Viewer)
+    *   [4.23 Snippet031 - Table Viewer Custom Tooltips Multi Selection\]](#Snippet031---Table-Viewer-Custom-Tooltips-Multi-Selection.5D)
+    *   [4.24 Snippet034 - Cell Editor Per Row](#Snippet034---Cell-Editor-Per-Row)
+    *   [4.25 Snippet035 - Table Cursor Cell Highlighter](#Snippet035---Table-Cursor-Cell-Highlighter)
+    *   [4.26 Snippet036 - Focus Border Cell Highlighter](#Snippet036---Focus-Border-Cell-Highlighter)
+    *   [4.27 Snippet037 - Fancy Custom Tooltips](#Snippet037---Fancy-Custom-Tooltips)
+    *   [4.28 Snippet039 - List Viewer](#Snippet039---List-Viewer)
+    *   [4.29 Snippet040 - Table Viewer Sorting](#Snippet040---Table-Viewer-Sorting)
+    *   [4.30 Snippet 041 - Table Viewer Alternating Colors and Viewer Filters](#Snippet-041---Table-Viewer-Alternating-Colors-and-Viewer-Filters)
+    *   [4.31 Snippet043 - Tree Viewer Keyboard Editing](#Snippet043---Tree-Viewer-Keyboard-Editing)
+    *   [4.32 Snippet044 - Table Viewer Keyboard Editing](#Snippet044---Table-Viewer-Keyboard-Editing)
+    *   [4.33 Snippet045 - Table Viewer Fill From Background Thread](#Snippet045---Table-Viewer-Fill-From-Background-Thread)
+    *   [4.34 Snippet046 - Update Viewer From Background Thread](#Snippet046---Update-Viewer-From-Background-Thread)
+    *   [4.35 Snippet047 - Virtual Lazy Tree Viewer](#Snippet047---Virtual-Lazy-Tree-Viewer)
+    *   [4.36 Snippet048 - Tree Viewer Tab With Checkbox](#Snippet048---Tree-Viewer-Tab-With-Checkbox)
+    *   [4.37 Snippet049 - Styled Cell Label Provider](#Snippet049---Styled-Cell-Label-Provider)
+    *   [4.38 Snippet050 - Delegating Styled Cell Label Provider](#Snippet050---Delegating-Styled-Cell-Label-Provider)
+    *   [4.39 Snippet051 - Table Centered Image](#Snippet051---Table-Centered-Image)
+    *   [4.40 Snippet052 - Double Click Cell Editor](#Snippet052---Double-Click-Cell-Editor)
+    *   [4.41 Snippet053 - Start Editor With Context Menu](#Snippet053---Start-Editor-With-Context-Menu)
+    *   [4.42 Snippet055 - Hide Show Column](#Snippet055---Hide-Show-Column)
+    *   [4.43 Snippet056 - Boolean Cell Editor](#Snippet056---Boolean-Cell-Editor)
+    *   [4.44 Snippet057 - Table Viewer Skip Hidden Cells](#Snippet057---Table-Viewer-Skip-Hidden-Cells)
+    *   [4.45 Snippet058 - Cell Navigation](#Snippet058---Cell-Navigation)
+    *   [4.46 Snippet060 - Text Cell Editor With Content Proposal/Field assists](#Snippet060---Text-Cell-Editor-With-Content-Proposal.2FField-assists)
+    *   [4.47 Snippet061 - Faked Native Cell Editor](#Snippet061---Faked-Native-Cell-Editor)
+    *   [4.48 Snippet062 - Text And Dialog Cell Editor](#Snippet062---Text-And-Dialog-Cell-Editor)
+    *   [4.49 Snippet063 - Combo Viewer](#Snippet063---Combo-Viewer)
+    *   [4.50 Snippet064 - Replacing elements in a TreeViewer with child elements](#Snippet064---Replacing-elements-in-a-TreeViewer-with-child-elements)
+    *   [4.51 Snippet065 - Replacing elements in a TreeViewer without child elements](#Snippet065---Replacing-elements-in-a-TreeViewer-without-child-elements)
+    *   [4.52 Snippet066 - TableViewer with Label Decorator](#Snippet066---TableViewer-with-Label-Decorator)
+*   [5 Window](#Window)
+    *   [5.1 Snippet020 - Customized Control Tooltips](#Snippet020---Customized-Control-Tooltips)
+    *   [5.2 Snippet031 - Table Static Tooltip](#Snippet031---Table-Static-Tooltip)
+*   [6 Wizard](#Wizard)
+    *   [6.1 Snippet047 - Wizard with Long Running Operation from Page](#Snippet047---Wizard-with-Long-Running-Operation-from-Page)
+    *   [6.2 Snippet071 - Wizard with Progress and Cancel](#Snippet071---Wizard-with-Progress-and-Cancel)
+    *   [6.3 Snippet072 Wizard with Progress Subtasks and Cancel](#Snippet072-Wizard-with-Progress-Subtasks-and-Cancel)
+    *   [6.4 Snippet074 Wizard with access to application window](#Snippet074-Wizard-with-access-to-application-window)
 
-Guidelines on versioning plug-ins
----------------------------------
+Dialogs
+-------
 
-This document contains a set of guidelines expressing how to evolve plug-in version numbers in a way that captures the nature of the changes that have been made.
+### [Snippet012 - Dialog with Image Buttons](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet012DialogWithImageButtons.java)
 
-Reminder: In Eclipse, version numbers are composed of four (4) segments: 3 integers and a string respectively named major.minor.service.qualifier.
+*   [Snippet012 - Dialog with Image Buttons](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet012DialogWithImageButtons.java)
 
-Each segment captures a different intent:
+  
+Demonstrates usage of Icons in Buttons of Dialogs
 
-*   the major segment indicates breakage in the API
-*   the minor segment indicates "externally visible" changes
-*   the service segment indicates bug fixes and the change of development stream (the semantics attached to development stream is new to this proposal, see below)
-*   the qualifier segment indicates a particular build
+[![Snippet012DialogWithImageButtons.png](/images/Snippet012DialogWithImageButtons.png)](/File:Snippet012DialogWithImageButtons.png)
 
-### When to change the major segment
+Drop these icons also in the same package
 
-The major segment number must be increased when a plug-in makes breaking changes to its API. When the major segment is changed the minor and service segments are reset to 0. See [Evolving Java-based APIs](/Evolving_Java-based_APIs "Evolving Java-based APIs") for details on what constitutes a breaking change.
+[![Filesave.png](/images/Filesave.png)](/File:Filesave.png)[![Cancel.png](/images/Cancel.png)](/File:Cancel.png)
 
-**Example**: From the version 2.2.7, an incompatible change would lead to 3.0.0. By definition, such changes should not be made when working in a maintenance stream.
+### [Snippet082 - Color Selector](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet082ColorSelectDialog.java)
 
-### When to change the minor segment
+*   [Snippet082 - Color Selector](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet082ColorSelectDialog.java)
 
-The minor segment number must be incremented when a plug-in changes in an "externally visible" way. Examples of externally visible changes include [binary compatible API changes](/Evolving_Java-based_APIs_2 "Evolving Java-based APIs 2"), an updated [BREE](/BREE "BREE") (Bundle-RequiredExecutionEnvironment), significant performance changes, major code rework, adding a new extension point, changing files with a somewhat unclear API status (e.g. changing icons from gif to png), etc. Another way to know when this version number should be changed is by exclusion: it should indicate changes that are neither bug fixes (indicated by the service segment) nor breaking API changes (indicated by the major segment). When the minor segment is changed, the service segment is reset to 0.
+  
+The JFace ColorSelector widget is a convenient composition of button and color selector dialog. The button displays a swatch of the selected color.
 
-**Example**: From the version 2.2.7, a minor change would lead to 2.3.0.
+  
+[![Snippet082ColorSelectDialog.gif](/images/thumb/5/5e/Snippet082ColorSelectDialog.gif/325px-Snippet082ColorSelectDialog.gif)](/File:Snippet082ColorSelectDialog.gif)
 
-API changes in a maintenance branch are not recommended. If they happen, the minor version will not be increased. The usual service segment increase also applies to this case. The PDE API Tools errors have to be suppressed.
+Notification
+------------
 
-### When to change the service segment
+### [Snippet081 - Notication API](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet081NotificationPopup.java)
 
-The service segment number must be incremented whenever there have been changes to a plug-in between releases that are not visible in its API. For example, a bug has been fixed in the code, the plug-in manifest has changed, documentation has changed, compiler settings have changed. In general, if that change happens in a service (a.k.a. maintenance) release, then 1 is added. If it happens for the next official release, 100 has to be added. As a result, the service segment number for official releases normally ends with a zero (0, 100, 200, etc.). If that is not true for whatever reason, then one must not add 100 but instead set the service segment number to the next number that is divisible by 100, so that the normal numbering scheme is restored. This practice makes it easy to manage one line of descent after a release and still guarantee that plug-ins coming in the next release will have a higher version number than ones from maintenance releases (thus enabling the usage of update manager from maintenance releases to the new releases).
+*   [Snippet081 - Notication API](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet081NotificationPopup.java)
 
-**Example**: At the end of the development stream N, the version of the plug-in P is 2.4.0. When P makes its first change in the development stream N+1, then the version should be changed to 2.4.100. If P version 2.4.0 needs to receive a bug fix in the maintenance stream started from N, then its version number will be 2.4.1.
+  
+Demonstrates usage of the non-blocking notification API
 
-### Overall example
+  
+[![Snippet081 Shell1.gif](/images/6/6e/Snippet081_Shell1.gif)](/File:Snippet081_Shell1.gif)
 
-This example shows how the version of a plug-in reacts to changes (indicated in parenthesis) in the context of different development stream. Both the text and the diagram illustrate the same example.
+Layout
+------
 
-First development stream
- \- 1.0.0
+### [Snippet013 - Grid Layout Factory](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet013GridLayoutFactory.java)
 
-Second development stream
- \- 1.0.100 (indicates a bug fix)
- \- 1.1.0 (a new API has been introduced)
- The plug-in ships as 1.1.0
+*   [Snippet013 - Grid Layout Factory](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet013GridLayoutFactory.java)
 
-Third development stream
- \- 1.1.100 (indicates a bug fix)
- \- 2.0.0 (indicates a breaking change)
- The plug-in ships as 2.0.0
+  
+Demonstrates usage of the GridLayoutFactory to enhance readability
 
-Maintenance stream after 1.1.0
- \- 1.1.1
- The plug-in ships as 1.1.1
+[![Snippet013 Shell1.png](/images/Snippet013_Shell1.png)](/File:Snippet013_Shell1.png)[![Snippet013 Shell2.png](/images/Snippet013_Shell2.png)](/File:Snippet013_Shell2.png)[![Snippet013 Shell3.png](/images/Snippet013_Shell3.png)](/File:Snippet013_Shell3.png)
 
-[![Plugin-versioning-fig1.jpg](/images/7/71/Plugin-versioning-fig1.jpg)](/File:Plugin-versioning-fig1.jpg)
+### [Snippet016 - Table Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet016TableLayout.java)
 
-### When to change the qualifier segment
+*   [Snippet016 - Table Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet016TableLayout.java)
 
-Because changing the version number of a plug-in on every commit can be burdensome to the development team, we recommend only applying the previous guidelines once per release cycle. However, since we want to enable the use of the update manager by the development teams, we will use the qualifier segment to indicate changes between builds.
+  
+Demonstrates (dynamic)layout support for TableColumns available as of JFace 3.3
 
-Since Eclipse 3.1, PDE Build can automatically derive the value of the qualifier from the tag associated with the plug-in in the [map file](http://git.eclipse.org/c/platform/eclipse.platform.releng.basebuilder.git/plain/readme.html#createmap) that has been fed as input to the build. This leaves the responsibility to the developer preparing the input for the build to tag their plug-ins with a value that is [lexicographically](http://en.wikipedia.org/wiki/Lexicographical_order) higher than the previous one. To facilitate this, we recommend using the date formatted as vYYYYMMDD (year, month day). If you have multiple builds in a day, you can add "-HHMM" (hour, minute) to ensure it is unique.
+[![Snippet016.png](/images/Snippet016.png)](/File:Snippet016.png)
 
-It is also recommended that you prefix the tag on a maintenance branch with a unique branch identifier to ensure that builds on that branch can be distinguished from builds on the main development branch. For example, a branch for maintenance of the 1.0 release can use a prefix of "R10x_" so that all builds on that branch for the 1.0.x maintenance releases are grouped together. Note that the "x" in "R10x_" is not intended as a variable to be replaced by the current release number. The prefix should remain consistent throughout all maintenance releases within the same branch, because the same version of a plug-in may appear in multiple maintenance releases. For example a plug-in with version 1.0.1.R10x_v20030629 may appear in the 1.0.1 and 1.0.2 releases of a product.
+### [Snippet027 - Tree Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet027TreeLayout.java)
 
-**Example**: The map file for the plug-in P indicates v20050506, and P's version is 4.2.3. The resulting fully qualified version number would be 4.2.3.v20050506. Deriving the qualifier from the build input offers the advantage that if the plug-in code has not changed, no new version will be created and therefore update manager won't download the plug-in again.
+*   [Snippet027 - Tree Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet027TreeLayout.java)
 
-### Plug-ins with no API
+  
+Demonstrates (dynamic)layout support for TreeColumns available as of JFace 3.3
 
-There are certain kinds of plug-ins that have no API, and therefore would never evolve more than their service segment according to the above rules. For these plug-ins, the version number can be evolved in sync with another plug-in they are associated with. Note that since these plug-ins do not contain any API, they are generally only explicitly required by plug-ins they are closely associated with anyway.
+[![Snippet027.png](/images/Snippet027.png)](/File:Snippet027.png)
 
-In particular, a source/test/documentation plug-in that has changes in the current stream should evolve its version number in sync with the plug-in(s) it is providing source/test/documentation for. A fragment with no API should evolve its version number in sync with its host plug-in.
+Viewers
+-------
 
-A branding plug-in should keep its version in sync with its feature.
+### [Snippet001 - Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet001TableViewer.java)
 
-### Versioning plug-ins that wrap external libraries
+*   [Snippet001 - Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet001TableViewer.java)
 
-The version range guidelines above are only effective if the required bundle or feature follows the Eclipse version number evolution guidelines outlined in this document. When specifying a dependency on third party libraries (e.g. those from Orbit), be sure you understand the semantics of that library's version numbers, and specify your version range accordingly. In the absence of any well defined version evolution semantics, you should just specify the version number you require as a lower bound.
+  
+Demonstrates a simply TableViewer with one column. It holds all important classes used for all Table-like JFace-Viewers (_[LabelProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/LabelProvider.html)_,_[IStructuredContentProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/IStructuredContentProvider.html)_)
 
-**Example**: JFace requires a third party library wrapped in bundle com.xyz.widgets, and is compiled against version 3.8.1 of that bundle. It should specify its dependency as follows: Require-Bundle: com.xyz.widgets;bundle-version="3.8.1"
+[![Snippet1.png](/images/Snippet1.png)](/File:Snippet1.png)
 
-How to specify plug-in requirements
------------------------------------
+### [Snippet002 - Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet002TreeViewer.java)
 
-Plug-ins that require other plug-ins must qualify their requirements with a version range since the absence of a version range means that any version can satisfy the dependency. Given that all the changes between the version x.0.0 and the version x+1.0.0 excluded must be compatible (given the previous guidelines); the recommended range includes the minimal required version up-to but not including the next major release.
+*   [Snippet002 - Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet002TreeViewer.java)
 
-**Example**: JFace 3.1.0 should probably express the following requirement on SWT: \[3.1.0, 4.0.0).
+  
+Demonstrates a simply TreeViewer with one column. It describes all important classes used for all Tree-like JFace-Viewers (_[LabelProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/LabelProvider.html)_,_[ITreeContentProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/ITreeContentProvider.html)_)
 
-Also, while setting values for prerequisites, watch for opportunities to widen the set of plug-ins against which a plug-in can work.
+[![Snippet2.png](/images/Snippet2.png)](/File:Snippet2.png)
 
-**Example**: A plug-in using basic functions from the job API, may express a dependency on runtime 3.0.0 ( \[3.0.0, 4.0.0) ) instead of 3.1.0 ( \[3.1.0, 4.0.0) ).
+### [Snippet003 - Table Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet003TableLabelProvider.java)
 
-Also consider [#Versioning plug-ins that wrap external libraries](#Versioning_plug-ins_that_wrap_external_libraries).
+*   [Snippet003 - Table Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet003TableLabelProvider.java)
 
-**Example**: A plug-in requiring org.junit 3.8.2 should declare: Require-Bundle: org.junit;bundle-version="3.8.2"
+  
+Demonstrates tables with more than one column and the usage of _[ITableLabelProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/ITableLabelProvider.html)_
 
-### How to specify versions when plug-ins re-export other plug-ins
+[![Snippet003.png](/images/Snippet003.png)](/File:Snippet003.png)
 
-When a plug-in exports a range of versions for another plug-in, it is promising that some version in that range will be available. Specifically, it provides the guarantee that at least the version specified by the lower bound will be available. Therefore, whenever a plug-in changes the version range of an exported plug-in, it must change its own version number as follows:
+### [Snippet004 - Hide Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet004HideSelection.java)
 
-*   Any change to upper bound: increase service segment
-*   Decrease service segment of lower bound: increase service segment
-*   Decrease major or minor segment of lower bound: increase major segment
-*   Increase lower bound: increase version by the same magnitude
+*   [Snippet004 - Hide Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet004HideSelection.java)
 
-**Example**: JFace 8.4.2 re-exports SWT \[1.1.1,2.0)
+  
+Demonstrates how the selection can be hidden when the user clicks in a table-row/column which doesn't hold any information. The standard behavior of SWT-Table is to leave the selection on the last column. This snippet removes the selection if the user clicks in an area not selectable
 
-*   If the next version of JFace re-exports SWT \[1.1.1,1.5), JFace version must increase to at least 8.4.3.
-*   If the next version of JFace re-exports SWT \[1.1,2.0), JFace version must increase to at least 8.4.3.
-*   If the next version of JFace re-exports SWT \[1.0,2.0), JFace version must increase to at least 9.0.0.
-*   If the next version of JFace re-exports SWT \[1.1.2,2.0), JFace version must increase to at least 8.4.3.
-*   If the next version of JFace re-exports SWT \[1.2,2.0), JFace version must increase to at least 8.5.0.
-*   If the next version of JFace re-exports SWT \[2.0,3.0), JFace version must increase to 9.0.0
+[![Snippet004.png](/images/Snippet004.png)](/File:Snippet004.png)
 
-Exporting a version range that spans multiple major versions of a plug-in is not recommended, because it forces downstream plug-ins to support versions with arbitrary breaking changes between them. Therefore, the most common change to a version range will be increasing the minor or service segment of one of the bounds, or incrementing both bounds up to a range within the next major version.
+### [Snippet005 - Tree Custom Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet005TreeCustomMenu.java)
 
-### How to version packages
+*   [Snippet005 - Tree Custom Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet005TreeCustomMenu.java)
 
-Exported packages being used as service APIs must have a version number. The guidelines to evolve those version numbers are the same as for plug-ins. For plug-ins importing individual packages, you should follow the same guidelines as when requiring a plug-in to specify the version range of packages being imported.
+  
+Demonstrates how to create a different context menu depending on which item in the tree is currently selected this can also be used with a table of course
 
-### Which version to use in Javadoc tags
+[![Snippet005.png](/images/Snippet005.png)](/File:Snippet005.png)
 
-In the Javadoc, @since tags are used to indicate the version of a **plug-in** in which a specific API has been added. Because Javadoc describes API, only the first two segment of the plug-in version number should be used. This represents a change from the previous practice where @since indicated the development stream. In addition to using the plug-in version, we recommend to prefix the version number by the plug-in id. This allows tracking of APIs moving from one plug-in to another (this can happen when a plug-in is split into multiple plug-ins but the package names are kept). **Example**: In the 3.2 development stream, the API of the new plug-in org.eclipse.core.filesystem should be tagged as follows:
+### [Snippet006 - Table Multi Line Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet006TableMultiLineCells.java)
 
-/\*\*
- \* This class is the main entry point for clients of the Eclipse file system API.  This
- \* class has factory methods for obtaining instances of file systems and file
- \* stores, and provides constants for option values and error codes.
- \* 
- \* @noextend This class is not intended to be subclassed by clients.
- \* @noinstantiate This class is not intended to be instantiated by clients.
- \* @since org.eclipse.core.filesystem 1.0
- */
+*   [Snippet006 - Table Multi Line Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet006TableMultiLineCells.java)
 
-Versioning features
--------------------
+  
+Demonstrates first use case for the OwnerDraw-Support added to JFace in 3.3 (available at SWT-Level since 3.2). This example uses the Viewers API in this special case the _OwnerDrawLabelProvider_ to make items with more than one line of text.
 
-Features are a grouping mechanism that supports reasoning in terms of sets of plug-ins. Therefore, features hide the plug-in boundaries of the plug-ins they contain and act as if their API was the set of all the APIs of all the constituting plug-ins. Because of this, the version of a feature must indicate the most significant type of change between all the plug-ins and features it contains:
+[![Snippet006.png](/images/Snippet006.png)](/File:Snippet006.png)
 
-*   Increment the feature's major number if any contained plug-in or feature increases their major number
-*   Otherwise, increment the feature's minor number if any contained plug-in or feature increases their minor number
-*   Otherwise, increment the feature's service number if any contained plug-in or feature increases their service number.
+### [Snippet007 - Full Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet007FullSelection.java)
 
-Note that the magnitude of the change does not need to match between the feature and its plug-ins. If a plug-in increments its service number by two for some reason, it does not mean that the feature must also increase the number by two.
+*   [Snippet007 - Full Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet007FullSelection.java)
 
-A branding plug-in should keep its version in sync with its feature.
+  
+Demonstrates how you can use inline editing in tables with multiple columns that require to use SWT.FULL_SELECTION but hiding the selection from the user.
 
-### To require features or to require bundles
+[![Snippet007.png](/images/Snippet007.png)](/File:Snippet007.png)
 
-A feature can express its external dependencies as required features, required plug-ins, or a combination of the two. How dependencies are expressed has consequences on the install-time behavior of your feature, so it is important to understand the different approaches. These approaches are described below along with a discussion of their effect. It is important to note that since [Ganymede](/Ganymede "Ganymede") (Eclipse 3.4), feature dependencies do not have to express dependencies that are already expressed at the plug-in level. Such duplication or further refinement of dependency information between features and plug-ins may unnecessarily restrict the ability to install the feature. With the classic Eclipse Update Manager that was the default install/update technology prior to Eclipse 3.4, dependency information was required at the feature level because the provisioning technology only reasoned at the level of features.
+### [Snippet008 - Reveal Element](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet008RevealElement.java)
 
-#### Require bundles
+*   [Snippet008 - Reveal Element](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet008RevealElement.java)
 
-If your feature only requires a subset of plug-ins from another feature, you should express your dependencies at the plug-in level. This avoids the brittleness caused by version changes in required features, and allows system integrators to deliver the required plug-ins using different features if desired. Note that feature plug-in dependencies are only needed for plug-ins that are not already required by plug-ins in your feature. In other words, plug-in dependencies at the feature level are for expressing "soft" dependencies on plug-ins that are not strictly required by the plug-ins in your feature, such as documentation.
+  
+Demonstrates how you can scroll a TableViewer to the specific model element using TableViewer#reveal(Object)
 
-Expressing dependencies directly at the plug-in level has the benefit of isolating feature authors from changes that do not impact them, thus resulting in greater reusability of the feature.
+[![Snippet008.png](/images/Snippet008.png)](/File:Snippet008.png)
 
-**Example:**
+### [Snippet009 - Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet009CellEditors.java)
 
- Case 1: Assuming the feature org.eclipse.gef is as follows:
-    requires feature:
-      org.eclipse.platform		3.1.0 match="compatible"
-    contains plugins:
-      org.eclipse.draw2d		3.1.0
-      org.eclipse.gef			3.1.0
- 
- Case 2: It is better to express this as:
-     contains plugins:
-       org.eclipse.draw2d		3.1.0
-       org.eclipse.gef			3.1.0  
-     requires plugins:
-       org.eclipse.core.runtime	3.1.0 match="compatible"
-       org.eclipse.ui.views		3.1.0 match="compatible"
-       org.eclipse.ui.workbench	3.1.0 match="compatible"
-       org.eclipse.jface		3.1.0 match="compatible"
-       org.eclipse.swt			3.1.0 match="compatible"
+*   [Snippet009 - Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet009CellEditors.java)
 
-In case 1, if the version of the org.eclipse.platform feature changes to 4.0.0 (because org.eclipse.core.resources changes its major version number), org.eclipse.gef is required to deliver a new version of its features. In case 2, such changes are transparent to the author of GEF.
+  
+Demonstrates minimal example when trying to add inline editing to tables to get familiar with the various classes needed (3.2 API)
 
-*   **Note:** The example above is for the purpose of illustration only. In practice the "requires" dependencies mentioned above are already expressed at the GEF bundle level, so they do not need to be repeated at the feature level:
-    *   MANIFEST.MF of org.eclipse.draw2d already "requires" org.eclipse.swt
-    *   MANIFEST.MF of org.eclipse.gef already "requires" org.eclipse.core.runtime, org.eclipse.ui.views, org.eclipse.ui.workbench, org.eclipse.jface
+[![Snippet009.png](/images/Snippet009.png)](/File:Snippet009.png)
 
-#### Require features
+### [Snippet010 - Owner Draw](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet010OwnerDraw.java)
 
-Use required features when you want another entire feature to be present when your feature is installed. This typically results in a user-level awareness of the required feature, rather than a hidden implementation detail of your feature. For example, users installing Java EE tools from the [Web Tools Platform](http://www.eclipse.org/webtools/) project also require [Java development tools](/JDT "JDT"). This is not just because their plug-ins depend on plug-ins in JDT, but because users of the Java EE tools really expect the full JDT to be there, including documentation, help content, and possibly source. In this case the dependency should be expressed at the feature level to ensure the entire required feature is installed. Feature-level dependencies are also required if you are targeting a platform using the classic Eclipse Update Manager, which operated purely at the level of feature dependencies.
+*   [Snippet010 - Owner Draw](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet010OwnerDraw.java)
 
-### Feature includes
+  
+Demonstrates usage of the OwnerDraw-Support feature provided by JFace in 3.3(available in SWT since 3.2). This example uses the Viewers API in this special case the _OwnerDrawLabelProvider_.
 
-When a feature includes another feature, it is expressing a tightly bound relation to that other feature. In effect, it is declaring the included feature as a subset of itself. When including another feature, you must always specify in the feature declaration the exact four part version of the feature you are including.
+[![Snippet010.png](/images/Snippet010.png)](/File:Snippet010.png)
 
-### Patch features
+### [Snippet011 - Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet011CustomTooltips.java)
 
-A patch feature is a special kind of feature that updates or replaces some part of an existing feature. A patch feature version should take the same three part identifier as the feature being patched. The qualifier segment is used to distinguish multiple patches to the same feature. As with qualifiers in general, the only hard requirement is that the number increase lexicographically each time a new version is created.
+*   [Snippet011 - Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet011CustomTooltips.java)
 
-API Baseline in API Tools
--------------------------
+  
+Demonstrates usage of custom tooltip support in 3.3 used to provide a tooltip for each cell in TableViewer
 
-The Eclipse [API Tools](/PDE/API_Tools/User_Guide "PDE/API Tools/User Guide") detect some violations of the rules outlined in this document. The API Baseline should always be set to the last released version from the development stream you're working on (or from the N-1 stream, if the current stream has no released version yet).
+[![Snippet011.png](/images/Snippet011.png)](/File:Snippet011.png)
 
-**Examples**:
+### [Snippet013 - Table Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet013TableViewerNoMandatoryLabelProvider.java)\]
 
-*   When developing for 3.6, set the baseline to 3.5, 3.5.1, 3.5.2, as soon as the maintenance releases become available.
-*   When developing for 3.5.1, set the baseline to 3.5.
-*   When developing for 3.5.2, set the baseline to 3.5.1.
-*   When developing for 3.5.2+, set the baseline to 3.5.2.
+*   [Snippet013 - Table Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet013TableViewerNoMandatoryLabelProvider.java)\]
 
-If you use an older version as API Baseline, you will miss some API problems.
+  
+Demonstrates usage of none mandatory LabelProviders in TableViewers to set colors and fonts with 3.2-API
 
-pom.xml Versions
-----------------
+[![Jfacesnippet013.png](/images/Jfacesnippet013.png)](/File:Jfacesnippet013.png)
 
-Since [CBI](/CBI "CBI") builds depend on Maven and neither Maven nor Tycho can consume version numbers from the MANIFEST.MF ([bug 387802](https://bugs.eclipse.org/bugs/show_bug.cgi?id=387802)), every bundle version change also needs to be reflected in the pom.xml. The **Eclipse Releng Tools** can flag missing pom.xml updates. Install them from an [Eclipse Project Updates p2 repository](/Eclipse_Project_Update_Sites "Eclipse Project Update Sites").
+### [Snippet014 - Tree Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet014TreeViewerNoMandatoryLabelProvider.java)\]
 
-Open **Preferences > POM Version Tool** and make sure the severity is set to **Error**. (Starting with the Neon stream, the POM Version Tool is enabled by default).
+*   [Snippet014 - Tree Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet014TreeViewerNoMandatoryLabelProvider.java)\]
 
-Further reading
----------------
+  
+Demonstrates usage of none mandatory LabelProviders in TreeViewers to set colors and font with 3.2-API
 
-*   See [Evolving Java-based APIs Part 1](/Evolving_Java-based_APIs "Evolving Java-based APIs")
-*   See [Evolving Java-based APIs Part 2](/Evolving_Java-based_APIs_2 "Evolving Java-based APIs 2")
-*   See [Evolving Java-based APIs Part 3](/Evolving_Java-based_APIs_3 "Evolving Java-based APIs 3")
+[![Snippet014TreeViewerNoMandatoryLabelProvider.png](/images/Snippet014TreeViewerNoMandatoryLabelProvider.png)](/File:Snippet014TreeViewerNoMandatoryLabelProvider.png)
+
+### [Snippet015 - Custom Tooltips For Tree](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet015CustomTooltipsForTree.java)
+
+*   [Snippet015 - Custom Tooltips For Tree](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet015CustomTooltipsForTree.java)
+
+  
+Demonstrates usage of custom tooltip support used to provide a tooltip for each cell in a TreeViewer
+
+[![Snippet015CustomTooltipsForTree.png](/images/Snippet015CustomTooltipsForTree.png)](/File:Snippet015CustomTooltipsForTree.png)
+
+### [Snippet017 - Table Viewer Hide Show Columns](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet017TableViewerHideShowColumns.java)
+
+*   [Snippet017 - Table Viewer Hide Show Columns](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet017TableViewerHideShowColumns.java)
+
+  
+Demonstrates hiding and showing columns (animated)
+
+[![Snippet017TableViewerHideShowColumns.png](/images/Snippet017TableViewerHideShowColumns.png)](/File:Snippet017TableViewerHideShowColumns.png)
+
+### [Snippet019 - Table Viewer Add Remove Columns With Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet019TableViewerAddRemoveColumnsWithEditing.java)
+
+*   [Snippet019 - Table Viewer Add Remove Columns With Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet019TableViewerAddRemoveColumnsWithEditing.java)
+
+  
+Demonstrates adding/removing of columns in conjunction with the inline editing with JFace-API
+
+[![Snippet019TableViewerAddRemoveColumnsWithEditing.png](/images/Snippet019TableViewerAddRemoveColumnsWithEditing.png)](/File:Snippet019TableViewerAddRemoveColumnsWithEditing.png)
+
+### [Snippet024 - Table Viewer Explore](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet024TableViewerExploreNewAPI.java)
+
+*   [Snippet024 - Table Viewer Explore](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet024TableViewerExploreNewAPI.java)
+
+  
+Demonstrates the base classes of 3.3 API
+
+[![Snippet024TableViewerExploreNewAPI.png](/images/Snippet024TableViewerExploreNewAPI.png)](/File:Snippet024TableViewerExploreNewAPI.png)
+
+### [Snippet025 - Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet025TabEditing.java)
+
+*   [Snippet025 - Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet025TabEditing.java)
+
+  
+Demonstrates how one can use the 3.3 API to add tab-editing support to your viewer
+
+[![Snippet025TabEditing.png](/images/Snippet025TabEditing.png)](/File:Snippet025TabEditing.png)
+
+Press Tab to jump from cell to cell
+
+### [Snippet026 - Tree Viewer Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet026TreeViewerTabEditing.java)
+
+*   [Snippet026 - Tree Viewer Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet026TreeViewerTabEditing.java)
+
+  
+Demonstrates all fancy things one can do with the 3.3 API (Tab-Editing, Keyboard-Navigation from Cell to Cell, Editor-Activation with the Keyboard)
+
+[![Snippet026TreeViewerTabEditing.gif](/images/e/eb/Snippet026TreeViewerTabEditing.gif)](/File:Snippet026TreeViewerTabEditing.gif)
+
+### [Snippet027 - Combo Box Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet027ComboBoxCellEditors.java)
+
+*   [Snippet027 - Combo Box Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet027ComboBoxCellEditors.java)
+
+  
+Demonstrates usage of the ComboBoxCellEditor in JFace-Viewers
+
+[![Snippet027ComboBoxCellEditors.png](/images/Snippet027ComboBoxCellEditors.png)](/File:Snippet027ComboBoxCellEditors.png)
+
+### [Snippet029 - Virtual Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet029VirtualTableViewer.java)
+
+*   [Snippet029 - Virtual Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet029VirtualTableViewer.java)
+
+  
+Demonstrates usage of JFace-Viewers in "virtual" mode with an ordinary content provider (often the bottleneck is not the model but the UI). Using these Virtual viewers in conjunction with an ordinary content provider has the advantage that Sorting and Filtering are supported in 3.3.
+
+### [Snippet030 - Virtual Lazy Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet030VirtualLazyTableViewer.java)
+
+*   [Snippet030 - Virtual Lazy Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet030VirtualLazyTableViewer.java)
+
+  
+Demonstrates usage of JFace-Viewer virtual mode with a lazy content provider
+
+### [Snippet031 - Table Viewer Custom Tooltips Multi Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet031TableViewerCustomTooltipsMultiSelection.java)\]
+
+*   [Snippet031 - Table Viewer Custom Tooltips Multi Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet031TableViewerCustomTooltipsMultiSelection.java)\]
+
+  
+Demonstrates creation of tooltips for cells for pre 3.3 users
+
+[![Snippet031TableViewerCustomTooltipsMultiSelection.png](/images/Snippet031TableViewerCustomTooltipsMultiSelection.png)](/File:Snippet031TableViewerCustomTooltipsMultiSelection.png)
+
+### [Snippet034 - Cell Editor Per Row](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet034CellEditorPerRow.java)
+
+*   [Snippet034 - Cell Editor Per Row](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet034CellEditorPerRow.java)
+
+  
+Demonstrates different CellEditor-Types in one COLUMN of JFace-Viewers
+
+[![Snippet034CellEditorPerRow.png](/images/Snippet034CellEditorPerRow.png)](/File:Snippet034CellEditorPerRow.png)
+
+### [Snippet035 - Table Cursor Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet035TableCursorCellHighlighter.java)
+
+*   [Snippet035 - Table Cursor Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet035TableCursorCellHighlighter.java)
+
+  
+Demonstrates keyboard navigation in TableViewers using a TableCursor showing the flexibility of the cell navigation support
+
+You also need these classes:
+
+*   [CursorCellHighlighter.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/CursorCellHighlighter.java)
+*   [AbstractCellCursor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/AbstractCellCursor.java)
+*   [TableCursor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/TableCursor.java)
+
+  
+[![Snippet035TableCursorCellHighlighter.png](/images/Snippet035TableCursorCellHighlighter.png)](/File:Snippet035TableCursorCellHighlighter.png)
+
+### [Snippet036 - Focus Border Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet036FocusBorderCellHighlighter.java)
+
+*   [Snippet036 - Focus Border Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet036FocusBorderCellHighlighter.java)
+
+  
+Demonstrates keyboard navigation by highlighting the currently selected cell with a focus border showing once more the flexibility of the cell navigation support
+
+You also need:
+
+*   [FocusBorderCellHighlighter.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/FocusBorderCellHighlighter.java)
+
+  
+[![Snippet036FocusBorderCellHighlighter.png](/images/Snippet036FocusBorderCellHighlighter.png)](/File:Snippet036FocusBorderCellHighlighter.png)
+
+### [Snippet037 - Fancy Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet037FancyCustomTooltips.java)
+
+*   [Snippet037 - Fancy Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet037FancyCustomTooltips.java)
+
+  
+Demonstrates customizability of the 3.3 JFace-Support for cell tooltips using the Browser-Widget and presenting HTML
+
+[![Snippet037FancyCustomTooltips.png](/images/Snippet037FancyCustomTooltips.png)](/File:Snippet037FancyCustomTooltips.png)
+
+### [Snippet039 - List Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet039ListViewer.java)
+
+*   [Snippet039 - List Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet039ListViewer.java)
+
+  
+Demonstrates a very simple usage of ListViewer
+
+[![Snippet039ListViewer.png](/images/Snippet039ListViewer.png)](/File:Snippet039ListViewer.png)
+
+### [Snippet040 - Table Viewer Sorting](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet040TableViewerSorting.java)
+
+*   [Snippet040 - Table Viewer Sorting](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet040TableViewerSorting.java)
+
+  
+Demonstrates sorting (ascending/descending) in TableViewers by clicking the column header.
+
+[![Snippet040TableViewerSorting.png](/images/Snippet040TableViewerSorting.png)](/File:Snippet040TableViewerSorting.png)
+
+### [Snippet 041 - Table Viewer Alternating Colors and Viewer Filters](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet041TableViewerAlternatingColors.java)
+
+*   [Snippet 041 - Table Viewer Alternating Colors and Viewer Filters](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet041TableViewerAlternatingColors.java)
+
+  
+Demonstrates how to achieve alternating row-colors with TableViewer. It can also be used in conjunction with virtual-bits to even work with big tables (e.g. 100,000 rows in this example). In addition, this snippet provided a button that will demonstrate the usage of viewer filters.
+
+[![Snippet041TableViewerAlternatingColors.png](/images/Snippet041TableViewerAlternatingColors.png)](/File:Snippet041TableViewerAlternatingColors.png)
+
+### [Snippet043 - Tree Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet043TreeViewerKeyboardEditing.java)
+
+*   [Snippet043 - Tree Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet043TreeViewerKeyboardEditing.java)
+
+  
+Demonstrates the JFace 3.3 keyboard editing support for Trees without columns. Tabbing from editor to editor is supported since 3.4. In addition, this snippet provided a button that shows how to enter in edit mode programmatically.
+
+[![Snippet043TreeViewerKeyboardEditing.png](/images/Snippet043TreeViewerKeyboardEditing.png)](/File:Snippet043TreeViewerKeyboardEditing.png)
+
+### [Snippet044 - Table Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet044TableViewerKeyboardEditing.java)
+
+*   [Snippet044 - Table Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet044TableViewerKeyboardEditing.java)
+
+  
+Demonstrates the JFace 3.3 keyboard editing support for Tables without columns. Tabbing from editor to editor is supported since 3.4.
+
+You also need:
+
+*   [FocusBorderCellHighlighter.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/FocusBorderCellHighlighter.java)
+
+### [Snippet045 - Table Viewer Fill From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet045TableViewerFillFromBackgroundThread.java)
+
+*   [Snippet045 - Table Viewer Fill From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet045TableViewerFillFromBackgroundThread.java)
+
+  
+Demonstrates how a TableViewer with a sorter can be filled from a NON-UI thread
+
+[![Snippet045TableViewerFillFromBackgroundThread.gif](/images/6/6d/Snippet045TableViewerFillFromBackgroundThread.gif)](/File:Snippet045TableViewerFillFromBackgroundThread.gif)
+
+### [Snippet046 - Update Viewer From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet046UpdateViewerFromBackgroundThread.java)
+
+*   [Snippet046 - Update Viewer From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet046UpdateViewerFromBackgroundThread.java)
+
+  
+Demonstrates how to update a viewer from a long-running task (which is executed in a thread) and calls back to the UI-Thread using "asyncExec".
+
+[![Snippet046UpdateViewerFromBackgroundThread.gif](/images/b/bc/Snippet046UpdateViewerFromBackgroundThread.gif)](/File:Snippet046UpdateViewerFromBackgroundThread.gif)
+
+### [Snippet047 - Virtual Lazy Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet047VirtualLazyTreeViewer.java)
+
+*   [Snippet047 - Virtual Lazy Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet047VirtualLazyTreeViewer.java)
+
+  
+Demonstrates the usage of ILazyContentProvider in conjunction with a Virtual-TreeViewer. The snippet shows how using a lazy tree can minimize the memory footprint and maximize the speed when viewing large models.
+
+[![Snippet047VirtualLazyTreeViewer.png](/images/Snippet047VirtualLazyTreeViewer.png)](/File:Snippet047VirtualLazyTreeViewer.png)
+
+### [Snippet048 - Tree Viewer Tab With Checkbox](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet048TreeViewerTabWithCheckboxFor3_3.java)
+
+*   [Snippet048 - Tree Viewer Tab With Checkbox](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet048TreeViewerTabWithCheckboxFor3_3.java)
+
+  
+Demonstrates how to overcome a limitation when it comes to key-navigation and CheckBoxEditors in 3.3.1.
+
+This is a workaround for bug [https://bugs.eclipse.org/bugs/show_bug.cgi?id=198502](https://bugs.eclipse.org/bugs/show_bug.cgi?id=198502)
+
+[![Snippet048TreeViewerTabWithCheckboxFor3 3.png](/images/Snippet048TreeViewerTabWithCheckboxFor3_3.png)](/File:Snippet048TreeViewerTabWithCheckboxFor3_3.png)
+
+### [Snippet049 - Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet049StyledCellLabelProvider.java)
+
+*   [Snippet049 - Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet049StyledCellLabelProvider.java)
+
+  
+Demonstrates a LabelProvider-Type which uses StyleRanges. This Snippet requires SWT/JFace 3.4.
+
+[![Snippet049StyledCellLabelProvider.gif](/images/f/ff/Snippet049StyledCellLabelProvider.gif)](/File:Snippet049StyledCellLabelProvider.gif)
+
+### [Snippet050 - Delegating Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet050DelegatingStyledCellLabelProvider.java)
+
+*   [Snippet050 - Delegating Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet050DelegatingStyledCellLabelProvider.java)
+
+  
+Demonstrates how you can add styled text by wrapping an existing label provider. This Snippet requires SWT/JFace 3.4.
+
+[![Snippet050DelegatingStyledCellLabelProvider.png](/images/Snippet050DelegatingStyledCellLabelProvider.png)](/File:Snippet050DelegatingStyledCellLabelProvider.png)
+
+### [Snippet051 - Table Centered Image](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet051TableCenteredImage.java)
+
+*   [Snippet051 - Table Centered Image](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet051TableCenteredImage.java)
+
+  
+Demonstrate how to center an image and create graphics in a cell using a technique called "owner draw".
+
+[![Snippet051TableCenteredImage.png](/images/Snippet051TableCenteredImage.png)](/File:Snippet051TableCenteredImage.png)
+
+### [Snippet052 - Double Click Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet052DoubleClickCellEditor.java)
+
+*   [Snippet052 - Double Click Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet052DoubleClickCellEditor.java)
+
+  
+Demonstrate how to start cell-editors on double click.
+
+[![Snippet052DoubleClickCellEditor.png](/images/Snippet052DoubleClickCellEditor.png)](/File:Snippet052DoubleClickCellEditor.png)
+
+### [Snippet053 - Start Editor With Context Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet053StartEditorWithContextMenu.java)
+
+*   [Snippet053 - Start Editor With Context Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet053StartEditorWithContextMenu.java)
+
+  
+Demonstrate how to start up a cell editor with a context menu and not with mouse clicking on the cell.
+
+[![Snippet053StartEditorWithContextMenu.png](/images/Snippet053StartEditorWithContextMenu.png)](/File:Snippet053StartEditorWithContextMenu.png)
+
+### [Snippet055 - Hide Show Column](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet055HideShowColumn.java)
+
+*   [https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet055HideShowColumn.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet055HideShowColumn.java) Snippet055 - Hide Show Column\]
+
+  
+Demonstrate hiding and showing columns and starting a cell editor programmatically.
+
+[![Snippet055HideShowColumn.png](/images/Snippet055HideShowColumn.png)](/File:Snippet055HideShowColumn.png)
+
+### [Snippet056 - Boolean Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet056BooleanCellEditor.java)
+
+*   [Snippet056 - Boolean Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet056BooleanCellEditor.java)
+
+  
+Demonstrate a custom cell-editor which uses a real Checkbox-Button
+
+You also need these classes:
+
+*   [BooleanCellEditor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/BooleanCellEditor.java)
+
+  
+[![Snippet056BooleanCellEditor.png](/images/Snippet056BooleanCellEditor.png)](/File:Snippet056BooleanCellEditor.png)
+
+### [Snippet057 - Table Viewer Skip Hidden Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet057TableViewerSkipHiddenCells.java)
+
+*   [Snippet057 - Table Viewer Skip Hidden Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet057TableViewerSkipHiddenCells.java)
+
+  
+Example of showing how easy cell-navigation with hidden cells is. Use the cursor keys to navigate between cells. Then use the context menu to hide a column.
+
+[![Snippet057TableViewerSkipHiddenCells.png](/images/Snippet057TableViewerSkipHiddenCells.png)](/File:Snippet057TableViewerSkipHiddenCells.png)
+
+### [Snippet058 - Cell Navigation](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet058CellNavigationIn34.java)
+
+*   [Snippet058 - Cell Navigation](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet058CellNavigationIn34.java)
+
+  
+Shows how to automatically reveal cells when navigating. Run the snippet and then edit the first cell by double-clicking. Pressing the tab key will advance to the next cell in edit mode and reveal the cell if it is not in the viewport.
+
+[![Snippet058CellNavigationIn34.gif](/images/0/0e/Snippet058CellNavigationIn34.gif)](/File:Snippet058CellNavigationIn34.gif)
+
+### [Snippet060 - Text Cell Editor With Content Proposal/Field assists](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet060TextCellEditorWithContentProposal.java)
+
+*   [Snippet060 - Text Cell Editor With Content Proposal/Field assists](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet060TextCellEditorWithContentProposal.java)
+
+  
+Show how to use content-proposal inside a CellEditor
+
+[![Snippet060TextCellEditorWithContentProposal.png](/images/Snippet060TextCellEditorWithContentProposal.png)](/File:Snippet060TextCellEditorWithContentProposal.png)
+
+### [Snippet061 - Faked Native Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet061FakedNativeCellEditor.java)
+
+*   [Snippet061 - Faked Native Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet061FakedNativeCellEditor.java)
+
+  
+Full-featured native-looking viewer with checkboxes in an arbitrary column
+
+You also need these classes:
+
+*   [BooleanCellEditor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/BooleanCellEditor.java)
+
+  
+
+[![Snippet061FakedNativeCellEditor.png](/images/Snippet061FakedNativeCellEditor.png)](/File:Snippet061FakedNativeCellEditor.png)
+
+### [Snippet062 - Text And Dialog Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet062TextAndDialogCellEditor.java)
+
+*   [Snippet062 - Text And Dialog Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet062TextAndDialogCellEditor.java)
+
+  
+Demonstrates usage of TextAndDialogCellEditor. The email column uses the TextAndDialogCellEditor; othe columns use ordinary TextCellEditor.
+
+You also need these classes:
+
+*   [TextAndDialogCellEditor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/TextAndDialogCellEditor.java)
+
+  
+[![Snippet062TextAndDialogCellEditor.png](/images/Snippet062TextAndDialogCellEditor.png)](/File:Snippet062TextAndDialogCellEditor.png)
+
+### [Snippet063 - Combo Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet063ComboViewer.java)
+
+*   [Snippet063 - Combo Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet063ComboViewer.java)
+
+  
+Show how to use ComboViewer and set an initial selection
+
+[![Snippet063ComboViewer.png](/images/Snippet063ComboViewer.png)](/File:Snippet063ComboViewer.png)
+
+### [Snippet064 - Replacing elements in a TreeViewer with child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet064TreeViewerReplacingElements.java)
+
+*   [Snippet064 - Replacing elements in a TreeViewer with child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet064TreeViewerReplacingElements.java)
+
+  
+A TreeViewer with observable collections as input, to demonstrate, how elements are replaced, especially what happens to selected items on replacement
+
+[![Snippet064TreeViewerReplacingElements.png](/images/Snippet064TreeViewerReplacingElements.png)](/File:Snippet064TreeViewerReplacingElements.png)
+
+### [Snippet065 - Replacing elements in a TreeViewer without child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet065TableViewerReplacingElements.java)
+
+*   [Snippet065 - Replacing elements in a TreeViewer without child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet065TableViewerReplacingElements.java)
+
+  
+A TreeViewer with observable collections as input, to demonstrate, how elements are replaced, especially what happens to selected items on replacement
+
+[![Snippet065TableViewerReplacingElements.png](/images/Snippet065TableViewerReplacingElements.png)](/File:Snippet065TableViewerReplacingElements.png)
+
+### [Snippet066 - TableViewer with Label Decorator](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet066TableViewerWithLabelDecorator.java)
+
+*   [Snippet066 - TableViewer with Label Decorator](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet066TableViewerWithLabelDecorator.java)
+
+  
+A TableViewer that shows how to add a status icon to a Label with IStyledLabelProvider and DecorationOverlayIcon
+
+[![Snippet066TableViewerWithLabelDecorator.png](/images/Snippet066TableViewerWithLabelDecorator.png)](/File:Snippet066TableViewerWithLabelDecorator.png)
+
+Window
+------
+
+### [Snippet020 - Customized Control Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet020CustomizedControlTooltips.java)
+
+*   [Snippet020 - Customized Control Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet020CustomizedControlTooltips.java)
+
+  
+Demonstrates usage of JFace 3.3 to show really cool ToolTips for your controls
+
+For full fun you also need:
+
+*   [Help Icon](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/linkto_help.gif)
+*   [Error Icon](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/showerr_tsk.gif)
+
+  
+[![Snippet020CustomizedControlTooltips.png](/images/Snippet020CustomizedControlTooltips.png)](/File:Snippet020CustomizedControlTooltips.png)
+
+### [Snippet031 - Table Static Tooltip](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet031TableStaticTooltip.java)
+
+*   [Snippet031 - Table Static Tooltip](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet031TableStaticTooltip.java)
+
+  
+Demonstrates creation of ToolTips for Tables without using the JFace-Viewers API but only JFace-Tooltips
+
+[![Snippet031TableStaticTooltip.png](/images/Snippet031TableStaticTooltip.png)](/File:Snippet031TableStaticTooltip.png)
+
+Wizard
+------
+
+### [Snippet047 - Wizard with Long Running Operation from Page](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet047WizardWithLongRunningOperation.java)
+
+*   [Snippet047 - Wizard with Long Running Operation from Page](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet047WizardWithLongRunningOperation.java)
+
+  
+Demonstrates how to work with JFace-Wizards and fill a TableViewer from a Background-Thread without blocking the UI showing a progress bar in the meanwhile
+
+[![Snippet047.gif](/images/4/4f/Snippet047.gif)](/File:Snippet047.gif)
+
+### [Snippet071 - Wizard with Progress and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet071WizardWithProgressAndCancel.java)
+
+*   [Snippet071 - Wizard with Progress and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet071WizardWithProgressAndCancel.java)
+
+  
+Demonstrates a wizard with internal progress.
+
+[![Snippet071WizardWithProgressAndCancel.gif](/images/6/66/Snippet071WizardWithProgressAndCancel.gif)](/File:Snippet071WizardWithProgressAndCancel.gif)
+
+### [Snippet072 Wizard with Progress Subtasks and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet072WizardWithProgressSubtasksAndCancel.java)
+
+*   [Snippet072 Wizard with Progress Subtasks and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet072WizardWithProgressSubtasksAndCancel.java)
+
+[https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/FocusBorderCellHighlighter.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/FocusBorderCellHighlighter.java) Demonstrates a wizard with internal progress using SubMonitor and subtasks.
+
+[![Snippet072WizardWithProgressSubtasksAndCancel.png](/images/Snippet072WizardWithProgressSubtasksAndCancel.png)](/File:Snippet072WizardWithProgressSubtasksAndCancel.png)
+
+  
+
+### [Snippet074 Wizard with access to application window](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet074ModelesWizard.java)
+
+*   [Snippet074 Wizard with access to application window](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet074ModelesWizard.java)
+
+  
+Demonstrates a wizard that enables access to the calling shell...
+
+[![Snippet074ModelesWizard.gif](/images/d/db/Snippet074ModelesWizard.gif)](/File:Snippet074ModelesWizard.gif)
