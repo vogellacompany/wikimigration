@@ -5,7 +5,7 @@ import 'package:html2md/html2md.dart' as html2md;
 import 'dart:io';
 
 Future<void> main() async {
-  var wikiPageUrl = 'https://wiki.eclipse.org/JFaceSnippets';
+  var wikiPageUrl = 'https://wiki.eclipse.org/Evolving_Java-based_APIs';
   final imagePageUrl = 'https://wiki.eclipse.org';
 
   try {
