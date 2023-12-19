@@ -44,11 +44,28 @@ Future<void> main() async {
       RegExp imagePattern =
           RegExp(r'\[\!\[(.*?)\]\((/images/.*?/)([^/]+\.png)\)\]');
 
-      String imagesLinksAdjusted = headerReplaced.replaceAllMapped(
+      String imagesPngLinksAdjusted = headerReplaced.replaceAllMapped(
         imagePattern,
         (match) {
           String altText = match.group(1)!; // Alt text inside the first ![...]
-          String fileName = match.group(3)!; // Filename with the extension .jpg
+          String fileName = match.group(3)!; // Filename with the extension .png
+
+          // Create the modified substring
+          String modifiedSubstring = '[![$altText](/images/$fileName)]';
+
+          return modifiedSubstring;
+        },
+      );
+
+      // // Fix image link
+
+      imagePattern = RegExp(r'\[\!\[(.*?)\]\((/images/.*?/)([^/]+\.gif)\)\]');
+
+      String imagesGifLinksAdjusted = headerReplaced.replaceAllMapped(
+        imagesPngLinksAdjusted,
+        (match) {
+          String altText = match.group(1)!; // Alt text inside the first ![...]
+          String fileName = match.group(3)!;
 
           // Create the modified substring
           String modifiedSubstring = '[![$altText](/images/$fileName)]';
@@ -58,7 +75,7 @@ Future<void> main() async {
       );
 
       final filename = 'file.md';
-      var file = await File(filename).writeAsString(imagesLinksAdjusted);
+      var file = await File(filename).writeAsString(imagesGifLinksAdjusted);
       // Do something with the file.
       // The variable `markdownContent` now contains the markdown
       // representation of the Wiki page content
