@@ -121,7 +121,7 @@ Notification
 Demonstrates usage of the non-blocking notification API
 
   
-[![Snippet081 Shell1.gif](/images/6/6e/Snippet081_Shell1.gif)](/File:Snippet081_Shell1.gif)
+[![Snippet081 Shell1.gif](/images/Snippet081_Shell1.gif)](/File:Snippet081_Shell1.gif)
 
 Layout
 ------
@@ -327,7 +327,7 @@ Press Tab to jump from cell to cell
   
 Demonstrates all fancy things one can do with the 3.3 API (Tab-Editing, Keyboard-Navigation from Cell to Cell, Editor-Activation with the Keyboard)
 
-[![Snippet026TreeViewerTabEditing.gif](/images/e/eb/Snippet026TreeViewerTabEditing.gif)](/File:Snippet026TreeViewerTabEditing.gif)
+[![Snippet026TreeViewerTabEditing.gif](/images/Snippet026TreeViewerTabEditing.gif)](/File:Snippet026TreeViewerTabEditing.gif)
 
 ### [Snippet027 - Combo Box Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet027ComboBoxCellEditors.java)
 
@@ -463,7 +463,7 @@ You also need:
   
 Demonstrates how a TableViewer with a sorter can be filled from a NON-UI thread
 
-[![Snippet045TableViewerFillFromBackgroundThread.gif](/images/6/6d/Snippet045TableViewerFillFromBackgroundThread.gif)](/File:Snippet045TableViewerFillFromBackgroundThread.gif)
+[![Snippet045TableViewerFillFromBackgroundThread.gif](/images/Snippet045TableViewerFillFromBackgroundThread.gif)](/File:Snippet045TableViewerFillFromBackgroundThread.gif)
 
 ### [Snippet046 - Update Viewer From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet046UpdateViewerFromBackgroundThread.java)
 
@@ -472,7 +472,7 @@ Demonstrates how a TableViewer with a sorter can be filled from a NON-UI thread
   
 Demonstrates how to update a viewer from a long-running task (which is executed in a thread) and calls back to the UI-Thread using "asyncExec".
 
-[![Snippet046UpdateViewerFromBackgroundThread.gif](/images/b/bc/Snippet046UpdateViewerFromBackgroundThread.gif)](/File:Snippet046UpdateViewerFromBackgroundThread.gif)
+[![Snippet046UpdateViewerFromBackgroundThread.gif](/images/Snippet046UpdateViewerFromBackgroundThread.gif)](/File:Snippet046UpdateViewerFromBackgroundThread.gif)
 
 ### [Snippet047 - Virtual Lazy Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet047VirtualLazyTreeViewer.java)
 
@@ -501,7 +501,7 @@ This is a workaround for bug [https://bugs.eclipse.org/bugs/show_bug.cgi?id=1985
   
 Demonstrates a LabelProvider-Type which uses StyleRanges. This Snippet requires SWT/JFace 3.4.
 
-[![Snippet049StyledCellLabelProvider.gif](/images/f/ff/Snippet049StyledCellLabelProvider.gif)](/File:Snippet049StyledCellLabelProvider.gif)
+[![Snippet049StyledCellLabelProvider.gif](/images/Snippet049StyledCellLabelProvider.gif)](/File:Snippet049StyledCellLabelProvider.gif)
 
 ### [Snippet050 - Delegating Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet050DelegatingStyledCellLabelProvider.java)
 
@@ -578,7 +578,7 @@ Example of showing how easy cell-navigation with hidden cells is. Use the cursor
   
 Shows how to automatically reveal cells when navigating. Run the snippet and then edit the first cell by double-clicking. Pressing the tab key will advance to the next cell in edit mode and reveal the cell if it is not in the viewport.
 
-[![Snippet058CellNavigationIn34.gif](/images/0/0e/Snippet058CellNavigationIn34.gif)](/File:Snippet058CellNavigationIn34.gif)
+[![Snippet058CellNavigationIn34.gif](/images/Snippet058CellNavigationIn34.gif)](/File:Snippet058CellNavigationIn34.gif)
 
 ### [Snippet060 - Text Cell Editor With Content Proposal/Field assists](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet060TextCellEditorWithContentProposal.java)
 
@@ -691,7 +691,7 @@ Wizard
   
 Demonstrates how to work with JFace-Wizards and fill a TableViewer from a Background-Thread without blocking the UI showing a progress bar in the meanwhile
 
-[![Snippet047.gif](/images/4/4f/Snippet047.gif)](/File:Snippet047.gif)
+[![Snippet047.gif](/images/Snippet047.gif)](/File:Snippet047.gif)
 
 ### [Snippet071 - Wizard with Progress and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet071WizardWithProgressAndCancel.java)
 
@@ -700,7 +700,7 @@ Demonstrates how to work with JFace-Wizards and fill a TableViewer from a Backgr
   
 Demonstrates a wizard with internal progress.
 
-[![Snippet071WizardWithProgressAndCancel.gif](/images/6/66/Snippet071WizardWithProgressAndCancel.gif)](/File:Snippet071WizardWithProgressAndCancel.gif)
+[![Snippet071WizardWithProgressAndCancel.gif](/images/Snippet071WizardWithProgressAndCancel.gif)](/File:Snippet071WizardWithProgressAndCancel.gif)
 
 ### [Snippet072 Wizard with Progress Subtasks and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet072WizardWithProgressSubtasksAndCancel.java)
 
@@ -719,5 +719,5 @@ Demonstrates a wizard with internal progress.
   
 Demonstrates a wizard that enables access to the calling shell...
 
-[![Snippet074ModelesWizard.gif](/images/d/db/Snippet074ModelesWizard.gif)](/File:Snippet074ModelesWizard.gif)
+[![Snippet074ModelesWizard.gif](/images/Snippet074ModelesWizard.gif)](/File:Snippet074ModelesWizard.gif)
 
