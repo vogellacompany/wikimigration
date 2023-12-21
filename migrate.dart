@@ -4,8 +4,12 @@ import 'package:html/dom.dart' as htmlDom;
 import 'package:html2md/html2md.dart' as html2md;
 import 'dart:io';
 
-Future<void> main() async {
-  var wikiPageUrl = 'https://wiki.eclipse.org/JFaceSnippets';
+void main(List<String> arguments) async {
+  var filename = "JFaceSnippets";
+  if (arguments.isNotEmpty) {
+    filename = arguments[0];
+  }
+  var wikiPageUrl = 'https://wiki.eclipse.org/${filename}';
   final imagePageUrl = 'https://wiki.eclipse.org';
 
   try {
@@ -41,10 +45,10 @@ Future<void> main() async {
 
       // // Fix image link
 
-      RegExp imagePattern =
-          RegExp(r'\[\!\[(.*?)\]\((/images/.*?/)([^/]+\.png)\)\]');
+      RegExp imagePattern = RegExp(
+          r'\[\!\[(.*?)\]\((/images/.*?/)([^/]+\.(png|gif|jpeg|jpg))\)\]');
 
-      String imagesPngLinksAdjusted = headerReplaced.replaceAllMapped(
+      String imagesLinksAdjusted = headerReplaced.replaceAllMapped(
         imagePattern,
         (match) {
           String altText = match.group(1)!; // Alt text inside the first ![...]
@@ -56,26 +60,28 @@ Future<void> main() async {
           return modifiedSubstring;
         },
       );
+      String folderPath = 'output/';
 
-      // // Fix image link
+      // Create a Directory object
+      Directory outputDirectory = Directory(folderPath);
 
-      imagePattern = RegExp(r'\[\!\[(.*?)\]\((/images/.*?/)([^/]+\.gif)\)\]');
+      if (!outputDirectory.existsSync()) {
+        // Create the folder
+        outputDirectory.createSync(recursive: true);
+      }
 
-      String imagesGifLinksAdjusted = headerReplaced.replaceAllMapped(
-        imagesPngLinksAdjusted,
-        (match) {
-          String altText = match.group(1)!; // Alt text inside the first ![...]
-          String fileName = match.group(3)!;
+      // Delete the content of the "output" folder
+      clearOutputFolder(folderPath);
 
-          // Create the modified substring
-          String modifiedSubstring = '[![$altText](/images/$fileName)]';
+      Directory imageOutputPath = Directory(folderPath + "/images");
 
-          return modifiedSubstring;
-        },
-      );
+      if (!imageOutputPath.existsSync()) {
+        // Create the folder
+        imageOutputPath.createSync(recursive: true);
+      }
 
-      final filename = 'file.md';
-      var file = await File(filename).writeAsString(imagesGifLinksAdjusted);
+      var file = await File(folderPath + filename + ".md")
+          .writeAsString(imagesLinksAdjusted);
       // Do something with the file.
       // The variable `markdownContent` now contains the markdown
       // representation of the Wiki page content
@@ -93,7 +99,7 @@ void download(String URL) {
   List<int> _downloadData = [];
   var filename = URL.split("/").last;
 
-  var fileSave = new File('./images/${filename}');
+  var fileSave = new File('./output/images/${filename}');
   client.getUrl(Uri.parse(URL)).then((HttpClientRequest request) {
     return request.close();
   }).then((HttpClientResponse response) {
@@ -141,5 +147,21 @@ void convertPreTo2CodeBlocks(htmlDom.Element? element) {
     preElement.children.add(codeBlock);
     // preElement.replaceWith(codeBlock);
     print(preElement);
+  }
+}
+
+void clearOutputFolder(String folderPath) {
+  // Create a Directory object for the "output" folder
+  Directory outputDirectory = Directory(folderPath);
+
+  // Check if the "output" folder exists
+  if (outputDirectory.existsSync()) {
+    // Get a list of all items (files and subdirectories) in the folder
+    List<FileSystemEntity> content = outputDirectory.listSync();
+
+    // Delete each item in the "output" folder
+    for (var item in content) {
+      item.deleteSync(recursive: true);
+    }
   }
 }
