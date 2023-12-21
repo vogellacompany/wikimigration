@@ -1,4 +1,8 @@
-dart migrate.dart > output.md
+dart migrate.dart 
 
-Auto generate the toc: https://github.com/thlorenz/doctoc
-doctoc output.md --github
+or
+
+dart migrate.dart filename
+
+This will download https://wiki.eclipse.org/${filename}
+Example dart migrate.dart JFaceSnippets

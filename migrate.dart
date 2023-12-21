@@ -80,8 +80,10 @@ void main(List<String> arguments) async {
         imageOutputPath.createSync(recursive: true);
       }
 
-      var file = await File(folderPath + filename + ".md")
-          .writeAsString(imagesLinksAdjusted);
+      String result = deleteUpToLine(imagesLinksAdjusted, '* [History]');
+
+      var file =
+          await File(folderPath + filename + ".md").writeAsString(result);
       // Do something with the file.
       // The variable `markdownContent` now contains the markdown
       // representation of the Wiki page content
@@ -164,4 +166,17 @@ void clearOutputFolder(String folderPath) {
       item.deleteSync(recursive: true);
     }
   }
+}
+
+String deleteUpToLine(String input, String lineStart) {
+  // Find the index of the line that starts with the specified text
+  int startIndex = input.indexOf(lineStart);
+
+  // If the line is found, delete everything up to and including that line
+  if (startIndex != -1) {
+    return input.substring(startIndex + lineStart.length);
+  }
+
+  // If the line is not found, return the original string
+  return input;
 }
