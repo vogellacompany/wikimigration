@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as htmlParser;
 import 'package:html/dom.dart' as htmlDom;
@@ -44,23 +46,9 @@ void main(List<String> arguments) async {
       });
 
       // // Fix image link
+      String imagesLinksAdjusted = convertFileLinks(headerReplaced);
 
-      RegExp imagePattern = RegExp(
-          r'\[\!\[(.*?)\]\((/images/.*?/)([^/]+\.(png|gif|jpeg|jpg))\)\]');
-
-      String imagesLinksAdjusted = headerReplaced.replaceAllMapped(
-        imagePattern,
-        (match) {
-          String altText = match.group(1)!; // Alt text inside the first ![...]
-          String fileName = match.group(3)!; // Filename with the extension .png
-
-          // Create the modified substring
-          String modifiedSubstring = '[![$altText](/images/$fileName)]';
-
-          return modifiedSubstring;
-        },
-      );
-      String folderPath = 'output/';
+      String folderPath = 'docs/';
 
       // Create a Directory object
       Directory outputDirectory = Directory(folderPath);
@@ -79,9 +67,12 @@ void main(List<String> arguments) async {
         // Create the folder
         imageOutputPath.createSync(recursive: true);
       }
+      String result = "";
+      result = deleteUpToLine(
+          imagesLinksAdjusted, '"Past revisions of this page [h]")');
 
-      String result = deleteUpToLine(imagesLinksAdjusted, '* [History]');
-
+      result = deleteFromLine(result, '[Categories]');
+      // String result = imagesLinksAdjusted;
       var file =
           await File(folderPath + filename + ".md").writeAsString(result);
       // Do something with the file.
@@ -96,12 +87,37 @@ void main(List<String> arguments) async {
   }
 }
 
+String convertFileLinks(String input) {
+  // Define the regular expression pattern
+  RegExp pattern = RegExp(
+      r'\[\!\[(.*?)\]\((/images/.+?/)([^/]+)\.(png|jpg|jpeg|gif)\)\]\(/File:(.*?)\.(png|jpg|jpeg|gif)\)');
+
+  // Perform the replacement using replaceAllMapped
+  return input.replaceAllMapped(
+    pattern,
+    (match) {
+      String altText = match.group(1)!;
+      String imagePath = match.group(2)!;
+      String fileName = match.group(3)!;
+      String extension = match.group(4)!;
+      String originalFileName = match.group(5)!;
+      String originalExtension = match.group(6)!;
+
+      // Construct the new image URL
+      String imageUrl =
+          'https://raw.githubusercontent.com/vogellacompany/eclipse.platform.ui/master/docs/images/$fileName.$originalExtension';
+
+      return '![$altText]($imageUrl)';
+    },
+  );
+}
+
 void download(String URL) {
   HttpClient client = new HttpClient();
   List<int> _downloadData = [];
   var filename = URL.split("/").last;
 
-  var fileSave = new File('./output/images/${filename}');
+  var fileSave = new File('./docs/images/${filename}');
   client.getUrl(Uri.parse(URL)).then((HttpClientRequest request) {
     return request.close();
   }).then((HttpClientResponse response) {
@@ -156,12 +172,12 @@ void clearOutputFolder(String folderPath) {
   // Create a Directory object for the "output" folder
   Directory outputDirectory = Directory(folderPath);
 
-  // Check if the "output" folder exists
+  // Check if the output folder exists
   if (outputDirectory.existsSync()) {
     // Get a list of all items (files and subdirectories) in the folder
     List<FileSystemEntity> content = outputDirectory.listSync();
 
-    // Delete each item in the "output" folder
+    // Delete each item in the output folder
     for (var item in content) {
       item.deleteSync(recursive: true);
     }
@@ -171,12 +187,26 @@ void clearOutputFolder(String folderPath) {
 String deleteUpToLine(String input, String lineStart) {
   // Find the index of the line that starts with the specified text
   int startIndex = input.indexOf(lineStart);
-
-  // If the line is found, delete everything up to and including that line
-  if (startIndex != -1) {
-    return input.substring(startIndex + lineStart.length);
+  // If the line is not found, throw an exception
+  if (startIndex == -1) {
+    throw Exception('Line starting with "$lineStart" not found.');
   }
 
-  // If the line is not found, return the original string
-  return input;
+  // Return the substring starting from the index after the line
+  return input.substring(startIndex + lineStart.length);
+}
+
+String deleteFromLine(String input, String lineStart) {
+  print(input.length);
+
+  // Find the index of the line that starts with the specified text
+  int endIndex = input.indexOf(lineStart);
+  // If the line is not found, throw an exception
+  if (endIndex == -1) {
+    throw Exception('Line starting with "$lineStart" not found.');
+  }
+
+  print(endIndex);
+  // Return the substring starting from the index after the line
+  return input.substring(0, endIndex);
 }
