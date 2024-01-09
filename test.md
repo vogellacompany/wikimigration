@@ -9,7 +9,7 @@ Contents
 --------
 
 *   [1 JFace Data Binding Introduction](#JFace-Data-Binding-Introduction)
-*   [2 JFace Data Binding/Getting started](#JFace-Data-Binding/Getting-started)
+*   [2 JFace Data Binding/Getting started](#JFace-Data-BindingGetting-started)
 *   [3 JFace Data Binding/Snippets](#JFace-Data-Binding/Snippets)
 *   [4 JFace Data Binding/Observable](#JFace-Data-Binding/Observable)
 *   [5 JFace Data Binding/Binding](#JFace-Data-Binding/Binding)
