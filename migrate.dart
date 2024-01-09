@@ -70,8 +70,13 @@ void main(List<String> arguments) async {
       String result = "";
       result = deleteUpToLine(
           imagesLinksAdjusted, '"Past revisions of this page [h]")');
+      if (result.contains('[Categories]')) {
+        result = deleteFromLine(result, '[Categories]');
+      }
+      if (result.contains('[Category]')) {
+        result = deleteFromLine(result, '[Category]');
+      }
 
-      result = deleteFromLine(result, '[Categories]');
       // String result = imagesLinksAdjusted;
       var file =
           await File(folderPath + filename + ".md").writeAsString(result);
@@ -105,7 +110,7 @@ String convertFileLinks(String input) {
 
       // Construct the new image URL
       String imageUrl =
-          'https://raw.githubusercontent.com/vogellacompany/eclipse.platform.ui/master/docs/images/$fileName.$originalExtension';
+          'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/$fileName.$originalExtension';
 
       return '![$altText]($imageUrl)';
     },
