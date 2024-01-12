@@ -83,7 +83,7 @@ The data binding core plug-in does not depend on SWT but needs to talk about "be
 
 The core Data Binding plug-in only depends on org.eclipse.equinox.common, [ICU4J](/ICU4J "ICU4J") but no other parts of Eclipse. It will run without OSGi.
 
-See [Where can I get the plugins?](#Where_can_I_get_the_plugins) for information about downloading the framework.
+See [Where can I get the plugins?](#Where-can-I-get-the-plugins) for information about downloading the framework.
 
 See also [JFace Data Binding/Runtime Dependencies](/JFace_Data_Binding/Runtime_Dependencies "JFace Data Binding/Runtime Dependencies").
 
