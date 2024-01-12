@@ -3,22 +3,22 @@
 JFace Data Binding
 ==================
 
-JFace Data Binding is a multi-threaded set of abstractions that allow for automated validation and synchronization of values between objects. This is commonly used for, but not limited to, the binding of user interface components to model attributes. The core concepts behind the project are [Observables](/Observables "Observables") and [Bindings](/Binding "Binding"). We provide IObservable implementations for SWT, JFace, and JavaBeans but the core is void of references to these in anticipation of implementations for other projects (e.g. EMF, Swing, etc.).
+JFace Data Binding is a multi-threaded set of abstractions that allow for automated validation and synchronization of values between objects. This is commonly used for, but not limited to, the binding of user interface components to model attributes. The core concepts behind the project are [Observables](#Observable) and [Bindings](#Binding). We provide IObservable implementations for SWT, JFace, and JavaBeans but the core is void of references to these in anticipation of implementations for other projects (e.g. EMF, Swing, etc.).
 
 Contents
 --------
 
-*   [1 JFace Data Binding Introduction](#JFace-Data-Binding-Introduction)
-*   [2 JFace Data Binding/Getting started](#JFace-Data-BindingGetting-started)
-*   [3 JFace Data Binding/Snippets](#JFace-Data-Binding/Snippets)
-*   [4 JFace Data Binding/Observable](#JFace-Data-Binding/Observable)
-*   [5 JFace Data Binding/Binding](#JFace-Data-Binding/Binding)
-*   [6 JFace Data Binding/Data Binding Context](#JFace-Data-Binding/Data-Binding-Context)
-*   [7 JFace Data Binding/Converter](#JFace-Data-Binding/Converter)
-*   [8 JFace Data Binding/Validators](#JFace-Data-Binding/Validators)
-*   [9 JFace Data Binding/Realm](#JFace-Data-Binding/Realm)
-*   [10 JFace Data Binding/TrackedGetter](#JFace-Data-Binding/TrackedGetter)
-*   [11 JFace Data Binding/Master Detail](#JFace-Data-Binding/MasterDetail)
+*   [1 Introduction](#Introduction)
+*   [2 Getting started](#Getting-started)
+*   [3 Snippets](#Snippets)
+*   [4 Observable](#Observable)
+*   [5 Binding](#Binding)
+*   [6 Data Binding Context](#JData-Binding-Context)
+*   [7 Converter](#Converter)
+*   [8 Validators](#Validators)
+*   [9 Realm](#Realm)
+*   [10 TrackedGetter](#TrackedGetter)
+*   [11 Master Detail](#Master-Detail)
 
 <!-- 
 | **JFace Data Binding** |
@@ -77,7 +77,7 @@ Project Release Status
 
 JFace Data Binding 1.0 was released with Eclipse 3.3, [Europa](/Europa_Simultaneous_Release "Europa Simultaneous Release"). The Eclipse 3.3.1 release (Europa Fall Maintenance Release) contains a number of [bug fixes](https://bugs.eclipse.org/bugs/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=%5BDataBinding%5D&classification=Eclipse&product=Platform&component=UI&target_milestone=3.3.1&long_desc_type=allwordssubstr&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&status_whiteboard_type=allwordssubstr&status_whiteboard=&keywords_type=allwords&keywords=&emailtype1=substring&email1=&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0=). -->
 
-# JFace Data Binding Introduction
+# Introduction
 
 Why JFace Data Binding?
 -----------------------
@@ -145,7 +145,7 @@ If the user changes the UI or the underlying model object changes, that change i
 
 For example, if the user changes the SWT Text object, the new String value is validated that it can be converted to an "int", the value is then converted to an "int", and the new integer value is then set in the model object.
 
-# JFace Data Binding/Getting started
+# Getting started
 
 This page shows you how to create a simple example application using data binding that you can play with.
 
@@ -251,7 +251,7 @@ This is a pretty basic model class that conforms to the JavaBeans specification 
 	}
 }
 
-This is the standard SWT event loop with one complication - a SWT _Realm_ is created and made the default realm for our application. Think of a Realm as an abstraction of SWT's UI thread. If everything in your application happens in the UI thread, you don't have to deal with Realms in your binding code. For more details on this, see the [FAQ](/JFace_Data_Binding/FAQ "JFace Data Binding/FAQ") or the wiki page that explains in detail what a [Realm](/JFace_Data_Binding/Realm "JFace Data Binding/Realm") is. If you are writing a plug-in for the Eclipse Platform, or a RCP application, you don't have to do this setup yourself - as of Eclipse 3.3, it is already part of the initialization code in **PlatformUI.createAndRunWorkbench()**.
+This is the standard SWT event loop with one complication - a SWT _Realm_ is created and made the default realm for our application. Think of a Realm as an abstraction of SWT's UI thread. If everything in your application happens in the UI thread, you don't have to deal with Realms in your binding code. For more details on this, see the [FAQ](/JFace_Data_Binding/FAQ "JFace Data Binding/FAQ") or the section that explains in detail what a [Realm](#Realm") is. If you are writing a plug-in for the Eclipse Platform, or a RCP application, you don't have to do this setup yourself - as of Eclipse 3.3, it is already part of the initialization code in **PlatformUI.createAndRunWorkbench()**.
 
 ### Validation Results
 
@@ -283,5 +283,309 @@ To configure your own converters and/or validators instead of the default ones, 
 		new UpdateValueStrategy().setAfterConvertValidator(anIntValidator),
 		// model to UI:
 		new UpdateValueStrategy().setConverter(anIntToStringConverter));
- 
- 
+
+# Snippets
+
+Snippets show how common use cases can be implemented using the JFace Data Binding framework. They are typically a single self-contained Java class with a main method. See the bottom of this page for additional instructions on how to get and run the snippets.
+
+Contents
+--------
+
+*   [1 Running the Snippets](#Running-the-Snippets)
+    *   [1.1 Basic](#Basic)
+    *   [1.2 WizardPage](#WizardPage)
+    *   [1.3 ComputedValue](#ComputedValue)
+    *   [1.4 Bindings](#Bindings)
+    *   [1.5 Master Detail](#Master-Detail)
+    *   [1.6 SWT](#SWT)
+    *   [1.7 Viewers](#Viewers)
+    *   [1.8 Additional Run Options](#Additional-Run-Options)
+
+Running the Snippets
+--------------------
+
+*   [Create an Eclipse plug-in project](http://help.eclipse.org/juno/index.jsp?topic=%2Forg.eclipse.rse.doc.isv%2Fguide%2Ftutorial%2FpdeProject.html) and in the Manifest editor go to the **Dependencies tab**
+*   Add dependencies to the following bundles: org.eclipse.core.databinding, org.eclipse.core.databinding.beans, org.eclipse.core.databinding.property, org.eclipse.jface.databinding, org.eclipse.swt, and org.eclipse.core.runtime
+*   Click on any snippet in this list
+*   Copy (CTRL+C) the source to your clipboard
+*   Go to the src folder of your project and paste (CTRL+V). This will automatically create the correct package and source file.
+*   Right click on the new source file and select "Run as / Java Application"
+
+### Basic
+
+*   [Hello World](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet000HelloWorld.java) \- the most basic of bindings
+
+### WizardPage
+
+*   [Wizard Dialog](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet014WizardDialog.java) \- Shows how to use data binding in a wizard dialog so that validation results are displayed in the dialog's title area
+
+### ComputedValue
+
+*   [Spreadsheet](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet006Spreadsheet.java) \- fills a Table updating cells upon change
+*   [Name Formatter](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet008ComputedValue.java) \- observable value that updates when the first or last name changes
+
+### Bindings
+
+*   [Bind validation status to a Label](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet004DataBindingContextErrorLabel.java)
+*   [Validate observables across Bindings](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet011ValidateMultipleBindingsSnippet.java?view=markup)
+
+### Master Detail
+
+*   [Master detail](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet010MasterDetail.java) \- display the detail of the selection of a ListViewer in a Text widget
+*   [Nested Selection With ComboViewer](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet001NestedSelectionWithCombo.java)
+
+### SWT
+
+*   [MenuUpdater](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet005MenuUpdater.java)
+*   [CompositeUpdater](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet012CompositeUpdater.java)
+
+### Viewers
+
+*   [Model to TableViewer binding](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet009TableViewer.java) \- basic binding to a TableViewer
+*   [TableViewer binding with colors](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet007ColorLabelProvider.java) \- label provider that provides Colors and auto updates the viewer
+*   [TableViewer inline editing](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet013TableViewerEditing.java) \- TableViewer editing with the Eclipse 3.3 JFace viewer APIs. _(requires Eclipse 3.3)_
+*   [ComputedList and Combo](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet022ComputedListCombo.java) \- Filter the elements in one viewer based on the selection in another
+*   [ComboViewer and Java enum](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet034ComboViewerAndEnum.java) \- Demonstrates binding the list of a ComboViewer to the values of an enum and the selected value to a simple model property.
+
+### Additional Run Options
+
+A great way to learn is to look at concrete examples that you can run and experiment with.
+
+You can clone the [eclipse.platform.ui git repository](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/) which contains the "org.eclipse.jface.examples.databinding" project with the JFace Databinding examples. For cloning a git repository you can use the [EGit](http://eclipse.org/egit/) tooling of Eclipse.
+
+Use the following URL to clone the repository via File -> Import -> Git repository
+
+*   [http://anonymous@git.eclipse.org/gitroot/platform/eclipse.platform.ui.git](http://anonymous@git.eclipse.org/gitroot/platform/eclipse.platform.ui.git)
+
+After you cloned the project the clone wizard will allow you to import the included projects. For the databinding examples you only have to import the "org.eclipse.jface.examples.databinding" project. For an introduction into EGit please see [EGit](http://www.vogella.de/articles/EGit/article.html)
+
+Most of the examples provide a main method, you can run it as a Java Application to see what happens.  
+
+You can also copy any of the snippets (see below) into a scratch project within Eclipse. If you are copying single snippets into a scratch project, make sure that it is set up with the correct dependencies. You will need org.eclipse.core.databinding, org.eclipse.core.databinding.beans, and org.eclipse.jface.databinding.
+
+# Observable
+
+Observables are one of the key abstractions provided by JFace Data Binding and are an implementation of the [Observer pattern](http://en.wikipedia.org/wiki/Observer_pattern). They provide a common abstraction for observing changes in objects.
+
+
+Core Interfaces of Interest
+---------------------------
+
+*   IObservable - super-interface of all observables, allows to listen for generic change events
+*   IObservableValue - has getValue(), setValue(), and allows to listen for value change events
+*   IVetoableValue - inherits from IObservableValue, and allows to listen for before-change events
+*   IObservableCollection - extends java.util.Collection and IObservable
+*   IObservableList - extends java.util.List and IObservableCollection, and allows to listen for incremental list change events
+*   IObservableSet - extends java.util.Set and IObservableCollection, and allows to listen for incremental set change events
+*   IObservableMap - extends java.util.Map and IObservable, and allows to listen for incremental map change events
+
+Implementation Design Principles
+--------------------------------
+
+1.  An observable must remove listeners on the observed when disposed. For example if you registered selection listeners on a widget when the observable was constructed it must remove these on dispose of the observable.
+2.  An observable should fire change events when the value changes if at all possible. This means when the value changes in the object being observed or when the value is set on the observable. One thing to look out for is firing multiple change events when this occurs. A use case where this arises is a widget that fires change events when the value is set programmatically (e.g. Text.setText(...)). In these use cases an 'updating' flag is normally employed.
+3.  Not all observables fire change events when the state of its underlying object changes, but they do fire a change event if the change goes through the observable's setter. An example of this is Control.setEnabled(...) in SWT. If the object being observed doesn't fire change events when the value is set programmatically the observable cannot observe programmatic changes in the observed object. In these use cases it still pays to have the abstraction for get/set value but when coding against such observables it's good to be aware of this behavior. Because of this it's good to always set the value on the observable to ensure that change events are fired.
+4.  In an observable when retrieving the value always retrieve it from the observed object. Don't cache the value in the observable if possible. Caching can cause issues if there's potential for this state to get out of sync like in the Control.setEnabled(...) use case mentioned above.
+5.  If the observable is an `IObservableValue` and the type of the attribute is a primitive use the primitive class (e.g. Boolean.TYPE or boolean.class) rather than the boxed type (e.g. Boolean.class) even though when get/setValue(...) is invoked the boxed type will be returned. By using the primitive the observable will be able to convey that the value cannot be null. This allows for better control in the validation and conversion phases of binding.
+
+@See
+----
+
+[Realm](#Realm) for how observables can be accessed in a multi-threaded environment.
+
+# Binding
+
+Bindings synchronize the values of 2 [observables](#Observable) in JFace Data Binding. The synchronization process is comprised of phases of validation and conversion. The specific phases available are dependant upon the type of binding.
+
+
+Contents
+--------
+
+*   [1 Value Bindings](#Value-Bindings)
+    *   [1.1 Validate After Get](#Validate-After-Get)
+    *   [1.2 Convert](#Convert)
+    *   [1.3 Validate After Convert](#Validate-After-Convert)
+    *   [1.4 Validate Before Set](#Validate-Before-Set)
+    *   [1.5 Set Value](#Set-Value)
+*   [2 List Bindings](#List-Bindings)
+    *   [2.1 Convert](#Convert-2)
+    *   [2.2 Add/Remove](#Add.2FRemove)
+
+Value Bindings
+--------------
+
+A value binding binds two `IObservableValue` instances. The order of phases are:
+
+### Validate After Get
+
+Validation of the value before conversion. This phase can be used to ensure that conversion will succeed.
+
+### Convert
+
+Converts the value to the expected type.
+
+### Validate After Convert
+
+Validates the converted value.
+
+### Validate Before Set
+
+Validates before setting the value. The only difference between 'before set' and 'after convert' is a conceptual one. Before set can be used to perform expensive validation that should be deferred until the value is copied to the model. This comes in handy in a dialog setting where validation should occur before the changes are committed.
+
+### Set Value
+
+The value is set on the opposite observable. This stage is exposed in `UpdateValueStrategy` to allow the consumer to persist changes when the value is set.
+
+List Bindings
+-------------
+
+A list binding binds two `IObservableList` instances. The order of phases are:
+
+### Convert
+
+Convert the value to the expected type.
+
+### Add/Remove
+
+Update the opposite observable with the change.
+
+# Data Binding Context
+
+A data binding context manages a list of [Bindings](#Binding), and potentially other sources of validation results (such as model-side validators). Think of it as the context in which a number of bindings are created, and in which validation is performed. DataBindingContext offers methods for triggering re-validation, and (in the case of bindings that do not copy values to the model automatically) for triggering an update of the model.
+
+Using an AggregateValidationStatus object, you can compute an aggregate validation status for the data binding context. The class WizardPageSupport can be used to connect the validation results of a data binding context to the title area in a wizard.
+
+# Converter
+
+In JFace Data Binding converters are used to convert from one value type to another.
+
+Converters, implementations of `org.eclipse.core.databinding.conversion.IConverter`, are a basic yet core part of the binding pipeline. They allow for the conversion between data types. This conversion can be as basic as converting from a primitive (e.g. boolean.class) to a boxed type (e.g. Boolean.class) or as complex as converting a String to an int.
+
+To convert a value within a data binding, create an UpdateValueStrategy and set your converter to it. Then use that update strategy in the data binding.
+
+Implementation Design Principles
+--------------------------------
+
+1.  It's best for the converter to be immutable. This will allow for greater reuse of the instance especially across threads.
+2.  Synchronize during convert(...) if necessary. A good example of this is using `com.ibm.icu.text.NumberFormat` in a converter. NumberFormat expects to be externally synchronized as the state of NumberFormat changes during formatting and parsing. In order to be used across threads access to the internal NumberFormat must be synchronized.
+3.  If the converter is converting to a primitive from an object ensure null is handled.
+
+# Validators
+
+Validators are used to validate values in various stages of the binding pipeline (before conversion, after conversion, and just before setting the value). A validator is an implementation of the IValidator interface which for a given value produces a validation status of type IStatus. Bindings use two validators, one for each direction (model to target and target to model). It is recommended (but not required) that you use the static methods on ValidationStatus to create status objects returned from IValidator.validate().
+
+Currently, there is no public API for standard validators because simple validators are trivial to write, and more complex ones tend to be highly application-specific. We do however recommend that in your projects, you build your own library of validators for application-internal reuse.
+
+Validation in the context of bindings can only look at one value at a time. For cross-field validation involving more than one value, you can use the helper class MultiValidator.
+
+# Realm
+
+Realm (["Kingdom"](http://en.wikipedia.org/wiki/Realm)) is the core concept of JFace Data Binding in regards to synchronization. A realm can be thought of as a special thread, or a lock, that serializes access to a set of [observables](#Observable) in that realm. Each observable belongs to a Realm. It can only be accessed from that realm, and it will always fire change events on that realm. One important example of a realm is the SWT UI thread. Like for the SWT UI thread, you can execute code within a realm by using Realm.asyncExec(); in fact, the SWT realm implementation just delegates to Display.asyncExec(). This means that while the data binding framework can be used in a multi-threaded environment, each observable is essentially single-threaded. Java bean observables implement this contract on the observable side, but don't require it on the Java beans side: Even if a bean fires a PropertyChangeEvent on a different thread, the change events originating from the observable will happen within its realm. To bridge between observables in different realms, use a data binding context - you can bind two observables even if they belong to different realms and the bindings take care of this for you by using Realm.asyncExec() where necessary.
+
+Unit Testing
+------------
+
+When writing unit tests for observables or bindings it is difficult to set the default Realm without wrapping the test code in a `Runnable` and invoking `Realm.runWithDefault(Realm realm, Runnable runnable)`. The following implementation can be used as a stub Realm for unit testing purposes and fits into the `setUp()` and `tearDown()` testing paradigm.
+
+    /**
+     * Simple realm implementation that will set itself as default when constructed. Invoke
+     * {@link #dispose()} to remove the realm from being the default. Does not support asyncExec(...).
+     */
+    public class DefaultRealm extends Realm {
+        private Realm previousRealm;
+    
+        public DefaultRealm() {
+            previousRealm = super.setDefault(this);
+        }
+    
+        /**
+         * @return always returns true
+         */
+        public boolean isCurrent() {
+            return true;
+        }
+    
+        protected void syncExec(Runnable runnable) {
+            runnable.run();
+        }
+    
+        /**
+         * @throws UnsupportedOperationException
+         */
+        public void asyncExec(Runnable runnable) {
+            throw new UnsupportedOperationException("asyncExec is unsupported");
+        }
+    
+        /**
+         * Removes the realm from being the current and sets the previous realm to the default.
+         */
+        public void dispose() {
+            if (getDefault() == this) {
+                setDefault(previousRealm);
+            }
+        }
+    }
+
+
+    public class SampleTestCase extends TestCase {
+        private DefaultRealm realm;
+        
+        /**
+         * Creates a new default realm for every test.
+         */
+        protected void setUp() throws Exception {
+            super.setUp();
+            realm = new DefaultRealm();
+        }
+        
+        /**
+         * Removes the default realm.
+         */
+        protected void tearDown() throws Exception {
+            super.tearDown();
+            realm.dispose();
+        }
+    }
+    
+# TrackedGetter
+
+Every getter on an observable object must make a call to ObservableTracker.getterCalled(). Why?
+
+This enables abstractions like ComputedValue or ComputedList: All you have to write is a piece of code that computes a value, or a list. As long as this code only accesses other observables, the framework will manager listeners for you automatically.
+
+For example, assume that your UI has text fields for the first name and the last name of a person, but you want to display a formatted version of the full name elsewhere in the UI. This is what you can write (see [Snippet008](http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.jface.examples.databinding/src/org/eclipse/jface/examples/databinding/snippets/Snippet008ComputedValue.java?view=markup) for a complete example):
+
+    final IObservableValue firstName = SWTObservables.observeText(firstNameField, SWT.Modify);
+    final IObservableValue lastName = SWTObservables.observeText(lastNameField, SWT.Modify);
+    IObservableValue formattedName = new ComputedValue() {
+      protected Object calculate() {
+        return lastName.getValue() + firstName.getValue();
+      }
+    }; 
+
+Note that without having to register any listeners from client code, the 'formattedName' observable will always change whenever one of the observables referenced in its calculate() method changes. We didn't even have to pass a list of observables to the framework - just by calling lastName.getValue(), or firstName.getValue(), it will figure out that it has to listen for changes to lastName and firstName for you.
+
+The data binding framework has internal classes that work similar to ComputedValue and ComputedList, but instead of producing a value or a list, they update widgets. For example, look for ControlUpdater, TableUpdater. These classes are not API yet because we haven't received enough feedback from early adopters yet. If you would like to see this as API, please push for it by filing enhancement requests in bugzilla.
+
+### Related Work
+
+This idea is not new. It has been around for (at least) 10 years. Here are some pointers to related work.
+
+*   [Designing object-oriented synchronous groupware with COAST (1996)](http://citeseer.ist.psu.edu/195548.html), see section 5.1 on 'virtual slots'.
+*   [Cells - A dataflow extension to CLOS (2001?)](http://www.tilton-technology.com/cells_top.html)
+*   [PyCells, a Python port of Cells (2006)](http://pycells.pdxcb.net/)
+*   [JavaFX Script (2007)](http://www.sun.com/software/javafx/script/) \- not quite the same but very close, look for 'incremental evaluation'.
+*   _Please add more links if you know of other related work._
+
+# Master Detail
+
+Some UIs allow you to select an object from a list, table, or tree and then, based on the selection, allow you to edit details about the selected object. For example, the selected object could be a Person object, and the editable details could be the person's name and their phone number.
+
+Usually, when creating a model-side observable, you call a method like BeansObservables.observeValue(person, "name"). This would create an observable that (behind the scenes) attaches a listener to the given person object so that it can generate standardized events when the name attribute changes.
+
+When the selected person changes, you could dispose the observable (and the binding) for the previously selected person and create new ones for the newly selected person, but there is a better way. By creating a _detail observable_, you can keep the same observable and binding and what you would have done manually is done for you by the framework automatically.
+
+To create a detail observable, first create an observable for the current selection (this is sometimes called the _master observable_), for example through ViewersObservables.observeSingleSelection(). Then, call BeansObservables.observeDetailValue(selectionObservable, "name", String.class) to create the detail observable for the currently selected person's name attibute.
+
+For an example snippet, see the [Master Detail snippet](#Snippets).
+
