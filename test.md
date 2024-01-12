@@ -25,34 +25,8 @@ On the [Eclipse bugzilla](https://bugs.eclipse.org/bugs) log a bug to Eclipse > 
 
 ### Where can I find examples of how to use data binding?
 
-Have a look at our collection of [Snippets](JFace Data Binding/FAQ
-======================
-
-Contents
---------
-
-*   [1 Where can I ask a question?](#Where-can-I-ask-a-question.3F)
-*   [2 How do I report a bug?](#How-do-I-report-a-bug.3F)
-*   [3 Where can I find examples of how to use data binding?](#Where-can-I-find-examples-of-how-to-use-data-binding.3F)
-*   [4 Where can I get the plugins?](#Where-can-I-get-the-plugins.3F)
-*   [5 What is a Realm, and do I need to care?](#What-is-a-Realm.2C-and-do-I-need-to-care.3F)
-*   [6 Does Data Binding depend on Eclipse and the OSGi runtime?](#Does-Data-Binding-depend-on-Eclipse-and-the-OSGi-runtime.3F)
-*   [7 Does Data Binding depend on SWT?](#Does-Data-Binding-depend-on-SWT.3F)
-*   [8 How do I bind to the ValidationError of a Binding or DataBindingContext?](#How-do-I-bind-to-the-ValidationError-of-a-Binding-or-DataBindingContext.3F)
-*   [9 How do I run the tests?](#How-do-I-run-the-tests.3F)
-*   [10 Can JFace Data Binding run against older versions of Eclipse?](#Can-JFace-Data-Binding-run-against-older-versions-of-Eclipse.3F)
-
-### Where can I ask a question?
-
-You can ask questions on the [Eclipse JFace newsgroup](http://www.eclipse.org/newsportal/thread.php?group=eclipse.platform.jface). When you post please prefix the title with "\[DataBinding\]".
-
-### How do I report a bug?
-
-On the [Eclipse bugzilla](https://bugs.eclipse.org/bugs) log a bug to Eclipse > Platform > UI with "\[DataBinding\]" in the summary.
-
-### Where can I find examples of how to use data binding?
-
 Have a look at our collection of [Snippets](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/JFaceDataBinding.md#snippets).
+
 
 ### Where can I get the plugins?
 
