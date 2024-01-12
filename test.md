@@ -4,7 +4,7 @@ JFace Data Binding/FAQ
 Contents
 --------
 
-*   [1 Where can I ask a question?](#Where-can-I-ask-a-question?)
+*   [1 Where can I ask a question?](#Where-can-I-ask-a-question-)
 *   [2 How do I report a bug?](#How-do-I-report-a-bug.3F)
 *   [3 Where can I find examples of how to use data binding?](#Where-can-I-find-examples-of-how-to-use-data-binding.3F)
 *   [4 Where can I get the plugins?](#Where-can-I-get-the-plugins.3F)
