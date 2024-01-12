@@ -5,15 +5,15 @@ Contents
 --------
 
 *   [1 Where can I ask a question?](#Where-can-I-ask-a-question)
-*   [2 How do I report a bug?](#How-do-I-report-a-bug.3F)
-*   [3 Where can I find examples of how to use data binding?](#Where-can-I-find-examples-of-how-to-use-data-binding.3F)
-*   [4 Where can I get the plugins?](#Where-can-I-get-the-plugins.3F)
-*   [5 What is a Realm, and do I need to care?](#What-is-a-Realm.2C-and-do-I-need-to-care.3F)
-*   [6 Does Data Binding depend on Eclipse and the OSGi runtime?](#Does-Data-Binding-depend-on-Eclipse-and-the-OSGi-runtime.3F)
-*   [7 Does Data Binding depend on SWT?](#Does-Data-Binding-depend-on-SWT.3F)
-*   [8 How do I bind to the ValidationError of a Binding or DataBindingContext?](#How-do-I-bind-to-the-ValidationError-of-a-Binding-or-DataBindingContext.3F)
-*   [9 How do I run the tests?](#How-do-I-run-the-tests.3F)
-*   [10 Can JFace Data Binding run against older versions of Eclipse?](#Can-JFace-Data-Binding-run-against-older-versions-of-Eclipse.3F)
+*   [2 How do I report a bug?](#How-do-I-report-a-bug)
+*   [3 Where can I find examples of how to use data binding?](#Where-can-I-find-examples-of-how-to-use-data-binding)
+*   [4 Where can I get the plugins?](#Where-can-I-get-the-plugins)
+*   [5 What is a Realm, and do I need to care?](#What-is-a-Realm.2C-and-do-I-need-to-care)
+*   [6 Does Data Binding depend on Eclipse and the OSGi runtime?](#Does-Data-Binding-depend-on-Eclipse-and-the-OSGi-runtime)
+*   [7 Does Data Binding depend on SWT?](#Does-Data-Binding-depend-on-SWT)
+*   [8 How do I bind to the ValidationError of a Binding or DataBindingContext?](#How-do-I-bind-to-the-ValidationError-of-a-Binding-or-DataBindingContext)
+*   [9 How do I run the tests?](#How-do-I-run-the-tests)
+*   [10 Can JFace Data Binding run against older versions of Eclipse?](#Can-JFace-Data-Binding-run-against-older-versions-of-Eclipse)
 
 ### Where can I ask a question?
 
@@ -83,7 +83,7 @@ The data binding core plug-in does not depend on SWT but needs to talk about "be
 
 The core Data Binding plug-in only depends on org.eclipse.equinox.common, [ICU4J](/ICU4J "ICU4J") but no other parts of Eclipse. It will run without OSGi.
 
-See [#Where can I get the plugins?](#Where_can_I_get_the_plugins.3F) for information about downloading the framework.
+See [#Where can I get the plugins?](#Where_can_I_get_the_plugins) for information about downloading the framework.
 
 See also [JFace Data Binding/Runtime Dependencies](/JFace_Data_Binding/Runtime_Dependencies "JFace Data Binding/Runtime Dependencies").
 
@@ -167,7 +167,7 @@ The data binding core plug-in does not depend on SWT but needs to talk about "be
 
 The core Data Binding plug-in only depends on org.eclipse.equinox.common, [ICU4J](/ICU4J "ICU4J") but no other parts of Eclipse. It will run without OSGi.
 
-See [#Where can I get the plugins?](#Where_can_I_get_the_plugins.3F) for information about downloading the framework.
+See [#Where can I get the plugins?](#Where_can_I_get_the_plugins) for information about downloading the framework.
 
 See also [JFace Data Binding/Runtime Dependencies](/JFace_Data_Binding/Runtime_Dependencies "JFace Data Binding/Runtime Dependencies").
 
