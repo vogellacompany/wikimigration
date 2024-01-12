@@ -251,7 +251,7 @@ This is a pretty basic model class that conforms to the JavaBeans specification 
 	}
 }
 
-This is the standard SWT event loop with one complication - a SWT _Realm_ is created and made the default realm for our application. Think of a Realm as an abstraction of SWT's UI thread. If everything in your application happens in the UI thread, you don't have to deal with Realms in your binding code. For more details on this, see the [FAQ](/JFace_Data_Binding/FAQ "JFace Data Binding/FAQ") or the section that explains in detail what a [Realm](#Realm") is. If you are writing a plug-in for the Eclipse Platform, or a RCP application, you don't have to do this setup yourself - as of Eclipse 3.3, it is already part of the initialization code in **PlatformUI.createAndRunWorkbench()**.
+This is the standard SWT event loop with one complication - a SWT _Realm_ is created and made the default realm for our application. Think of a Realm as an abstraction of SWT's UI thread. If everything in your application happens in the UI thread, you don't have to deal with Realms in your binding code. For more details on this, see the [FAQ](/JFace_Data_Binding/FAQ "JFace Data Binding/FAQ") or the section that explains in detail what a [Realm](#Realm) is. If you are writing a plug-in for the Eclipse Platform, or a RCP application, you don't have to do this setup yourself - as of Eclipse 3.3, it is already part of the initialization code in **PlatformUI.createAndRunWorkbench()**.
 
 ### Validation Results
 
