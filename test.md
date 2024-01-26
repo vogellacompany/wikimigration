@@ -1,1087 +1,724 @@
-Eclipse Corner
-==============
+JFaceSnippets
+=============
 
-These following articles have been written by members of the various project development teams and other members of the Eclipse community.
+JFace-Snippets are small and easy understandable programming examples of how to use the JFace API. To browse the examples, navigate to the [examples GIT repository](https://github.com/eclipse-platform/eclipse.platform.ui/tree/master/examples/org.eclipse.jface.snippets).
+
+**Copy Paste**
+
+The header section of each snippet is a link to the plain source. You can copy the source and paste it directly on the source folder or package in an eclipse project. The package and the class will be created automatically.  
+
+![Jfacecopypaste.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Jfacecopypaste.gif)
+
+  
 
 Contents
 --------
 
-*   [1 Eclipse setup instructions on a new Linux (or other OS) computer](#Eclipse-setup-instructions-on-a-new-Linux-.28or-other-OS.29-computer)
-*   [2 Custom Drawing Table and Tree Items](#Custom-Drawing-Table-and-Tree-Items)
-*   [3 Extending WTP Using Project Facets](#Extending-WTP-Using-Project-Facets)
-*   [4 Implementing Model Integrity in EMF with EMFT OCL](#Implementing-Model-Integrity-in-EMF-with-EMFT-OCL)
-*   [5 From Front End To Code - MDSD in Practice](#From-Front-End-To-Code---MDSD-in-Practice)
-*   [6 Virtual Tables and Trees](#Virtual-Tables-and-Trees)
-*   [7 A Shape Diagram Editor](#A-Shape-Diagram-Editor)
-*   [8 Eclipse Platform Technical Overview](#Eclipse-Platform-Technical-Overview)
-*   [9 Eclipse Workbench: Using the Selection Service](#Eclipse-Workbench-Using-the-Selection-Service)
-*   [10 The Language Toolkit: An API for Automated Refactorings in Eclipse-based IDEs](#The-Language-Toolkit-An-API-for-Automated-Refactorings-in-Eclipse-based-IDEs)
-*   [11 Creating Database Web Applications with Eclipse](#Creating-Database-Web-Applications-with-Eclipse)
-*   [12 Teach Your Eclipse to Speak the Local Lingo](#Teach-Your-Eclipse-to-Speak-the-Local-Lingo)
-*   [13 Java Application Profiling using TPTP](#Java-Application-Profiling-using-TPTP)
-*   [14 The Eclipse Tabbed Properties View](#The-Eclipse-Tabbed-Properties-View)
-*   [15 How to Correctly and Uniformly Use Progress Monitors](#How-to-Correctly-and-Uniformly-Use-Progress-Monitors)
-*   [16 Eclipse Forms: Rich UI for the Rich Client](#Eclipse-Forms-Rich-UI-for-the-Rich-Client)
-*   [17 Introducing the GMF Runtime](#Introducing-the-GMF-Runtime)
-*   [18 Authoring with Eclipse](#Authoring-with-Eclipse)
-*   [19 Inside the Workbench: A guide to the workbench internals](#Inside-the-Workbench-A-guide-to-the-workbench-internals)
-*   [20 Plugging into SourceForge.net](#Plugging-into-SourceForge.net)
-*   [21 Persisting EMF models with WTP](#Persisting-EMF-models-with-WTP)
-*   [22 Extending The Visual Editor: Enabling support for a custom widget](#Extending-The-Visual-Editor-Enabling-support-for-a-custom-widget)
-*   [23 Using GEF with EMF](#Using-GEF-with-EMF)
-*   [24 Build and Test Automation for plug-ins and features](#Build-and-Test-Automation-for-plug-ins-and-features)
-*   [25 Using OpenGL with SWT](#Using-OpenGL-with-SWT)
-*   [26 Folding in Eclipse Text Editors](#Folding-in-Eclipse-Text-Editors)
-*   [27 Eclipse User Interface Guidelines: Version 2.1](#Eclipse-User-Interface-Guidelines-Version-2.1)
-*   [28 Modeling Rule-Based Systems with EMF](#Modeling-Rule-Based-Systems-with-EMF)
-*   [29 Building Administrative Applications in Eclipse](#Building-Administrative-Applications-in-Eclipse)
-*   [30 EMF goes RCP](#EMF-goes-RCP)
-*   [31 Building a Database Schema Diagram Editor with GEF](#Building-a-Database-Schema-Diagram-Editor-with-GEF)
-*   [32 On the Job: The Eclipse Jobs API](#On-the-Job-The-Eclipse-Jobs-API)
-*   [33 Branding Your Application](#Branding-Your-Application)
-*   [34 How to Write an Eclipse Debugger](#How-to-Write-an-Eclipse-Debugger)
-*   [35 Viewing HTML pages with SWT Browser widget](#Viewing-HTML-pages-with-SWT-Browser-widget)
-*   [36 Rich Client Tutorial](#Rich-Client-Tutorial)
-*   [37 A Basic Image Viewer](#A-Basic-Image-Viewer)
-*   [38 Mutatis mutandis - Using Preference Pages as Property Pages](#Mutatis-mutandis---Using-Preference-Pages-as-Property-Pages)
-*   [39 A small cup of SWT: A bag of hints, tricks and recipes for developing SWT apps on the Pocket PC](#A-small-cup-of-SWT-A-bag-of-hints.2C-tricks-and-recipes-for-developing-SWT-apps-on-the-Pocket-PC)
-*   [40 Taking a look at SWT Images](#Taking-a-look-at-SWT-Images)
-*   [41 PDE Does Plug-ins](#PDE-Does-Plug-ins)
-*   [42 How To Keep Up To Date](#How-To-Keep-Up-To-Date)
-*   [43 JET Tutorial Part 2 (Write Code that Writes Code)](#JET-Tutorial-Part-2-.28Write-Code-that-Writes-Code.29)
-*   [44 Launching Java Applications Programmatically](#Launching-Java-Applications-Programmatically)
-*   [45 Adding Drag and Drop to an SWT Application](#Adding-Drag-and-Drop-to-an-SWT-Application)
-*   [46 Display a UML Diagram using Draw2D](#Display-a-UML-Diagram-using-Draw2D)
-*   [47 Drag and Drop in the Eclipse UI](#Drag-and-Drop-in-the-Eclipse-UI)
-*   [48 Using Native Drag and Drop with GEF](#Using-Native-Drag-and-Drop-with-GEF)
-*   [49 JET Tutorial Part 1 (Introduction to JET)](#JET-Tutorial-Part-1-.28Introduction-to-JET.29)
-*   [50 Inside the Memory View: A Guide for Debug Providers](#Inside-the-Memory-View-A-Guide-for-Debug-Providers)
-*   [51 Building and delivering a table editor with SWT/JFace](#Building-and-delivering-a-table-editor-with-SWT.2FJFace)
-*   [52 Graphics Context - Quick on the draw](#Graphics-Context---Quick-on-the-draw)
-*   [53 Notes on the Eclipse Plug-in Architecture](#Notes-on-the-Eclipse-Plug-in-Architecture)
-*   [54 Designing Accessible Plug-ins in Eclipse](#Designing-Accessible-Plug-ins-in-Eclipse)
-*   [55 Take control of your properties](#Take-control-of-your-properties)
-*   [56 Project Builders and Natures](#Project-Builders-and-Natures)
-*   [57 Understanding Decorators in Eclipse](#Understanding-Decorators-in-Eclipse)
-*   [58 We Have Lift-off: The Launching Framework in Eclipse](#We-Have-Lift-off-The-Launching-Framework-in-Eclipse)
-*   [59 Creating JFace Wizards](#Creating-JFace-Wizards)
-*   [60 Using EMF](#Using-EMF)
-*   [61 How You've Changed!: Responding to resource changes in the Eclipse workspace](#How-You.27ve-Changed.21-Responding-to-resource-changes-in-the-Eclipse-workspace)
-*   [62 How to Internationalize your Eclipse Plug-In](#How-to-Internationalize-your-Eclipse-Plug-In)
-*   [63 How to Test Your Internationalized Eclipse Plug-In](#How-to-Test-Your-Internationalized-Eclipse-Plug-In)
-*   [64 Simplifying Preference Pages with Field Editors](#Simplifying-Preference-Pages-with-Field-Editors)
-*   [65 Preferences in the Eclipse Workbench UI](#Preferences-in-the-Eclipse-Workbench-UI)
-*   [66 Help Part 1: Contributing a Little Help](#Help-Part-1-Contributing-a-Little-Help)
-*   [67 How to use the JFace Tree Viewer](#How-to-use-the-JFace-Tree-Viewer)
-*   [68 Creating an Eclipse View](#Creating-an-Eclipse-View)
-*   [69 Contributing Actions to the Eclipse Workbench](#Contributing-Actions-to-the-Eclipse-Workbench)
-*   [70 Into the Deep End of the SWT StyledText Widget](#Into-the-Deep-End-of-the-SWT-StyledText-Widget)
-*   [71 Using Perspectives in the Eclipse UI](#Using-Perspectives-in-the-Eclipse-UI)
-*   [72 How to Use the Eclipse API](#How-to-Use-the-Eclipse-API)
-*   [73 Getting Your Feet Wet with the SWT StyledText Widget](#Getting-Your-Feet-Wet-with-the-SWT-StyledText-Widget)
-*   [74 SWT Color Model](#SWT-Color-Model)
-*   [75 Using Images in the Eclipse UI](#Using-Images-in-the-Eclipse-UI)
-*   [76 Mark My Words: Using markers to tell users about problems and tasks](#Mark-My-Words-Using-markers-to-tell-users-about-problems-and-tasks)
-*   [77 Levels Of Integration: Five ways you can integrate with the Eclipse Platform](#Levels-Of-Integration-Five-ways-you-can-integrate-with-the-Eclipse-Platform)
-*   [78 ActiveX Support In SWT](#ActiveX-Support-In-SWT)
-*   [79 Creating Your Own Widgets using SWT](#Creating-Your-Own-Widgets-using-SWT)
-*   [80 SWT: The Standard Widget Toolkit](#SWT-The-Standard-Widget-Toolkit)
-*   [81 Understanding Layouts in SWT](#Understanding-Layouts-in-SWT)
-*   [82 Introducing AJDT: The AspectJ Development Tools](#Introducing-AJDT-The-AspectJ-Development-Tools)
-*   [83 Abstract Syntax Tree](#Abstract-Syntax-Tree)
-*   [84 Running Web Service Scenarios using Ant](#Running-Web-Service-Scenarios-using-Ant)
-*   [85 Unleashing the Power of Refactoring](#Unleashing-the-Power-of-Refactoring)
-*   [86 Building Eclipse Plugins with Maven 2](#Building-Eclipse-Plugins-with-Maven-2)
-*   [87 Using TPTP to Automate Functional Testing](#Using-TPTP-to-Automate-Functional-Testing)
-*   [88 Simple Image Effects for SWT](#Simple-Image-Effects-for-SWT)
-*   [89 Using the BIRT Chart Engine in Your Plug-in](#Using-the-BIRT-Chart-Engine-in-Your-Plug-in)
-*   [90 Swing/SWT Integration](#Swing.2FSWT-Integration)
-*   [91 How to process OCL Abstract Syntax Trees](#How-to-process-OCL-Abstract-Syntax-Trees)
-*   [92 Branching with Eclipse and CVS](#Branching-with-Eclipse-and-CVS)
-*   [93 Adding Help Support to a Rich Client Platform (RCP) Application](#Adding-Help-Support-to-a-Rich-Client-Platform-.28RCP.29-Application)
-*   [94 Eclipse Forms: New in 3.3](#Eclipse-Forms-New-in-3.3)
-*   [95 Defining Generics with UML Templates](#Defining-Generics-with-UML-Templates)
-*   [96 Integrating EMF and GMF Generated Editors](#Integrating-EMF-and-GMF-Generated-Editors)
-*   [97 Build your own textual DSL with Tools from the Eclipse Modeling Project](#Build-your-own-textual-DSL-with-Tools-from-the-Eclipse-Modeling-Project)
-*   [98 Automating Eclipse PDE Unit Tests using Ant](#Automating-Eclipse-PDE-Unit-Tests-using-Ant)
-*   [99 Adapters](#Adapters)
-*   [100 Automating the embedding of Domain Specific Languages in Eclipse JDT](#Automating-the-embedding-of-Domain-Specific-Languages-in-Eclipse-JDT)
-*   [101 Dynamic User Assistance in Eclipse Based Applications](#Dynamic-User-Assistance-in-Eclipse-Based-Applications)
-*   [102 BIRT Extension Mechanism, Part 1: Custom Report Items](#BIRT-Extension-Mechanism.2C-Part-1-Custom-Report-Items)
-*   [103 BIRT Extension Mechanism, Part 2](#BIRT-Extension-Mechanism.2C-Part-2)
-*   [104 How to Fix a Bug in Eclipse](#How-to-Fix-a-Bug-in-Eclipse)
-*   [105 Babel Pseudo Translations](#Babel-Pseudo-Translations)
+*   [1 Dialogs](#Dialogs)
+    *   [1.1 Snippet012 - Dialog with Image Buttons](#Snippet012---Dialog-with-Image-Buttons)
+    *   [1.2 Snippet082 - Color Selector](#Snippet082---Color-Selector)
+*   [2 Notification](#Notification)
+    *   [2.1 Snippet081 - Notification API](#Snippet081---Notification-API)
+*   [3 Layout](#Layout)
+    *   [3.1 Snippet013 - Grid Layout Factory](#Snippet013---Grid-Layout-Factory)
+    *   [3.2 Snippet016 - Table Layout](#Snippet016---Table-Layout)
+    *   [3.3 Snippet027 - Tree Layout](#Snippet027---Tree-Layout)
+*   [4 Viewers](#Viewers)
+    *   [4.1 Snippet001 - Table Viewer](#Snippet001---Table-Viewer)
+    *   [4.2 Snippet002 - Tree Viewer](#Snippet002---Tree-Viewer)
+    *   [4.3 Snippet003 - Table Label Provider](#Snippet003---Table-Label-Provider)
+    *   [4.4 Snippet004 - Hide Selection](#Snippet004---Hide-Selection)
+    *   [4.5 Snippet005 - Tree Custom Menu](#Snippet005---Tree-Custom-Menu)
+    *   [4.6 Snippet006 - Table Multi Line Cells](#Snippet006---Table-Multi-Line-Cells)
+    *   [4.7 Snippet007 - Full Selection](#Snippet007---Full-Selection)
+    *   [4.8 Snippet008 - Reveal Element](#Snippet008---Reveal-Element)
+    *   [4.9 Snippet009 - Cell Editors](#Snippet009---Cell-Editors)
+    *   [4.10 Snippet010 - Owner Draw](#Snippet010---Owner-Draw)
+    *   [4.11 Snippet011 - Custom Tooltips](#Snippet011---Custom-Tooltips)
+    *   [4.12 Snippet013 - Table Viewer No Mandatory Label Provider\]](#Snippet013---Table-Viewer-No-Mandatory-Label-Provider.5D)
+    *   [4.13 Snippet014 - Tree Viewer No Mandatory Label Provider\]](#Snippet014---Tree-Viewer-No-Mandatory-Label-Provider.5D)
+    *   [4.14 Snippet015 - Custom Tooltips For Tree](#Snippet015---Custom-Tooltips-For-Tree)
+    *   [4.15 Snippet017 - Table Viewer Hide Show Columns](#Snippet017---Table-Viewer-Hide-Show-Columns)
+    *   [4.16 Snippet019 - Table Viewer Add Remove Columns With Editing](#Snippet019---Table-Viewer-Add-Remove-Columns-With-Editing)
+    *   [4.17 Snippet024 - Table Viewer Explore](#Snippet024---Table-Viewer-Explore)
+    *   [4.18 Snippet025 - Tab Editing](#Snippet025---Tab-Editing)
+    *   [4.19 Snippet026 - Tree Viewer Tab Editing](#Snippet026---Tree-Viewer-Tab-Editing)
+    *   [4.20 Snippet027 - Combo Box Cell Editors](#Snippet027---Combo-Box-Cell-Editors)
+    *   [4.21 Snippet029 - Virtual Table Viewer](#Snippet029---Virtual-Table-Viewer)
+    *   [4.22 Snippet030 - Virtual Lazy Table Viewer](#Snippet030---Virtual-Lazy-Table-Viewer)
+    *   [4.23 Snippet031 - Table Viewer Custom Tooltips Multi Selection\]](#Snippet031---Table-Viewer-Custom-Tooltips-Multi-Selection.5D)
+    *   [4.24 Snippet034 - Cell Editor Per Row](#Snippet034---Cell-Editor-Per-Row)
+    *   [4.25 Snippet035 - Table Cursor Cell Highlighter](#Snippet035---Table-Cursor-Cell-Highlighter)
+    *   [4.26 Snippet036 - Focus Border Cell Highlighter](#Snippet036---Focus-Border-Cell-Highlighter)
+    *   [4.27 Snippet037 - Fancy Custom Tooltips](#Snippet037---Fancy-Custom-Tooltips)
+    *   [4.28 Snippet039 - List Viewer](#Snippet039---List-Viewer)
+    *   [4.29 Snippet040 - Table Viewer Sorting](#Snippet040---Table-Viewer-Sorting)
+    *   [4.30 Snippet 041 - Table Viewer Alternating Colors and Viewer Filters](#Snippet-041---Table-Viewer-Alternating-Colors-and-Viewer-Filters)
+    *   [4.31 Snippet043 - Tree Viewer Keyboard Editing](#Snippet043---Tree-Viewer-Keyboard-Editing)
+    *   [4.32 Snippet044 - Table Viewer Keyboard Editing](#Snippet044---Table-Viewer-Keyboard-Editing)
+    *   [4.33 Snippet045 - Table Viewer Fill From Background Thread](#Snippet045---Table-Viewer-Fill-From-Background-Thread)
+    *   [4.34 Snippet046 - Update Viewer From Background Thread](#Snippet046---Update-Viewer-From-Background-Thread)
+    *   [4.35 Snippet047 - Virtual Lazy Tree Viewer](#Snippet047---Virtual-Lazy-Tree-Viewer)
+    *   [4.36 Snippet048 - Tree Viewer Tab With Checkbox](#Snippet048---Tree-Viewer-Tab-With-Checkbox)
+    *   [4.37 Snippet049 - Styled Cell Label Provider](#Snippet049---Styled-Cell-Label-Provider)
+    *   [4.38 Snippet050 - Delegating Styled Cell Label Provider](#Snippet050---Delegating-Styled-Cell-Label-Provider)
+    *   [4.39 Snippet051 - Table Centered Image](#Snippet051---Table-Centered-Image)
+    *   [4.40 Snippet052 - Double Click Cell Editor](#Snippet052---Double-Click-Cell-Editor)
+    *   [4.41 Snippet053 - Start Editor With Context Menu](#Snippet053---Start-Editor-With-Context-Menu)
+    *   [4.42 Snippet055 - Hide Show Column](#Snippet055---Hide-Show-Column)
+    *   [4.43 Snippet056 - Boolean Cell Editor](#Snippet056---Boolean-Cell-Editor)
+    *   [4.44 Snippet057 - Table Viewer Skip Hidden Cells](#Snippet057---Table-Viewer-Skip-Hidden-Cells)
+    *   [4.45 Snippet058 - Cell Navigation](#Snippet058---Cell-Navigation)
+    *   [4.46 Snippet060 - Text Cell Editor With Content Proposal/Field assists](#Snippet060---Text-Cell-Editor-With-Content-Proposal.2FField-assists)
+    *   [4.47 Snippet061 - Faked Native Cell Editor](#Snippet061---Faked-Native-Cell-Editor)
+    *   [4.48 Snippet062 - Text And Dialog Cell Editor](#Snippet062---Text-And-Dialog-Cell-Editor)
+    *   [4.49 Snippet063 - Combo Viewer](#Snippet063---Combo-Viewer)
+    *   [4.50 Snippet064 - Replacing elements in a TreeViewer with child elements](#Snippet064---Replacing-elements-in-a-TreeViewer-with-child-elements)
+    *   [4.51 Snippet065 - Replacing elements in a TreeViewer without child elements](#Snippet065---Replacing-elements-in-a-TreeViewer-without-child-elements)
+    *   [4.52 Snippet066 - TableViewer with Label Decorator](#Snippet066---TableViewer-with-Label-Decorator)
+*   [5 Window](#Window)
+    *   [5.1 Snippet020 - Customized Control Tooltips](#Snippet020---Customized-Control-Tooltips)
+    *   [5.2 Snippet031 - Table Static Tooltip](#Snippet031---Table-Static-Tooltip)
+*   [6 Wizard](#Wizard)
+    *   [6.1 Snippet047 - Wizard with Long Running Operation from Page](#Snippet047---Wizard-with-Long-Running-Operation-from-Page)
+    *   [6.2 Snippet071 - Wizard with Progress and Cancel](#Snippet071---Wizard-with-Progress-and-Cancel)
+    *   [6.3 Snippet072 Wizard with Progress Subtasks and Cancel](#Snippet072-Wizard-with-Progress-Subtasks-and-Cancel)
+    *   [6.4 Snippet074 Wizard with access to application window](#Snippet074-Wizard-with-access-to-application-window)
 
-Eclipse setup instructions on a new Linux (or other OS) computer
-----------------------------------------------------------------
+Dialogs
+-------
 
-*   Direct download link is here: [Eclipse setup instructions on a new Linux (or other OS) computer.pdf](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/eclipse/Eclipse%20setup%20instructions%20on%20a%20new%20Linux%20(or%20other%20OS)%20computer.pdf) (PDF).
-*   It is part of this larger project here: [https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles).
+### [Snippet012 - Dialog with Image Buttons](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet012DialogWithImageButtons.java)
+
+*   [Snippet012 - Dialog with Image Buttons](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet012DialogWithImageButtons.java)
 
   
-Getting started with Eclipse as a beginner is difficult. This document _significantly_ eases that transition. Even for experienced Eclipse users, getting it to work perfectly and bug-free on large projects requires several advanced tricks, all of which are documented carefully in this document with the words "\[IMPORTANT TO PREVENT FREEZES\]". This is unofficial documentation to help Eclipse users get Eclipse installed and configured on any operating system, with a particular emphasis on using Eclipse on Linux. It details getting it to work well and crash-free on any OS when working with small or gigantic projects.
+Demonstrates usage of Icons in Buttons of Dialogs
 
-This document also introduces in detail the following concepts which are unique to Eclipse and very confusing for beginners:
+![Snippet012DialogWithImageButtons.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
 
-1.  workspace
-2.  project
-3.  perspective
-4.  working set
+Drop these icons also in the same package
 
-...and it introduces dozens of really useful shortcuts used daily by experienced Eclipse developers.
+![Filesave.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Filesave.png)![Cancel.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Cancel.png)
 
-Here is a snapshot of its table of contents:
+### [Snippet082 - Color Selector](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet082ColorSelectDialog.java)
 
-1.  Table of Contents: 1
-2.  Install & Setup Steps: 1
-3.  Plugins to Install: 7
-4.  Configure “eclipse.ini”: 8
-5.  Freezes, & Clearing Eclipse’s Cached .pdom Indexer File For Your Project: 10
-6.  Project Resource Filters (adding resources, linked resources, excluded resources, virtual folders, etc): 10
-    1.  Resource Filters (“Include only” or “Exclude all”) 10
-    2.  “Virtual” Folders and “Links” to files or folders (ie: Linked Folders or Linked Files) 11
-7.  Eclipse Usage, Workflow, Help, Tips & Tricks: 13
+*   [Snippet082 - Color Selector](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet082ColorSelectDialog.java)
 
   
-
-Custom Drawing Table and Tree Items
------------------------------------
-
-Populating a table or tree widget involves creating items and setting their attributes (eg.- texts, images, etc.), after which the table or tree takes responsibility for displaying the items. This approach makes item creation straightforward and visually consistent. As of Eclipse 3.2, clients of Table and Tree can now custom draw their items, enabling a wide range of potential visual appearances. This article explores the custom draw mechanism for Table and Tree.
-
-*   [Custom Drawing Table and Tree Items](http://www.eclipse.org/articles/Article-CustomDrawingTableAndTreeItems/customDraw.htm)
+The JFace ColorSelector widget is a convenient composition of button and color selector dialog. The button displays a swatch of the selected color.
 
   
+![Snippet082ColorSelectDialog.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/325px-Snippet082ColorSelectDialog.gif)
 
-Extending WTP Using Project Facets
-----------------------------------
-
-The Faceted Project Framework allows the plugin developer to think of Web Tools Platform (WTP) projects as composed of units of functionality, otherwise known as facets, that can be added and removed by the user. This tutorial walks you through an example of creating a couple of basic facets and in the process covers the majority of the framework's extension points. This tutorial has been written for version 1.5 of the Web Tools Platform.
-
-*   [Extending WTP Using Project Facets](http://www.eclipse.org/articles/Article-BuildingProjectFacets/tutorial.html)
-
-  
-
-Implementing Model Integrity in EMF with EMFT OCL
--------------------------------------------------
-
-This article illustrates how the EMFT OCL parser/interpreter technology adds to the value of EMF/JET code generation as a foundation for model-driven development (MDD). We will see, with fully functional examples, how a metamodel can be generated from an Ecore model without requiring any post-generation custom code, including complete implementations of invariant constraints, derived attributes and references, and operations.
-
-*   [Implementing Model Integrity in EMF with EMFT OCL](http://www.eclipse.org/articles/article.php?file=Article-EMF-Codegen-with-OCL/index.html)
-
-  
-
-From Front End To Code - MDSD in Practice
------------------------------------------
-
-Model-driven software development (MDSD) is not just about generating code. Several additional challenges have to be mastered. These include: how to get usable graphical and textual editors for your domain specific language (DSL), how to validate your models against your metamodels, how to define model modifications and transformations and finally, how to write scalable, maintainable and extensible code generators. In this article we show how to tackle all these challenges, based on a collection of open source tools: Eclipse, Eclipse Modeling Framework (EMF), Graphical Modeling Framework (GMF) as well as openArchitectureWare. We believe that this tool chain provides a proven and stable stack for making MDSD a practical reality.
-
-*   [From Front End To Code - MDSD in Practice](http://www.eclipse.org/articles/Article-FromFrontendToCode-MDSDInPractice/article.html)
-
-  
-
-Virtual Tables and Trees
-------------------------
-
-Virtual Tables and Trees allow developers to quickly create Tables and Trees with large amounts of data and populate them efficiently. This article is an overview of how to use virtual Tables and Trees within SWT applications.
-
-*   [Virtual Tables and Trees](http://www.eclipse.org/articles/Article-SWT-Virtual/Virtual-in-SWT.html)
-
-  
-
-A Shape Diagram Editor
-----------------------
-
-Graphical Editing Framework (GEF) provides a powerful foundation for creating editors for visual editing of arbitrary models. Its effectiveness lies in a modular build, fitting use of design patterns, and decoupling of components that comprise a full, working editor. To a newcomer, the sheer number and variety of concepts and techniques present in GEF may feel intimidating. However, once learned and correctly used, they help to develop highly scalable and easy to maintain software. This article aims to provide a gentle yet comprehensive introduction to GEF. It describes a shape diagram editor - a small, fully functional test case of core concepts.
-
-*   [A Shape Diagram Editor](http://www.eclipse.org/articles/Article-GEF-diagram-editor/shape.html)
-*   [A Shape Diagram Editor](http://www.eclipse.org/articles/Article-GEF-diagram-editor/shape_cn.html)
-
-  
-
-Eclipse Platform Technical Overview
------------------------------------
-
-The Eclipse Platform is designed for building applications, integrated development environments (IDEs)and arbitrary tools. This paper is a general technical introduction to the Eclipse Platform. Part I presents a technical overview of its architecture. Part II is a case study of how the Eclipse Platform was used to build a full-featured Java development environment.
-
-*   [Eclipse Platform Technical Overview](http://www.eclipse.org/articles/Whitepaper-Platform-3.1/eclipse-platform-whitepaper.html)
-*   [Eclipse Platform Technical Overview](http://www.eclipse.org/articles/Whitepaper-Platform-3.1/eclipse-platform-whitepaper.pdf)
-
-  
-
-Eclipse Workbench: Using the Selection Service
-----------------------------------------------
-
-The selection service provided by the Eclipse workbench allows efficient linking of different parts within the workbench window. Knowing and using the existing selection mechanisms gives your plug-ins a clean design, smoothly integrates them into the workbench and opens them for future extensions.
-
-*   [Eclipse Workbench: Using the Selection Service](http://www.eclipse.org/articles/Article-WorkbenchSelections/article.html)
-
-  
-
-The Language Toolkit: An API for Automated Refactorings in Eclipse-based IDEs
------------------------------------------------------------------------------
-
-Anyone who supports a programming language in an Eclipse-based IDE will be asked sooner or later to offer automated refactorings - similar to what is provided by the Java Development Tools (JDT). Since the release of Eclipse 3.1, at least part of this task--which is by no means simple--is supported by a language neutral API: the Language Toolkit (LTK). But how is this API used?
-
-*   [The Language Toolkit: An API for Automated Refactorings in Eclipse-based IDEs](http://www.eclipse.org/articles/Article-LTK/ltk.html)
-
-  
-
-Creating Database Web Applications with Eclipse
------------------------------------------------
-
-The Eclipse Web Tools Project delivers a feature-rich environment for developing J2EE database-driven web applications. This tutorial walks you through the process of creating a simple database web application using Eclipse WTP, Tomcat, and the Derby database engine.
-
-*   [Original article](http://www.eclipse.org/articles/Article-EclipseDbWebapps/2006-04-10/article.html)
-*   [Updated, April 2008](http://www.eclipse.org/articles/article.php?file=Article-EclipseDbWebapps/index.html)
-
-  
-
-Teach Your Eclipse to Speak the Local Lingo
--------------------------------------------
-
-Translations for the Eclipse Project and several top-level projects are contributed to the Eclipse Foundation in every major release of Eclipse. This article provides step-by-step instructions describing what is available, where to download them, how to install them, and how to launch Eclipse in different languages.
-
-*   [Teach Your Eclipse to Speak the Local Lingo](http://www.eclipse.org/articles/Article-Speak-The-Local-Language/article.html)
-
-  
-
-Java Application Profiling using TPTP
--------------------------------------
-
-This article demonstrates how to use the TPTP Profiling tool to profile a Java application for identifying execution related hot spots. It shows how to start the profiling session, use the various TPTP views to analyze the data, identify methods with high execution time then jump to the source code to fix the performance problem.
-
-*   [Java Application Profiling using TPTP](http://www.eclipse.org/articles/Article-TPTP-Profiling-Tool/tptpProfilingArticle.html)
-
-  
-
-The Eclipse Tabbed Properties View
-----------------------------------
-
-The Eclipse workbench provides a properties view which is used to view (and/or edit) properties of a selected item. In this article, you will learn how to use the tabbed properties view to create an enhanced user interface for the properties view.
-
-*   [The Eclipse Tabbed Properties View](http://www.eclipse.org/articles/Article-Tabbed-Properties/tabbed_properties_view.html)
-
-  
-
-How to Correctly and Uniformly Use Progress Monitors
-----------------------------------------------------
-
-Handling a progress monitor instance is deceptively simple. It seems to be straightforward but it is easy to make a mistake when using them. And, depending on numerous factors such as the underlying implementation, how it is displayed, the result can range from completely ok, mildly confusing or outright silliness. In this article we lay down a few ground rules that will help anyone use progress monitors in a way that will work with the explicit and implicit contract of IProgressMonitor. Also, understanding the usage side makes it easier to understand how to implement a monitor.
-
-*   [How to Correctly and Uniformly Use Progress Monitors](http://www.eclipse.org/articles/Article-Progress-Monitors/article.html)
-
-  
-
-Eclipse Forms: Rich UI for the Rich Client
-------------------------------------------
-
-Spice up your rich client with rich user experience using Eclipse Forms. Written as a thin layer on top of SWT, Eclipse Forms allow you to achieve the Web look in your desktop applications without using the embedded browser. This allows you to retain full control of the widgets in the UI and to maintain portability across all operating systems Eclipse already runs on. This article will take you from baby steps to advanced topics of the rich user interface experience of Eclipse Forms.
-
-*   [Eclipse Forms: Rich UI for the Rich Client](http://www.eclipse.org/articles/Article-Forms/article.html)
-
-  
-
-Introducing the GMF Runtime
----------------------------
-
-Graphical Modeling Framework (GMF) is a new Eclipse project with the potential to become a keystone framework for the rapid development of standardized Eclipse graphical modeling editors. GMF is divided in two main components: the runtime, and the tooling used to generate editors capable of leveraging the runtime. Architects and developers involved in the development of graphical editors or of plug-ins integrating both EMF and GEF technologies should consider building their editors against the GMF Runtime component. This article is designed to help understand the benefits of the GMF Runtime by presenting its various value-added features.
-
-*   [Introducing the GMF Runtime](http://www.eclipse.org/articles/Article-Introducing-GMF/article.html)
-
-  
-
-Authoring with Eclipse
-----------------------
-
-The topic of technical publishing is relatively new to the world of Eclipse. One can make the argument that technical publishing is just another collaborative development process involving several people with different backgrounds and skills. This article will show that the Eclipse platform is a viable platform for technical publishing by discussing how to write documents such as an article or a book within Eclipse. In fact, this article was written using Eclipse.
-
-*   [Authoring with Eclipse](http://www.eclipse.org/articles/article.php?file=Article-Authoring-With-Eclipse/index.html)
-
-  
-
-Inside the Workbench: A guide to the workbench internals
---------------------------------------------------------
-
-This article describes how the Eclipse 3.1 workbench works, in particular the infrastructure for views and editors. The goal is to teach you about important classes in the workbench, and how they interact. A familiarity with the basic workbench APIs for views, editors, action sets, and so forth is assumed.
-
-*   [Inside the Workbench: A guide to the workbench internals](http://www.eclipse.org/articles/Article-UI-Workbench/workbench.html)
-
-  
-
-Plugging into SourceForge.net
------------------------------
-
-Congratulations on taking the plunge and writing an open source plug-in for the Eclipse platform. SourceForge.net can provide a good home your plug-in, but information on how best to set up an Eclipse project there is sparse. This article is an introduction to SourceForge for the Eclipse developer. You will learn the features available to the SourceForge.net open source developer community and be guided through the process, from creating a SourceForge project to hosting your Eclipse Update site.
-
-*   [Plugging into SourceForge.net](http://www.eclipse.org/articles/Article-Plugging-into-SourceForge/sourceforge.html)
-
-  
-
-Persisting EMF models with WTP
-------------------------------
-
-This article guides you through an example where an EMF model is created without serialization and the serialization is done with the framework from the web tools plug-in org.eclipse.wst.common.emf.
-
-*   [Persisting EMF models with WTP](http://www.eclipse.org/articles/Article-WTP-Persisting-EMF/persisting.html)
-
-  
-
-Extending The Visual Editor: Enabling support for a custom widget
------------------------------------------------------------------
-
-This tutorial shows how to extend the Visual Editor to support a custom widget. It covers topics such as adding to the Visual Editor's palette, building a BeanInfo class, and working with EMF .override files to introduce custom editor behavior.
-
-*   [Extending The Visual Editor: Enabling support for a custom widget](http://www.eclipse.org/articles/Article-VE-Custom-Widget/customwidget.html)
-
-  
-
-Using GEF with EMF
-------------------
-
-The Graphical Editing Framework (GEF) provides a framework for creating visual editors while being model agnostic. In most cases, people bring their own model which tend to be based on Plain Old Java Objects (POJOs). An alternative using POJOs is the Eclipse Modeling Framework (EMF), which provides many features for manipulating models that aren't found in POJOs. The purpose of this article is to build upon the shapes example provided by GEF using the Eclipse Modeling Framework (EMF) and to provide an introduction using EMF based models in GEF based editors.
-
-*   [Using GEF with EMF](http://www.eclipse.org/articles/Article-GEF-EMF/gef-emf.html)
-
-  
-
-Build and Test Automation for plug-ins and features
----------------------------------------------------
-
-Eclipse offers the possibility to build plug-ins automatically outside the Eclipse IDE, which is called "headless build". Eclipse itself is built headless and since Eclipse is an assembly of plug-ins, this feature is also available for any other plug-in. Although the set up of automatic building and testing requires only a couple of files, it can be tedious work to do nonetheless. This article shares the experiences and lessons learned while setting up automatic building and testing for an Open-Source Eclipse plug-in called RDT, Ruby Development Tools.
-
-*   [Build and Test Automation for plug-ins and features](http://www.eclipse.org/articles/Article-PDE-Automation/automation.html)
-
-  
-
-Using OpenGL with SWT
----------------------
-
-OpenGL is a vendor-neutral, multi-platform standard for creating high-performance 2D and 3D graphics. Hardware and software implementations exist on various operating systems, including Windows, Linux and MacOS. OpenGL may be used to render simple 2D charts or complex 3D games. This article describes an experimental Eclipse plug-in that facilitates the use of OpenGL for drawing onto SWT widgets. A short history and overview of OpenGL is presented, followed by an example application.
-
-*   [Using OpenGL with SWT](http://www.eclipse.org/articles/Article-SWT-OpenGL/opengl.html)
-
-  
-
-Folding in Eclipse Text Editors
--------------------------------
-
-Starting with release 3.0, Eclipse allows folding in its text editor. In this article, I explain the new projection infrastructure introduced in the JFace Text framework and show how to extend the XML Editor example provided with Eclipse to allow folding of text.
-
-*   [Folding in Eclipse Text Editors](http://www.eclipse.org/articles/Article-Folding-in-Eclipse-Text-Editors/folding.html)
-
-  
-
-Eclipse User Interface Guidelines: Version 2.1
-----------------------------------------------
-
-The Eclipse platform is very flexible and extensible, but this flexibility has a serious drawback. In particular, there is no way within the program to ensure user interface consistency between the registered components within the platform.
-
-*   [Eclipse User Interface Guidelines: Version 2.1](http://www.eclipse.org/articles/Article-UI-Guidelines/Index.html)
-*   [Eclipse User Interface Guidelines: Version 2.1](http://www.eclipse.org/articles/Article-UI-Guidelines/index_cn.html)
-
-  
-
-Modeling Rule-Based Systems with EMF
-------------------------------------
-
-There are examples of meta-models defined in ECore for modeling objects and relational data. However, not much has been said about how to model rules. This article will define a meta-model in ECore for modeling rule-based systems. We will then use the meta-model to model the solution of a logical problem. Then we will compose some JET templates and generate code from the model, run the generated code through a rule engine and see that the logical problem is correctly solved.
-
-*   [Modeling Rule-Based Systems with EMF](//www.eclipse.org/articles/Article-Rule%20Modeling%20With%20EMF/article.html)
-
-  
-
-Building Administrative Applications in Eclipse
------------------------------------------------
-
-Eclipse is most commonly used as a platform for tools that allow the user to construct or assemble an end product out of development resources. It is less usual to use Eclipse as an administrative tool for monitoring existing runtime systems or applications. This article will describe some of the issues that arise in this case and illustrate possible solutions. It will show you can build an Eclipse perspective dedicated to the monitoring task. Running processes are shown in a dedicated view which always reflects their current state. You can start/stop the process, manage connections, invoke operations that the server exposes, examine server output and view events generated by the running applications.
-
-*   [Building Administrative Applications in Eclipse](http://www.eclipse.org/articles/Article-Monitor/monitorArticle.html)
-
-  
-
-EMF goes RCP
+Notification
 ------------
 
-This article explains how you can use EMF to generate RCP applications. It assumes that you have already used EMF, or have at least read the articles and references available on the documentation section of the EMF web site.
+### [Snippet081 - Notification API](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet081NotificationPopup.java)
 
-*   [EMF goes RCP](http://www.eclipse.org/articles/Article-EMF-goes-RCP/rcp.html)
+*   [Snippet081 - Notication API](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/dialogs/Snippet081NotificationPopup.java)
 
   
+Demonstrates usage of the non-blocking notification API
 
-Building a Database Schema Diagram Editor with GEF
---------------------------------------------------
-
-GEF is a very powerful framework for visually creating and editing models. With a small initial investment, even the relative Eclipse novice can be quickly up and running, building applications with graphical editing capabilities. To illustrate, this article uses a relational database schema diagram editor with a deliberately simplified underlying model, but with enough bells and whistles to show some of the interesting features of GEF at work.
-
-*   [Building a Database Schema Diagram Editor with GEF](http://www.eclipse.org/articles/Article-GEF-editor/gef-schema-editor.html)
-
   
+![Snippet081 Shell1.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet081_Shell1.gif)
 
-On the Job: The Eclipse Jobs API
---------------------------------
+Layout
+------
 
-This article looks at the new Jobs API available as part of Eclipse 3.0. It describes the main portions of the Jobs API and the use of scheduling rules. It also describes some changes to Eclipse resource management including how the Resources plug-in integrates with the new API. Finally, it describes some new UI functionality that has been added to provide feedback to users about jobs that are run in the background.
+### [Snippet013 - Grid Layout Factory](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet013GridLayoutFactory.java)
 
-*   [On the Job: The Eclipse Jobs API](http://www.eclipse.org/articles/Article-Concurrency/jobs-api.html)
+*   [Snippet013 - Grid Layout Factory](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet013GridLayoutFactory.java)
 
   
+Demonstrates usage of the GridLayoutFactory to enhance readability
 
-Branding Your Application
--------------------------
+![Snippet013 Shell1.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet013_Shell1.png)![Snippet013 Shell2.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet013_Shell2.png)![Snippet013 Shell3.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet013_Shell3.png)
 
-In this article we look at how to create branding for your Eclipse-based application. Branding is how you change the high level visual elements of your product. This includes items such as the splash screen, the about dialog, and the program executable.
+### [Snippet016 - Table Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet016TableLayout.java)
 
-*   [Branding Your Application](http://www.eclipse.org/articles/Article-Branding/branding-your-application.html)
+*   [Snippet016 - Table Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet016TableLayout.java)
 
   
+Demonstrates (dynamic)layout support for TableColumns available as of JFace 3.3
 
-How to Write an Eclipse Debugger
---------------------------------
+![Snippet016.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet016.png)
 
-One of the major tasks of adding a new language to an Eclipse-based IDE is debugging support. A debugger needs to start and stop the program being debugged, suspend and resume, single-step, manage breakpoints and watch points, and so on. This article explains the Eclipse Platform debug framework and steps through a simple, yet illustrative, example of adding debug support for a new language.
+### [Snippet027 - Tree Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet027TreeLayout.java)
 
-*   [How to Write an Eclipse Debugger](http://www.eclipse.org/articles/Article-Debugger/how-to.html)
+*   [Snippet027 - Tree Layout](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/layout/Snippet027TreeLayout.java)
 
   
+Demonstrates (dynamic)layout support for TreeColumns available as of JFace 3.3
 
-Viewing HTML pages with SWT Browser widget
-------------------------------------------
+![Snippet027.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet027.png)
 
-This article explains how to add HTML viewing capability to an SWT application. The Browser widget provides an easy way to integrate rich HTML content into your application.
+Viewers
+-------
 
-*   [Viewing HTML pages with SWT Browser widget](http://www.eclipse.org/articles/Article-SWT-browser-widget/browser.html)
+### [Snippet001 - Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet001TableViewer.java)
 
+*   [Snippet001 - Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet001TableViewer.java)
+
   
+Demonstrates a simply TableViewer with one column. It holds all important classes used for all Table-like JFace-Viewers (_[LabelProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/LabelProvider.html)_,_[IStructuredContentProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/IStructuredContentProvider.html)_)
 
-Rich Client Tutorial
---------------------
+![Snippet1.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet1.png)
 
-The Rich Client Platform (RCP) is an exciting new way to build Java applications that can compete with native applications on any platform. This tutorial is designed to get you started building RCP applications quickly. It has been updated for Eclipse 3.1.2.
+### [Snippet002 - Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet002TreeViewer.java)
 
-*   [Part 1](http://www.eclipse.org/articles/Article-RCP-1/tutorial1.html)
-*   [Part 2](http://www.eclipse.org/articles/Article-RCP-2/tutorial2.html)
-*   [Part 3](http://www.eclipse.org/articles/Article-RCP-3/tutorial3.html)
+*   [Snippet002 - Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet002TreeViewer.java)
 
   
+Demonstrates a simply TreeViewer with one column. It describes all important classes used for all Tree-like JFace-Viewers (_[LabelProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/LabelProvider.html)_,_[ITreeContentProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/ITreeContentProvider.html)_)
 
-A Basic Image Viewer
---------------------
+![Snippet2.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet2.png)
 
-This article shows how to extend the SWT Canvas to implement a mini image viewer plug-in using Java2D transforms. The extended image canvas can be used to scroll and zoom large images, and can also be extended to apply other transforms. The implementation is based on SWT and the non-UI portions of AWT. The plug-in has been tested on Windows, Linux GTK, and Mac OS X Carbon with Eclipse 2.1 or better.
+### [Snippet003 - Table Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet003TableLabelProvider.java)
 
-*   [A Basic Image Viewer](http://www.eclipse.org/articles/Article-Image-Viewer/Image_viewer.html)
+*   [Snippet003 - Table Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet003TableLabelProvider.java)
 
   
+Demonstrates tables with more than one column and the usage of _[ITableLabelProvider](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/jface/viewers/ITableLabelProvider.html)_
 
-Mutatis mutandis - Using Preference Pages as Property Pages
------------------------------------------------------------
+![Snippet003.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet003.png)
 
-A common problem in the implementation of applications is the implementation of project-specific properties that override workbench-wide preferences on project or file level. The naive approach is to implement these pages from scratch. However, writing the same code twice is a boring task and leads to increased maintenance efforts. In this article we show how existing preferences pages (with or without field editors) can be easily converted into pages that can act as both preference and property pages. We demonstrate this by implementing the abstract class FieldEditorOverlayPage providing the necessary functionality.
+### [Snippet004 - Hide Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet004HideSelection.java)
 
-*   [Mutatis mutandis - Using Preference Pages as Property Pages](http://www.eclipse.org/articles/Article-Mutatis-mutandis/overlay-pages.html)
+*   [Snippet004 - Hide Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet004HideSelection.java)
 
   
+Demonstrates how the selection can be hidden when the user clicks in a table-row/column which doesn't hold any information. The standard behavior of SWT-Table is to leave the selection on the last column. This snippet removes the selection if the user clicks in an area not selectable
 
-A small cup of SWT: A bag of hints, tricks and recipes for developing SWT apps on the Pocket PC
------------------------------------------------------------------------------------------------
+![Snippet004.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet004.png)
 
-Are you interested in developing applications for the Microsoft® Pocket PC? Are you a desktop developer curious about embedded user interfaces? A well-built embedded application is both user and resource friendly. User expectations are high. Resources are very limited...
+### [Snippet005 - Tree Custom Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet005TreeCustomMenu.java)
 
-*   [A small cup of SWT: A bag of hints, tricks and recipes for developing SWT apps on the Pocket PC](http://www.eclipse.org/articles/Article-small-cup-of-swt/pocket-PC.html)
+*   [Snippet005 - Tree Custom Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet005TreeCustomMenu.java)
 
   
+Demonstrates how to create a different context menu depending on which item in the tree is currently selected this can also be used with a table of course
 
-Taking a look at SWT Images
----------------------------
+![Snippet005.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet005.png)
 
-SWT's Image class can be used to display images in a GUI. The most common source of images is to load from a standard file format such as GIF, JPEG, PNG, or BMP. Some controls, including Buttons and TreeItems, are able to display an Image directly through the setImage(Image) method, but any control's paint event allows images to be drawn through the callback's graphic context. SWT's ImageData class represents the raw data making up an SWT Image and determines the color for each pixel coordinate. This article shows the correct uses of ImageData and Image, shows how to load images from files, and how to achieve graphic effects such as transparency, alpha blending, animation, scaling, and custom cursors.
+### [Snippet006 - Table Multi Line Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet006TableMultiLineCells.java)
 
-*   [Taking a look at SWT Images](http://www.eclipse.org/articles/Article-SWT-images/graphics-resources.html)
+*   [Snippet006 - Table Multi Line Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet006TableMultiLineCells.java)
 
   
+Demonstrates first use case for the OwnerDraw-Support added to JFace in 3.3 (available at SWT-Level since 3.2). This example uses the Viewers API in this special case the _OwnerDrawLabelProvider_ to make items with more than one line of text.
 
-PDE Does Plug-ins
------------------
+![Snippet006.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet006.png)
 
-The Plug-in Development Environment (PDE) provides a set of tools that assist the developer in every stage of plug-in development from genesis to deployment. This article chronicles the creation, development, testing, building, and deployment of a simple "Hello World" plug-in using a subset of these tools.
+### [Snippet007 - Full Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet007FullSelection.java)
 
-*   [PDE Does Plug-ins](http://www.eclipse.org/articles/Article-PDE-does-plugins/PDE-intro.html)
+*   [Snippet007 - Full Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet007FullSelection.java)
 
   
+Demonstrates how you can use inline editing in tables with multiple columns that require to use SWT.FULL_SELECTION but hiding the selection from the user.
 
-How To Keep Up To Date
-----------------------
+![Snippet007.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet007.png)
 
-This article shows you how to create and publish bundles of plug-ins (called features) to an update site so that customers can download and install them directly into Eclipse using the Eclipse update manager. This has many advantages over the low tech way of delivering new or updated plug-ins in a zip file that someone manually unzips into the directory where Eclipse is installed.
+### [Snippet008 - Reveal Element](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet008RevealElement.java)
 
-*   [How To Keep Up To Date](http://www.eclipse.org/articles/Article-Update/keeping-up-to-date.html)
+*   [Snippet008 - Reveal Element](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet008RevealElement.java)
 
   
+Demonstrates how you can scroll a TableViewer to the specific model element using TableViewer#reveal(Object)
 
-JET Tutorial Part 2 (Write Code that Writes Code)
--------------------------------------------------
+![Snippet008.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet008.png)
 
-In Part 2 of this JET (Java Emitter Templates) tutorial, we will take a look at the JET engine API. You will learn how to write plug-ins that use the classes in the JET package to generate Java source code.As a real-world example, we will create a plug-in that takes user input and generates a Typesafe Enumeration class. The generated source code is based on a JET template that can be distributed with the plug-in, allowing users of the plug-in to customize the generated code by editing the template. This article also provides a short reference to the JET API.
+### [Snippet009 - Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet009CellEditors.java)
 
-*   [JET Tutorial Part 2 (Write Code that Writes Code)](http://www.eclipse.org/articles/Article-JET2/jet_tutorial2.html)
+*   [Snippet009 - Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet009CellEditors.java)
 
   
+Demonstrates minimal example when trying to add inline editing to tables to get familiar with the various classes needed (3.2 API)
 
-Launching Java Applications Programmatically
---------------------------------------------
+![Snippet009.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet009.png)
 
-Application developers require the ability to run and debug code in order to test it. Tool developers require the ability to launch Java™ applications that assist in application development - for example, starting and stopping a Web server on which servlets, JSPs, and HTML pages can be tested; or launching a VM on which scrapbook evaluations can be performed. This article focuses on the high-level API provided by the Java launching plug-in that tool developers can leverage for the programmatic launching of local Java applications.
+### [Snippet010 - Owner Draw](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet010OwnerDraw.java)
 
-*   [Launching Java Applications Programmatically](http://www.eclipse.org/articles/Article-Java-launch/launching-java.html)
+*   [Snippet010 - Owner Draw](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet010OwnerDraw.java)
 
   
+Demonstrates usage of the OwnerDraw-Support feature provided by JFace in 3.3(available in SWT since 3.2). This example uses the Viewers API in this special case the _OwnerDrawLabelProvider_.
 
-Adding Drag and Drop to an SWT Application
-------------------------------------------
+![Snippet010.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet010.png)
 
-Drag and drop provides a quick and easy mechanism for users to re-order and transfer data within an application and between applications. This article is an overview of how to implement Drag and Drop and Clipboard data transfers within an SWT application.
+### [Snippet011 - Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet011CustomTooltips.java)
 
-*   [Adding Drag and Drop to an SWT Application](http://www.eclipse.org/articles/Article-SWT-DND/DND-in-SWT.html)
+*   [Snippet011 - Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet011CustomTooltips.java)
 
   
+Demonstrates usage of custom tooltip support in 3.3 used to provide a tooltip for each cell in TableViewer
 
-Display a UML Diagram using Draw2D
-----------------------------------
+![Snippet011.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet011.png)
 
-The Graphical Editing Framework (GEF) ships with a painting and layout plug-in called Draw2D. Draw2D provides figures and layout managers which form the graphical layer of a GEF application. This article focuses only on the use of Draw2D to render a simple UML class diagram. While Draw2D can be used for standalone purposes, it is not an editing framework. Most applications will use the GEF plug-in as the editing layer.
+### [Snippet013 - Table Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet013TableViewerNoMandatoryLabelProvider.java)\]
 
-*   [Display a UML Diagram using Draw2D](http://www.eclipse.org/articles/Article-GEF-Draw2d/GEF-Draw2d.html)
+*   [Snippet013 - Table Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet013TableViewerNoMandatoryLabelProvider.java)\]
 
   
+Demonstrates usage of none mandatory LabelProviders in TableViewers to set colors and fonts with 3.2-API
 
-Drag and Drop in the Eclipse UI
--------------------------------
+![Jfacesnippet013.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Jfacesnippet013.png)
 
-In this article, we discuss the drag and drop facilities provided by JFace and the Eclipse platform UI. After reading this, you will know how to add drag and drop support to your own Eclipse views, and how that support will interact with the standard views in the Eclipse platform. Along the way, we'll also discuss that keyboard relative of drag and drop: cut and paste. You'll learn that putting your own custom objects on the clipboard is easy once you've figured out the basics of drag and drop.
+### [Snippet014 - Tree Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet014TreeViewerNoMandatoryLabelProvider.java)\]
 
-*   [Drag and Drop in the Eclipse UI](http://www.eclipse.org/articles/Article-Workbench-DND/drag_drop.html)
+*   [Snippet014 - Tree Viewer No Mandatory Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet014TreeViewerNoMandatoryLabelProvider.java)\]
 
   
+Demonstrates usage of none mandatory LabelProviders in TreeViewers to set colors and font with 3.2-API
 
-Using Native Drag and Drop with GEF
------------------------------------
+![Snippet014TreeViewerNoMandatoryLabelProvider.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet014TreeViewerNoMandatoryLabelProvider.png)
 
-Native drag and drop provides the ability to drag data from one GUI object to another GUI object, which could potentially be in another application. GEF allows access to the operating system's underlying drag and drop infrastructure through SWT. This article will provide an in-depth look at GEF's drag and drop functionality and show some simple examples of how to take advantage of this API.
+### [Snippet015 - Custom Tooltips For Tree](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet015CustomTooltipsForTree.java)
 
-*   [Using Native Drag and Drop with GEF](http://www.eclipse.org/articles/Article-GEF-dnd/GEF-dnd.html)
+*   [Snippet015 - Custom Tooltips For Tree](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet015CustomTooltipsForTree.java)
 
   
+Demonstrates usage of custom tooltip support used to provide a tooltip for each cell in a TreeViewer
 
-JET Tutorial Part 1 (Introduction to JET)
------------------------------------------
+![Snippet015CustomTooltipsForTree.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet015CustomTooltipsForTree.png)
 
-Generating source code can save you time in your projects and can reduce the amount of tedious redundant programming. Generating source code can be powerful, but the program that writes the code can quickly become very complex and hard to understand. One way to reduce complexity and increase readability is to use templates. In this article you will learn how to create JET templates, how to use the JET Nature and JET Builder to automatically translate templates into Java classes, and how to use these classes to generate source code. This article also provides a short reference to the JET syntax.
+### [Snippet017 - Table Viewer Hide Show Columns](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet017TableViewerHideShowColumns.java)
 
-*   [JET Tutorial Part 1 (Introduction to JET)](http://www.eclipse.org/articles/Article-JET/jet_tutorial1.html)
+*   [Snippet017 - Table Viewer Hide Show Columns](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet017TableViewerHideShowColumns.java)
 
   
+Demonstrates hiding and showing columns (animated)
 
-Inside the Memory View: A Guide for Debug Providers
----------------------------------------------------
+![Snippet017TableViewerHideShowColumns.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet017TableViewerHideShowColumns.png)
 
-There are many programming languages that allow access and discrete control of system memory. If you are a debug provider for one of these languages, then you probably have a requirement to provide support for debug-time memory inspection and manipulation. The Eclipse debug framework provides a Memory View, along with an extensible framework to simplify and standardize this task. This article introduces the Memory View and describes how to add your own customized memory support.
+### [Snippet019 - Table Viewer Add Remove Columns With Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet019TableViewerAddRemoveColumnsWithEditing.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-MemoryView/index.html)
+*   [Snippet019 - Table Viewer Add Remove Columns With Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet019TableViewerAddRemoveColumnsWithEditing.java)
 
   
+Demonstrates adding/removing of columns in conjunction with the inline editing with JFace-API
 
-Building and delivering a table editor with SWT/JFace
------------------------------------------------------
+![Snippet019TableViewerAddRemoveColumnsWithEditing.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet019TableViewerAddRemoveColumnsWithEditing.png)
 
-The JFace API provides several classes that can be used to build editable table views. In this article, we present a fairly extensive example that exercises the JFace and SWT classes needed to implement a table with cell editors for check-boxes, free text and combo-boxes. We also show how to package and deliver the classes into a stand-alone (non-Eclipse) Java application.
+### [Snippet024 - Table Viewer Explore](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet024TableViewerExploreNewAPI.java)
 
-*   [Building and delivering a table editor with SWT/JFace](http://www.eclipse.org/articles/Article-Table-viewer/table_viewer.html)
+*   [Snippet024 - Table Viewer Explore](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet024TableViewerExploreNewAPI.java)
 
   
+Demonstrates the base classes of 3.3 API
 
-Graphics Context - Quick on the draw
-------------------------------------
+![Snippet024TableViewerExploreNewAPI.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet024TableViewerExploreNewAPI.png)
 
-The package `org.eclipse.swt.graphics` contains classes that allow management of graphics resources. Graphics can be drawn on anything that implements `org.eclipse.swt.graphics.Drawable`, which includes `org.eclipse.swt.widgets.Control` and `org.eclipse.swt.graphics.Image`. The class `org.eclipse.swt.graphics.GC` encapsulates all of the drawing API, including how to draw lines and shapes, draw text and images and fill shapes. This article shows how to use a GC to draw onto an Image, or onto a control through its paintEvent callback. The Canvas control, specifically designed for drawing operations, has a number of constructor style bits that allow you to determine when and how painting occurs, and the article shows how to use these.
+### [Snippet025 - Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet025TabEditing.java)
 
-*   [Graphics Context - Quick on the draw](http://www.eclipse.org/articles/Article-SWT-graphics/SWT_graphics.html)
-*   [Graphics Context - Quick on the draw](http://www.eclipse.org/articles/article.php?charset=utf-8&file=Article-SWT-graphics/index_cn.html)
+*   [Snippet025 - Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet025TabEditing.java)
 
   
+Demonstrates how one can use the 3.3 API to add tab-editing support to your viewer
+
+![Snippet025TabEditing.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet025TabEditing.png)
 
-Notes on the Eclipse Plug-in Architecture
------------------------------------------
+Press Tab to jump from cell to cell
 
-Eclipse plug-ins embody an architectural pattern for building an application from constituent parts. This article presents an in-depth view of the participant roles and collaborations of this architectural pattern, as they exist in an instance of the Eclipse workbench. The goal is to provide an understanding of plug-ins, and of how plug-in extensions are defined and processed, independently of the mechanics of using the Eclipse workbench to produce plug-ins.
+### [Snippet026 - Tree Viewer Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet026TreeViewerTabEditing.java)
 
-*   [Notes on the Eclipse Plug-in Architecture](http://www.eclipse.org/articles/Article-Plug-in-architecture/plugin_architecture.html)
+*   [Snippet026 - Tree Viewer Tab Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet026TreeViewerTabEditing.java)
 
   
+Demonstrates all fancy things one can do with the 3.3 API (Tab-Editing, Keyboard-Navigation from Cell to Cell, Editor-Activation with the Keyboard)
 
-Designing Accessible Plug-ins in Eclipse
-----------------------------------------
+![Snippet026TreeViewerTabEditing.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet026TreeViewerTabEditing.gif)
 
-Accessibility for disabled users is now a priority in application development as advances in techniques and support within operating systems have now made this possible. This article covers the Eclipse accessibility support, general tips for creating accessible plug-ins, and the types of disabilities that the Eclipse accessibility support assists. This is all illustrated using an example of making a view accessible.
+### [Snippet027 - Combo Box Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet027ComboBoxCellEditors.java)
 
-*   [Original article](http://www.eclipse.org/articles/Article-Accessibility/accessibility.html)
-*   [Updated for Eclipse Platform 3.5](http://www.eclipse.org/articles/article.php?file=Article-Accessibility351/index.html)
+*   [Snippet027 - Combo Box Cell Editors](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet027ComboBoxCellEditors.java)
 
   
+Demonstrates usage of the ComboBoxCellEditor in JFace-Viewers
 
-Take control of your properties
--------------------------------
+![Snippet027ComboBoxCellEditors.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet027ComboBoxCellEditors.png)
 
-The Eclipse workbench provides a properties view which is used to view (and/or edit) properties of a selected item. In this article, you will learn how to use the properties view to dynamically modify the properties of a GUI button.
+### [Snippet029 - Virtual Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet029VirtualTableViewer.java)
 
-*   [Take control of your properties](http://www.eclipse.org/articles/Article-Properties-View/properties-view.html)
+*   [Snippet029 - Virtual Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet029VirtualTableViewer.java)
 
   
+Demonstrates usage of JFace-Viewers in "virtual" mode with an ordinary content provider (often the bottleneck is not the model but the UI). Using these Virtual viewers in conjunction with an ordinary content provider has the advantage that Sorting and Filtering are supported in 3.3.
 
-Project Builders and Natures
-----------------------------
+### [Snippet030 - Virtual Lazy Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet030VirtualLazyTableViewer.java)
 
-This article discusses two central mechanisms that are associated with projects in an Eclipse workspace. The first of these is incremental project builders, which create some built state based on the project contents, and then keep that built state synchronized as the project contents change. The second is project natures, which define and manage the association between a given project and a particular plug-in or feature.
+*   [Snippet030 - Virtual Lazy Table Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet030VirtualLazyTableViewer.java)
 
-*   [Project Builders and Natures](http://www.eclipse.org/articles/Article-Builders/builders.html)
-
   
-
-Understanding Decorators in Eclipse
------------------------------------
+Demonstrates usage of JFace-Viewer virtual mode with a lazy content provider
 
-Decorators, as the name suggests, are used for adorning/annotating resources with useful information. Decorators can be used by plug-ins to convey more information about a resource and other objects displayed in different workbench views. This article, with the help of a simple plug-in example, will illustrate the steps involved in decorating resources, along with some best practice approaches for decorating resources. Finally, we will discuss performance issues that may arise when enabling decorators, and briefly go over the new lightweight decorators found in Eclipse 2.1.
+### [Snippet031 - Table Viewer Custom Tooltips Multi Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet031TableViewerCustomTooltipsMultiSelection.java)\]
 
-*   [Understanding Decorators in Eclipse](http://www.eclipse.org/articles/Article-Decorators/decorators.html)
+*   [Snippet031 - Table Viewer Custom Tooltips Multi Selection](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet031TableViewerCustomTooltipsMultiSelection.java)\]
 
   
+Demonstrates creation of tooltips for cells for pre 3.3 users
 
-We Have Lift-off: The Launching Framework in Eclipse
-----------------------------------------------------
+![Snippet031TableViewerCustomTooltipsMultiSelection.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet031TableViewerCustomTooltipsMultiSelection.png)
 
-The ability to launch (run or debug) code under development is fundamental to an IDE. But because Eclipse is more of a tools platform than a tool itself, Eclipse's launching capabilities depend entirely on the current set of installed plug-ins. This article describes the API available to build launching plug-ins and works through developing an example launcher using this API.
+### [Snippet034 - Cell Editor Per Row](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet034CellEditorPerRow.java)
 
-*   [We Have Lift-off: The Launching Framework in Eclipse](http://www.eclipse.org/articles/Article-Launch-Framework/launch.html)
+*   [Snippet034 - Cell Editor Per Row](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet034CellEditorPerRow.java)
 
   
+Demonstrates different CellEditor-Types in one COLUMN of JFace-Viewers
 
-Creating JFace Wizards
-----------------------
+![Snippet034CellEditorPerRow.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet034CellEditorPerRow.png)
 
-This article shows you how to implement a wizard using the JFace toolkit and how to contribute your wizard to the Eclipse workbench. A wizard whose page structure changes according to user input is implemented to demonstrate the flexibility of wizard support.
+### [Snippet035 - Table Cursor Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet035TableCursorCellHighlighter.java)
 
-*   [Creating JFace Wizards](http://www.eclipse.org/articles/Article-JFaceWizards/wizardArticle.html)
+*   [Snippet035 - Table Cursor Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet035TableCursorCellHighlighter.java)
 
   
+Demonstrates keyboard navigation in TableViewers using a TableCursor showing the flexibility of the cell navigation support
 
-Using EMF
----------
+You also need these classes:
 
-This article introduces EMF, the Eclipse Modeling Framework, and will help you get started using EMF in your own Eclipse plug-ins.
+*   [CursorCellHighlighter.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/CursorCellHighlighter.java)
+*   [AbstractCellCursor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/AbstractCellCursor.java)
+*   [TableCursor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/TableCursor.java)
 
-*   [Using EMF](http://www.eclipse.org/articles/Article-Using%20EMF/using-emf.html)
-
   
+![Snippet035TableCursorCellHighlighter.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet035TableCursorCellHighlighter.png)
 
-How You've Changed!: Responding to resource changes in the Eclipse workspace
-----------------------------------------------------------------------------
+### [Snippet036 - Focus Border Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet036FocusBorderCellHighlighter.java)
 
-Many tools and user interface elements are interested in processing resource changes as they happen. For example, the task list wants to update new or changed markers, the navigator wants to reflect added and deleted resources, and the Java compiler wants to recompile modified Java files. Such notifications are potentially costly to compute, manage and broadcast. The Eclipse Platform resource model includes a series of mechanisms for efficiently notifying clients of resource changes. This article outlines these facilities and gives some examples of their use.
+*   [Snippet036 - Focus Border Cell Highlighter](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet036FocusBorderCellHighlighter.java)
 
-*   [How You've Changed!: Responding to resource changes in the Eclipse workspace](http://www.eclipse.org/articles/Article-Resource-deltas/resource-deltas.html)
-
   
-
-How to Internationalize your Eclipse Plug-In
---------------------------------------------
+Demonstrates keyboard navigation by highlighting the currently selected cell with a focus border showing once more the flexibility of the cell navigation support
 
-This article is a roadmap for writing Eclipse plug-ins destined for the international market. We'll begin with a brief review of the motivations and technical challenges of internationalization, followed by step-by-step instructions of how to internationalize your Eclipse plug-in.
+You also need:
 
-*   [How to Internationalize your Eclipse Plug-In](http://www.eclipse.org/articles/Article-Internationalization/how2I18n.html)
-*   [Ukranian Translation](http://softdroid.net/how2I18n-ua)
+*   [FocusBorderCellHighlighter.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/FocusBorderCellHighlighter.java)
 
   
+![Snippet036FocusBorderCellHighlighter.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet036FocusBorderCellHighlighter.png)
 
-How to Test Your Internationalized Eclipse Plug-In
---------------------------------------------------
+### [Snippet037 - Fancy Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet037FancyCustomTooltips.java)
 
-This article shows you how to validate your internationalized product and prepares you for the types of common problems you can expect during translation testing. It includes an Eclipse plug-in that defines a Properties File Compare view that can help your translation testers find errors more quickly.
+*   [Snippet037 - Fancy Custom Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet037FancyCustomTooltips.java)
 
-*   [How to Test Your Internationalized Eclipse Plug-In](http://www.eclipse.org/articles/Article-TVT/how2TestI18n.html)
-
   
+Demonstrates customizability of the 3.3 JFace-Support for cell tooltips using the Browser-Widget and presenting HTML
 
-Simplifying Preference Pages with Field Editors
------------------------------------------------
+![Snippet037FancyCustomTooltips.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet037FancyCustomTooltips.png)
 
-Even though preference pages can be simple to program, you can spend a lot of time getting them "just right." Field editors make this task faster and easier by providing the behavior for storing, loading, and validating preferences. Field editors also define some of the behavior for grouping and laying out widgets on a preference page.
+### [Snippet039 - List Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet039ListViewer.java)
 
-*   [Simplifying Preference Pages with Field Editors](http://www.eclipse.org/articles/Article-Field-Editors/field_editors.html)
+*   [Snippet039 - List Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet039ListViewer.java)
 
   
+Demonstrates a very simple usage of ListViewer
 
-Preferences in the Eclipse Workbench UI
----------------------------------------
+![Snippet039ListViewer.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet039ListViewer.png)
 
-In the Eclipse Platform plug-in developers define preference pages for their plug-ins for use in the Workbench Preferences Dialog. This article explains when to use a preference and some of the features the Eclipse Platform provides to support preferences.
+### [Snippet040 - Table Viewer Sorting](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet040TableViewerSorting.java)
 
-*   [Preferences in the Eclipse Workbench UI](http://www.eclipse.org/articles/Article-Preferences/preferences.htm)
+*   [Snippet040 - Table Viewer Sorting](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet040TableViewerSorting.java)
 
   
+Demonstrates sorting (ascending/descending) in TableViewers by clicking the column header.
 
-Help Part 1: Contributing a Little Help
----------------------------------------
+![Snippet040TableViewerSorting.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet040TableViewerSorting.png)
 
-The Eclipse Platform's help system defines two extension points ("toc" and "contexts") that allow individual plug-ins to contribute online help and context-sensitive help for their components. In this article we will investigate the "toc" extension point and how you can use it to contribute documentation for your plug-in.
+### [Snippet 041 - Table Viewer Alternating Colors and Viewer Filters](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet041TableViewerAlternatingColors.java)
 
-*   [Help Part 1: Contributing a Little Help](http://www.eclipse.org/articles/Article-Online%20Help%20for%202_0/help1.htm)
+*   [Snippet 041 - Table Viewer Alternating Colors and Viewer Filters](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet041TableViewerAlternatingColors.java)
 
   
+Demonstrates how to achieve alternating row-colors with TableViewer. It can also be used in conjunction with virtual-bits to even work with big tables (e.g. 100,000 rows in this example). In addition, this snippet provided a button that will demonstrate the usage of viewer filters.
 
-How to use the JFace Tree Viewer
---------------------------------
+![Snippet041TableViewerAlternatingColors.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet041TableViewerAlternatingColors.png)
 
-The goal of this article is to teach you how to use TreeViewers in your Eclipse plug-ins or stand-alone JFace/SWT applications. We'll start with a simple example and progressively add functionality.
+### [Snippet043 - Tree Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet043TreeViewerKeyboardEditing.java)
 
-*   [How to use the JFace Tree Viewer](http://www.eclipse.org/articles/Article-TreeViewer/TreeViewerArticle.htm)
+*   [Snippet043 - Tree Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet043TreeViewerKeyboardEditing.java)
 
   
+Demonstrates the JFace 3.3 keyboard editing support for Trees without columns. Tabbing from editor to editor is supported since 3.4. In addition, this snippet provided a button that shows how to enter in edit mode programmatically.
 
-Creating an Eclipse View
-------------------------
+![Snippet043TreeViewerKeyboardEditing.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet043TreeViewerKeyboardEditing.png)
 
-In the Eclipse Platform a view is typically used to navigate a hierarchy of information, open an editor, or display properties for the active editor. In this article the design and implementation of a view will be examined in detail. You'll learn how to create a simple view based on SWT, and a more advanced view using the JFace viewer hierarchy. We'll also look at ways to achieve good integration with many of the existing features in the workbench, such as the window menu and toolbar, view linking, workbench persistence and action extension.
+### [Snippet044 - Table Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet044TableViewerKeyboardEditing.java)
 
-*   [Creating an Eclipse View](http://www.eclipse.org/articles/viewArticle/ViewArticle2.html)
+*   [Snippet044 - Table Viewer Keyboard Editing](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet044TableViewerKeyboardEditing.java)
 
   
-
-Contributing Actions to the Eclipse Workbench
----------------------------------------------
+Demonstrates the JFace 3.3 keyboard editing support for Tables without columns. Tabbing from editor to editor is supported since 3.4.
 
-The Eclipse Platform is an open and extensible platform. This article explains in detail how the Workbench can be extended to add new actions and provides guidance to the plug-in developers on how they can design for extensibility.
+You also need:
 
-*   [Updated article](https://www.eclipse.org/articles/article.php?file=Article-action-contribution/index.html)
+*   [FocusBorderCellHighlighter.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/FocusBorderCellHighlighter.java)
 
-Into the Deep End of the SWT StyledText Widget
-----------------------------------------------
+### [Snippet045 - Table Viewer Fill From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet045TableViewerFillFromBackgroundThread.java)
 
-The StyledText widget is a customizable widget that can be used to display and edit text with different colors and font styles. In this article we discuss why you might want to customize the StyledText widget and how you would do that.
+*   [Snippet045 - Table Viewer Fill From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet045TableViewerFillFromBackgroundThread.java)
 
-*   [Into the Deep End of the SWT StyledText Widget](http://www.eclipse.org/articles/StyledText%202/article2.html)
-
   
+Demonstrates how a TableViewer with a sorter can be filled from a NON-UI thread
 
-Using Perspectives in the Eclipse UI
-------------------------------------
+![Snippet045TableViewerFillFromBackgroundThread.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet045TableViewerFillFromBackgroundThread.gif)
 
-In the Eclipse Platform a Perspective determines the visible actions and views within a window. Perspectives also go well beyond this by providing mechanisms for task oriented interaction with resources in the Eclipse Platform, multi-tasking and information filtering. In this article the concepts behind perspectives are examined. The process for perspective definition, extension and instantiation will also be covered in detail with coding examples and sample scenarios.
+### [Snippet046 - Update Viewer From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet046UpdateViewerFromBackgroundThread.java)
 
-*   [Using Perspectives in the Eclipse UI](http://www.eclipse.org/articles/using-perspectives/PerspectiveArticle.html)
+*   [Snippet046 - Update Viewer From Background Thread](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet046UpdateViewerFromBackgroundThread.java)
 
   
+Demonstrates how to update a viewer from a long-running task (which is executed in a thread) and calls back to the UI-Thread using "asyncExec".
 
-How to Use the Eclipse API
---------------------------
+![Snippet046UpdateViewerFromBackgroundThread.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet046UpdateViewerFromBackgroundThread.gif)
 
-The Eclipse Platform offers a comprehensive API (Application Programmer Interface) to developers writing plug-ins. This article discusses the general ground rules for using the Eclipse Platform API, including how to tell API from non-API, and how to stay in the API "sweet spot" to avoid the risk of being broken as the platform and its APIs evolve. These general ground rules are also recommended practice for plug-ins that must declare API elements of their own.
+### [Snippet047 - Virtual Lazy Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet047VirtualLazyTreeViewer.java)
 
-*   [How to Use the Eclipse API](http://www.eclipse.org/articles/article.php?file=Article-API-Use/index.html)
+*   [Snippet047 - Virtual Lazy Tree Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet047VirtualLazyTreeViewer.java)
 
   
+Demonstrates the usage of ILazyContentProvider in conjunction with a Virtual-TreeViewer. The snippet shows how using a lazy tree can minimize the memory footprint and maximize the speed when viewing large models.
 
-Getting Your Feet Wet with the SWT StyledText Widget
-----------------------------------------------------
+![Snippet047VirtualLazyTreeViewer.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet047VirtualLazyTreeViewer.png)
 
-The StyledText widget is a customizable widget that can be used to display and edit text with different colors and font styles. This article presents an overview of the concepts, issues, and rules that you should be aware of when using the StyledText widget.
+### [Snippet048 - Tree Viewer Tab With Checkbox](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet048TreeViewerTabWithCheckboxFor3_3.java)
 
-*   [Getting Your Feet Wet with the SWT StyledText Widget](http://www.eclipse.org/articles/StyledText%201/article1.html)
+*   [Snippet048 - Tree Viewer Tab With Checkbox](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet048TreeViewerTabWithCheckboxFor3_3.java)
 
   
-
-SWT Color Model
----------------
-
-The combination of platforms, display devices and color depth makes providing an easy to use yet powerful and portable color model an interesting challenge. In this article we will examine the color management models of Windows® and X/Motif and then dig into the makings of the SWT color model and its implications for client code.
+Demonstrates how to overcome a limitation when it comes to key-navigation and CheckBoxEditors in 3.3.1.
 
-*   [SWT Color Model](http://www.eclipse.org/articles/Article-SWT-Color-Model/swt-color-model.htm)
+This is a workaround for bug [https://bugs.eclipse.org/bugs/show_bug.cgi?id=198502](https://bugs.eclipse.org/bugs/show_bug.cgi?id=198502)
 
-  
-
-Using Images in the Eclipse UI
-------------------------------
+![Snippet048TreeViewerTabWithCheckboxFor3 3.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet048TreeViewerTabWithCheckboxFor3_3.png)
 
-Managing images in a large graphical application can be a daunting task. Since modern operating systems such as Windows® only support a small number of images in memory at once, an application's icons and background images must be carefully managed and sometimes shared between widgets. This article describes the image management facilities provided by the Eclipse Platform, along with some best practice guidelines to keep in mind when writing your own Eclipse UI plug-ins. We assume the reader already has a basic understanding of Eclipse, the UI extension points defined by the Eclipse Platform, and the Standard Widget Toolkit (SWT).
+### [Snippet049 - Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet049StyledCellLabelProvider.java)
 
-*   [Using Images in the Eclipse UI](http://www.eclipse.org/articles/Article-Using%20Images%20In%20Eclipse/Using%20Images%20In%20Eclipse.html)
+*   [Snippet049 - Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet049StyledCellLabelProvider.java)
 
   
+Demonstrates a LabelProvider-Type which uses StyleRanges. This Snippet requires SWT/JFace 3.4.
 
-Mark My Words: Using markers to tell users about problems and tasks
--------------------------------------------------------------------
+![Snippet049StyledCellLabelProvider.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet049StyledCellLabelProvider.gif)
 
-Eclipse workbench has a central mechanism for managing resource annotations. They are called markers. In this article, you will learn how to use markers to mark-up resources as well as how to define your own marker types and enhance the Tasks view to handle them in a special way.
+### [Snippet050 - Delegating Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet050DelegatingStyledCellLabelProvider.java)
 
-*   [Mark My Words: Using markers to tell users about problems and tasks](http://www.eclipse.org/articles/Article-Mark%20My%20Words/mark-my-words.html)
+*   [Snippet050 - Delegating Styled Cell Label Provider](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet050DelegatingStyledCellLabelProvider.java)
 
   
+Demonstrates how you can add styled text by wrapping an existing label provider. This Snippet requires SWT/JFace 3.4.
 
-Levels Of Integration: Five ways you can integrate with the Eclipse Platform
-----------------------------------------------------------------------------
+![Snippet050DelegatingStyledCellLabelProvider.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet050DelegatingStyledCellLabelProvider.png)
 
-The types of problems web application developers face today require the use of a diverse set of tools that operate in many domains. In order to provide flexible tool integration, a tool integration platform must allow tool developers to target different levels or integration based on the desired level of investment, time to market, and specific tool needs. Each integration level determines how a tool must behave, and what end users can expect as a result. This article defines the different levels of tool integration supported by Eclipse, and gives an overview of how they work.
+### [Snippet051 - Table Centered Image](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet051TableCenteredImage.java)
 
-*   [Levels Of Integration: Five ways you can integrate with the Eclipse Platform](http://www.eclipse.org/articles/Article-Levels-Of-Integration/levels-of-integration.html)
+*   [Snippet051 - Table Centered Image](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet051TableCenteredImage.java)
 
   
-
-ActiveX Support In SWT
-----------------------
-
-OLE Documents, such as Word, Excel or PowerPoint, and ActiveX Controls such as Internet Explorer are COM objects that can be embedded into other applications running on a Microsoft® Windows ® platform. This article provides an overview of integrating OLE Documents and ActiveX Controls into an application using SWT.
-
-*   [ActiveX Support In SWT](//www.eclipse.org/articles/article.php?file=Article-ActivexSupportInSwt/index.html)
+Demonstrate how to center an image and create graphics in a cell using a technique called "owner draw".
 
-Creating Your Own Widgets using SWT
------------------------------------
+![Snippet051TableCenteredImage.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet051TableCenteredImage.png)
 
-When writing applications, you typically use the standard widgets provided by SWT. On occasion, you will need to create your own custom widgets. For example, you might want to add a new type of widget not provided by the standard widgets, or extend the functionality of an existing widget. This article explains the different SWT extension strategies and shows you how to use them.
+### [Snippet052 - Double Click Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet052DoubleClickCellEditor.java)
 
-*   [Creating Your Own Widgets using SWT](http://www.eclipse.org/articles/Article-Writing%20Your%20Own%20Widget/Writing%20Your%20Own%20Widget.htm)
+*   [Snippet052 - Double Click Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet052DoubleClickCellEditor.java)
 
   
+Demonstrate how to start cell-editors on double click.
 
-SWT: The Standard Widget Toolkit
---------------------------------
+![Snippet052DoubleClickCellEditor.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet052DoubleClickCellEditor.png)
 
-The two part series of articles describes the design ideas behind SWT. SWT is the software component that delivers native widget functionality for the Eclipse platform in an operating system independent manner. It is analogous to AWT/Swing in Java with a difference - SWT uses a rich set of native widgets. Even in an ideal situation, industrial strength cross platform widget libraries are very difficult to write and maintain. This is due to the inherent complexity of widget systems and the many subtle differences between platforms. There are several basic approaches that have helped significantly to reduce the complexity of the problem and deliver high quality libraries.
+### [Snippet053 - Start Editor With Context Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet053StartEditorWithContextMenu.java)
 
-*   [Part 1: Implementation Strategy](http://www.eclipse.org/articles/Article-SWT-Design-1/SWT-Design-1.html)
-*   [Part 2: Managing Operating System Resources](http://www.eclipse.org/articles/swt-design-2/swt-design-2.html)
+*   [Snippet053 - Start Editor With Context Menu](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet053StartEditorWithContextMenu.java)
 
   
+Demonstrate how to start up a cell editor with a context menu and not with mouse clicking on the cell.
 
-Understanding Layouts in SWT
-----------------------------
+![Snippet053StartEditorWithContextMenu.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet053StartEditorWithContextMenu.png)
 
-When writing applications in SWT, you may need to use layouts to give your windows a specific look. A layout controls the position and size of children in a Composite. Layout classes are subclasses of the abstract class Layout. This article shows you how to work with standard layouts, and write your own custom layout class.
+### [Snippet055 - Hide Show Column](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet055HideShowColumn.java)
 
-*   [Understanding Layouts in SWT](http://www.eclipse.org/articles/article.php?file=Article-Understanding-Layouts/index.html)
+*   [Snippet055 - Hide Show Column](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet055HideShowColumn.java)
 
   
+Demonstrate hiding and showing columns and starting a cell editor programmatically.
 
-Introducing AJDT: The AspectJ Development Tools
------------------------------------------------
+![Snippet055HideShowColumn.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet055HideShowColumn.png)
 
-The AspectJ Development Tools (AJDT) project is an Eclipse Tools project which enables the development of AspectJ applications in Eclipse. This article gives an overview of the capabilities of AJDT 1.4 for Eclipse 3.2 by describing several scenarios, including adding aspects to existing Java® projects, working with aspects across multiple projects, and using the load-time weaving capabilities of AspectJ 5.
+### [Snippet056 - Boolean Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet056BooleanCellEditor.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/Article-Introducing-AJDT/article.html)
+*   [Snippet056 - Boolean Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet056BooleanCellEditor.java)
 
   
+Demonstrate a custom cell-editor which uses a real Checkbox-Button
 
-Abstract Syntax Tree
---------------------
+You also need these classes:
 
-The Abstract Syntax Tree is the base framework for many powerful tools of the Eclipse IDE, including refactoring, Quick Fix and Quick Assist. The Abstract Syntax Tree maps plain Java source code in a tree form. This tree is more convenient and reliable to analyse and modify programmatically than text-based source. This article shows how you can use the Abstract Syntax Tree for your own applications.
+*   [BooleanCellEditor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/BooleanCellEditor.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/Article-JavaCodeManipulation_AST/index.html)
-
   
-
-Running Web Service Scenarios using Ant
----------------------------------------
+![Snippet056BooleanCellEditor.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet056BooleanCellEditor.png)
 
-This tutorial shows how to run Web services scenarios (top down web service, bottom up web service and client generation) by way of an Ant task from within Eclipse.
+### [Snippet057 - Table Viewer Skip Hidden Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet057TableViewerSkipHiddenCells.java)
 
-*   [Web Tools Platform Article](http://www.eclipse.org/webtools/jst/components/ws/1.0/tutorials/WebServiceAntTask/WebServiceAntTask.html)
+*   [Snippet057 - Table Viewer Skip Hidden Cells](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet057TableViewerSkipHiddenCells.java)
 
   
+Example of showing how easy cell-navigation with hidden cells is. Use the cursor keys to navigate between cells. Then use the context menu to hide a column.
 
-Unleashing the Power of Refactoring
------------------------------------
+![Snippet057TableViewerSkipHiddenCells.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet057TableViewerSkipHiddenCells.png)
 
-In this article, Tobias Widmer sheds light on the services offered by the Eclipse Java Development Tools (JDT) and the Refactoring Language Toolkit (LTK) to support automated Java refactorings, explains how these services are used by refactorings to perform searches on the Java workspace, rewrite existing code and provide a rich user-interface to present the results of the refactoring. To demonstrate this combination of Java-specific and language-neutral frameworks, this article presents a simple but working refactoring implementation for an 'Introduce Indirection' refactoring designed to introduce an indirection method for existing method invocations.
+### [Snippet058 - Cell Navigation](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet058CellNavigationIn34.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-Unleashing-the-Power-of-Refactoring/index.html)
+*   [Snippet058 - Cell Navigation](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet058CellNavigationIn34.java)
 
   
+Shows how to automatically reveal cells when navigating. Run the snippet and then edit the first cell by double-clicking. Pressing the tab key will advance to the next cell in edit mode and reveal the cell if it is not in the viewport.
 
-Building Eclipse Plugins with Maven 2
--------------------------------------
+![Snippet058CellNavigationIn34.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet058CellNavigationIn34.gif)
 
-In a mature and agile development environment, it is vital that the developers are kept productive and that builds are done continuously and dependably. Eclipse is a great environment for developers and Maven 2 (in conjunction with Continuum or Cruise Control) is a great environment for continuous integration. As with most great software, both Eclipse and Maven 2 tend to be somewhat opinionated and the two don't always see eye to eye on how things should be done. This article describes how to use Maven 2 with Eclipse in general. In particular we will focus on how to develop, package and test Eclipse plugins using Eclipse (Callisto) and Maven 2 (2.0.4) efficiently.
+### [Snippet060 - Text Cell Editor With Content Proposal/Field assists](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet060TextCellEditorWithContentProposal.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-Eclipse-and-Maven2/index.html)
+*   [Snippet060 - Text Cell Editor With Content Proposal/Field assists](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet060TextCellEditorWithContentProposal.java)
 
   
+Show how to use content-proposal inside a CellEditor
 
-Using TPTP to Automate Functional Testing
------------------------------------------
+![Snippet060TextCellEditorWithContentProposal.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet060TextCellEditorWithContentProposal.png)
 
-This article provides an overview and some details of the design of a functional test automation solution that was built using testing frameworks available within the TPTP Testing Tools Project.
+### [Snippet061 - Faked Native Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet061FakedNativeCellEditor.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-TPTPAutomateFunctionalTesting/index.html)
+*   [Snippet061 - Faked Native Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet061FakedNativeCellEditor.java)
 
   
+Full-featured native-looking viewer with checkboxes in an arbitrary column
 
-Simple Image Effects for SWT
-----------------------------
+You also need these classes:
 
-This article explores simple emboss, blur, glow, and drop shadow algorithms that can be applied to images in SWT.
+*   [BooleanCellEditor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/BooleanCellEditor.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-SimpleImageEffectsForSWT/index.html)
-
   
 
-Using the BIRT Chart Engine in Your Plug-in
--------------------------------------------
+![Snippet061FakedNativeCellEditor.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet061FakedNativeCellEditor.png)
 
-The BIRT Chart Engine is a powerful business chart generation tool that can be used as a standalone charting component. This article introduces the basic concepts of BIRT Chart Engine, explains what BIRT Chart Engine is composed of, and illustrates how to create a chart and use it as widget.
+### [Snippet062 - Text And Dialog Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet062TextAndDialogCellEditor.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-BIRTChartEngine/index.html)
+*   [Snippet062 - Text And Dialog Cell Editor](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet062TextAndDialogCellEditor.java)
 
   
+Demonstrates usage of TextAndDialogCellEditor. The email column uses the TextAndDialogCellEditor; othe columns use ordinary TextCellEditor.
 
-Swing/SWT Integration
----------------------
+You also need these classes:
 
-Swing and SWT are sometimes seen as strictly competing technologies. Some people have strong opinions on which UI toolkit to use exclusively for client applications. However, in the real world, ideological extremes are often impractical. Some valid use cases require both technologies to coexist in a single application. While mixing the two toolkits is not a simple task, it can be done, and it can be done such that the two toolkits are smoothly integrated. This article discusses the steps necessary to achieve good Swing/SWT integration. It focuses on the use case of embedding existing Swing components into an SWT-based Rich Client Platform application.
+*   [TextAndDialogCellEditor.java](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/TextAndDialogCellEditor.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-Swing-SWT-Integration/index.html)
-
   
-
-How to process OCL Abstract Syntax Trees
-----------------------------------------
+![Snippet062TextAndDialogCellEditor.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet062TextAndDialogCellEditor.png)
 
-The Model Development Tools Object Constraint Language (MDT OCL) project provides the building blocks for Model-Driven tools to weave OCL declarative specifications into software artifacts. We showcase some of these possibilities, taking as starting point a plug-in to visualize OCL abstract syntax trees (ASTs) in the form of annotated trees. This example motivates some practical tips about patterns for OCL visitors, including using Java 5 generics and achieving conciseness by letting MDT OCL take care of the "walking" order. To really reap the benefits of OCL-enriched specifications, tools in our modeling chain have to be able to transform such expressions into the target software platform (e.g. compile into Java, translate into SQL). Work in this area is summarized, to ease jump-starting your own OCL processing project.
+### [Snippet063 - Combo Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet063ComboViewer.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-HowToProcessOCLAbstractSyntaxTrees/index.html)
+*   [Snippet063 - Combo Viewer](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet063ComboViewer.java)
 
   
+Show how to use ComboViewer and set an initial selection
 
-Branching with Eclipse and CVS
-------------------------------
+![Snippet063ComboViewer.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet063ComboViewer.png)
 
-This two-part article describes how to use the branch and merge features provided by Eclipse's CVS support. Part one presents a brief branch-and-merge scenario designed to quickly illustrate some branch-and-merge features. Part two shows how to rebase a subbranch with changes from the main branch before merging the subbranch back into the main branch.
+### [Snippet064 - Replacing elements in a TreeViewer with child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet064TreeViewerReplacingElements.java)
 
-*   [Part 1](http://www.eclipse.org/articles/article.php?file=Article-BranchingWithEclipseAndCVS/article1.html)
-*   [Part 2](http://www.eclipse.org/articles/article.php?file=Article-BranchingWithEclipseAndCVS/article2.html)
+*   [Snippet064 - Replacing elements in a TreeViewer with child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet064TreeViewerReplacingElements.java)
 
   
+A TreeViewer with observable collections as input, to demonstrate, how elements are replaced, especially what happens to selected items on replacement
 
-Adding Help Support to a Rich Client Platform (RCP) Application
----------------------------------------------------------------
+![Snippet064TreeViewerReplacingElements.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet064TreeViewerReplacingElements.png)
 
-In this article we show you how you can incorporate the Eclipse help system into your Rich Client Application in a series of easy to follow steps. We also show you how to set up context help and how to fine tune your help settings.
+### [Snippet065 - Replacing elements in a TreeViewer without child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet065TableViewerReplacingElements.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-AddingHelpToRCP/index.html)
+*   [Snippet065 - Replacing elements in a TreeViewer without child elements](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet065TableViewerReplacingElements.java)
 
   
+A TreeViewer with observable collections as input, to demonstrate, how elements are replaced, especially what happens to selected items on replacement
 
-Eclipse Forms: New in 3.3
--------------------------
+![Snippet065TableViewerReplacingElements.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet065TableViewerReplacingElements.png)
 
-Eclipse Forms is a layer on top of SWT that allows you to achieve a web-like feel inside your desktop applications without having to resort to an embedded browser. In this article, the new features added to Eclipse Forms in version 3.3 are discussed. Readers are expected to be familiar with Eclipse Forms and its concepts.
+### [Snippet066 - TableViewer with Label Decorator](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet066TableViewerWithLabelDecorator.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-Forms33/index.html)
+*   [Snippet066 - TableViewer with Label Decorator](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet066TableViewerWithLabelDecorator.java)
 
   
+A TableViewer that shows how to add a status icon to a Label with IStyledLabelProvider and DecorationOverlayIcon
 
-Defining Generics with UML Templates
-------------------------------------
+![Snippet066TableViewerWithLabelDecorator.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet066TableViewerWithLabelDecorator.png)
 
-Generics in Java have been around for a while but support for mapping generically specified artifacts in UML to their Ecore representation is new to UML2 2.1. This article will walk the reader through the details of the mapping process with the end goal of producing generically specified code. This article assumes some level of familiarity with generics and is not intended as a tutorial in Java generics.
+Window
+------
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-Defining-Generics-with-UML-Templates/index.html)
+### [Snippet020 - Customized Control Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet020CustomizedControlTooltips.java)
 
-  
-
-Integrating EMF and GMF Generated Editors
------------------------------------------
+*   [Snippet020 - Customized Control Tooltips](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet020CustomizedControlTooltips.java)
 
-This article provides a walk-through example how to combine the editor plug-ins generated by the Eclipse Modeling Framework (EMF) and the Graphical Modeling Framework (GMF) to create an integrated editor that supports graphical and list- oder tree-based editing of the same information. The approach outlined in this article can easily be used as a starting point for the implementation of arbitrary multi-page editor solutions that contain GMF-based graphical editors.
-
-*   [Integrating EMF and GMF Generated Editors](http://www.eclipse.org/articles/article.php?file=Article-Integrating-EMF-GMF-Editors/index.html)
-
   
-
-Build your own textual DSL with Tools from the Eclipse Modeling Project
------------------------------------------------------------------------
+Demonstrates usage of JFace 3.3 to show really cool ToolTips for your controls
 
-Domain Specific Languages (DSLs) are a hot topic nowadays. While creating internal DSLs is no big deal, creating external DSLs have been said to be hard to create. In this tutorial we will show you how easy it is to create your own DSL with tools from the Eclipse Modeling Project (EMP) in less than one hour.
+For full fun you also need:
 
-*   [Build your own textual DSL with Tools from the Eclipse Modeling Project](http://www.eclipse.org/articles/article.php?file=Article-BuildYourOwnDSL/index.html)
+*   [Help Icon](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/linkto_help.gif)
+*   [Error Icon](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/showerr_tsk.gif)
 
   
+![Snippet020CustomizedControlTooltips.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet020CustomizedControlTooltips.png)
 
-Automating Eclipse PDE Unit Tests using Ant
--------------------------------------------
+### [Snippet031 - Table Static Tooltip](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet031TableStaticTooltip.java)
 
-This article outlines how to integrate your PDE unit tests into an Ant based automated build, using a simple Eclipse plug-in as an example, some simple java classes, basic Eclipse plug-in techniques and some standard Ant tasks.
+*   [Snippet031 - Table Static Tooltip](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/window/Snippet031TableStaticTooltip.java)
 
-*   [Automating Eclipse PDE Unit Tests using Ant](http://www.eclipse.org/articles/article.php?file=Article-PDEJUnitAntAutomation/index.html)
-
   
-
-Adapters
---------
+Demonstrates creation of ToolTips for Tables without using the JFace-Viewers API but only JFace-Tooltips
 
-The adapter pattern is used extensively in Eclipse. The use of this pattern allows plug-ins to be loosely coupled, yet still be tightly integrated in the extremely dynamic Eclipse runtime environment. In this article, we show you how to use the adapter framework to make your own objects adaptable, and adapt other objects.
-
-*   [Adapters](http://www.eclipse.org/articles/article.php?file=Article-Adapters/index.html)
-
-  
+![Snippet031TableStaticTooltip.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet031TableStaticTooltip.png)
 
-Automating the embedding of Domain Specific Languages in Eclipse JDT
---------------------------------------------------------------------
+Wizard
+------
 
-The Eclipse Java Development Tools (JDT) excels at supporting the editing and navigation of Java code, setting the bar for newer IDEs, including those for Domain Specific Languages (DSLs). Although IDE generation keeps making progress, most developers still rely on traditional ways to encapsulate new language abstractions: frameworks and XML dialects. We explore an alternative path, Internal DSLs, by automating the generation of the required APIs from Ecore models describing the abstract syntax of the DSLs in question. To evaluate the approach, we present a case study (statecharts) and discuss the pros and cons with respect to other approaches.
+### [Snippet047 - Wizard with Long Running Operation from Page](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet047WizardWithLongRunningOperation.java)
 
-*   [Eclipse Corner Article](http://www.eclipse.org/articles/article.php?file=Article-AutomatingDSLEmbeddings/index.html)
+*   [Snippet047 - Wizard with Long Running Operation from Page](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet047WizardWithLongRunningOperation.java)
 
   
+Demonstrates how to work with JFace-Wizards and fill a TableViewer from a Background-Thread without blocking the UI showing a progress bar in the meanwhile
 
-Dynamic User Assistance in Eclipse Based Applications
------------------------------------------------------
+![Snippet047.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet047.gif)
 
-Development environments have become very complex. As a result, providing users with context relevant assistance is critical to helping them succeed with your tools and applications. This article will introduce you to Eclipse's powerful Dynamic Assistance framework and provide examples that illustrate how you can take full advantage of its capabilities.
+### [Snippet071 - Wizard with Progress and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet071WizardWithProgressAndCancel.java)
 
-*   [Dynamic User Assistance in Eclipse Based Applications](http://www.eclipse.org/articles/article.php?file=Article-DynamicCSH/index.html)
+*   [Snippet071 - Wizard with Progress and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet071WizardWithProgressAndCancel.java)
 
   
+Demonstrates a wizard with internal progress.
 
-BIRT Extension Mechanism, Part 1: Custom Report Items
------------------------------------------------------
+![Snippet071WizardWithProgressAndCancel.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet071WizardWithProgressAndCancel.gif)
 
-This article introduces the extension mechanism of BIRT report model, engine and designer, and shows how to create custom custom report items step-by-step.
+### [Snippet072 Wizard with Progress Subtasks and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet072WizardWithProgressSubtasksAndCancel.java)
 
-*   [BIRT Extension Mechanism, Part 1: Custom Report Items](http://www.eclipse.org/articles/article.php?file=Article-BIRT-ExtensionTutorial1/index.html)
+*   [Snippet072 Wizard with Progress Subtasks and Cancel](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet072WizardWithProgressSubtasksAndCancel.java)
 
-  
-
-BIRT Extension Mechanism, Part 2
---------------------------------
-
-This article introduces the extension mechanism of BIRT report model, engine and designer, and shows how to create custom extended report items step-by-step.
+[Demonstrates a wizard with internal progress using SubMonitor and subtasks.](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/FocusBorderCellHighlighter.java)
 
-*   [BIRT Extension Mechanism, Part 2](http://www.eclipse.org/articles/article.php?file=Article-BIRT-ExtensionTutorial2/index.html)
+![Snippet072WizardWithProgressSubtasksAndCancel.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet072WizardWithProgressSubtasksAndCancel.png)
 
   
 
-How to Fix a Bug in Eclipse
----------------------------
+### [Snippet074 Wizard with access to application window](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet074ModelesWizard.java)
 
-In this article, the reader will be guided through the entire process of a search for an open bug within one of the Eclipse projects and the steps that may be required in order to implement a fix to be contributed back to the Eclipse community. This article assumes that the reader is familiar with using CVS and Subversion in Eclipse as well as the basics required to develop Eclipse plug-ins.
+*   [Snippet074 Wizard with access to application window](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/wizard/Snippet074ModelesWizard.java)
 
-*   [How to Fix a Bug in Eclipse](http://www.eclipse.org/articles/article.php?file=Article-How-to-Fix-a-Bug-in-Eclipse/index.html)
-
   
-
-Babel Pseudo Translations
--------------------------
-
-Babel Pseudo Translations are a very useful tool for globalization testing of Eclipse projects. This article provides step-by-step instructions and examples describing what are the Babel Pseudo Translations, where to download them, how to install them, and how to launch Eclipse in Babel Pseudo Translations. Eclipse developers can use the Babel Pseudo Translations to verify the translatability of their projects and make sure Eclipse excels in national language support.
+Demonstrates a wizard that enables access to the calling shell...
 
-*   [Babel Pseudo Translations](http://www.eclipse.org/articles/article.php?file=Article-babel-pseudo-translations/article.html)
+![Snippet074ModelesWizard.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet074ModelesWizard.gif)
 
