@@ -15,6 +15,9 @@ The package and the class will be created automatically.
 ![Jfacecopypaste.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Jfacecopypaste.gif)
  
 ![Snippet012DialogWithImageButtons.png](https://raw.githubusercontent.com/eclipseplatform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
+
+![Snippet012DialogWithImageButtons.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
+
   
 
 Contents
