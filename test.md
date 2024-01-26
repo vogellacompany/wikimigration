@@ -10,7 +10,7 @@ The header section of each snippet is a link to the plain source.
 You can copy the source and paste it directly on the source folder or package in an eclipse project. 
 The package and the class will be created automatically.  
 
-![Snippet012DialogWithImageButtons.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
+![Snippet012fffDialogWithImageButtons.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
 
 ![Jfacecopypaste.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Jfacecopypaste.gif)
    
