@@ -8,8 +8,8 @@ JFace-Snippets are small and easy understandable programming examples of how to 
 The header section of each snippet is a link to the plain source. You can copy the source and paste it directly on the source folder or package in an eclipse project. The package and the class will be created automatically.  
 
 ![Jfacecopypaste.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Jfacecopypaste.gif)
-
   
+asdfas  
 
 Contents
 --------
