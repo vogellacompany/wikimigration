@@ -4,7 +4,7 @@ JFaceSnippets
 JFace-Snippets are small and easy understandable programming examples of how to use the JFace API. 
 To browse the examples, navigate to the [examples GIT repository](https://github.com/eclipse-platform/eclipse.platform.ui/tree/master/examples/org.eclipse.jface.snippets).
 
-Copy Paste
+**Copy Paste**
 
 The header section of each snippet is a link to the plain source. 
 You can copy the source and paste it directly on the source folder or package in an eclipse project. 
@@ -12,13 +12,8 @@ The package and the class will be created automatically.
 
 ![Snippet012DialogWithImageButtons.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
 
-![Jfacecopypaste.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Jfacecopypaste.gif)
- 
-![Snippet012DialogWithImageButtons.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
-
-![Snippet012DialogWithImageButtons.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Snippet012DialogWithImageButtons.png)
-
-  
+![Jfacecopypaste.gif](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Jfacecopypaste.gif)
+   
 
 Contents
 --------
