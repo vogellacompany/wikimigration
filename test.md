@@ -5,11 +5,11 @@ Contents
 --------
 
 *   [1 Adopting the Eclipse 4 Application Platform](#Adopting-the-Eclipse-4-Application-Platform)
-    *   [1.1 How do the Eclipse 3.x and 4.x programming models differ?](#How-do-the-Eclipse-3.x-and-4.x-programming-models-differ.3F)
+    *   [1.1 How do the Eclipse 3.x and 4.x programming models differ?](#How-do-the-Eclipse-3.x-and-4.x-programming-models-differ)
         *   [1.1.1 Handlers](#Handlers)
         *   [1.1.2 Parts](#Parts)
         *   [1.1.3 Lazy Instantiantion](#Lazy-Instantiantion)
-    *   [1.2 How would I accomplish X in Eclipse 4?](#How-would-I-accomplish-X-in-Eclipse-4.3F)
+    *   [1.2 How would I accomplish X in Eclipse 4?](#How-would-I-accomplish-X-in-Eclipse-4)
         *   [1.2.1 Accessing the status line](#Accessing-the-status-line)
         *   [1.2.2 Associating help context with a control](#Associating-help-context-with-a-control)
         *   [1.2.3 Handling errors and exceptions](#Handling-errors-and-exceptions)
@@ -21,39 +21,39 @@ Contents
             *   [1.2.5.4 Setup for a e4AP RCP](#Setup-for-a-e4AP-RCP)
             *   [1.2.5.5 Open the "Sleak" view](#Open-the-.22Sleak.22-view)
 *   [2 The E4 Model](#The-E4-Model)
-    *   [2.1 What is an _xmi:id_? How is it different from the _elementId_?](#What-is-an-xmi:id.3F-How-is-it-different-from-the-elementId.3F)
-    *   [2.2 How do I reference an object defined in another .e4xmi?](#How-do-I-reference-an-object-defined-in-another-.e4xmi.3F)
-    *   [2.3 Are identifiers (elementId) supposed to be unique?](#Are-identifiers-.28elementId.29-supposed-to-be-unique.3F)
-    *   [2.4 How do I use MPlaceholders?](#How-do-I-use-MPlaceholders.3F)
-    *   [2.5 How do I create an MPart from an MPartDescriptor?](#How-do-I-create-an-MPart-from-an-MPartDescriptor.3F)
+    *   [2.1 What is an _xmi:id_? How is it different from the _elementId_?](#What-is-an-xmi:id-How-is-it-different-from-the-elementId)
+    *   [2.2 How do I reference an object defined in another .e4xmi?](#How-do-I-reference-an-object-defined-in-another-.e4xmi)
+    *   [2.3 Are identifiers (elementId) supposed to be unique?](#Are-identifiers-.28elementId.29-supposed-to-be-unique)
+    *   [2.4 How do I use MPlaceholders?](#How-do-I-use-MPlaceholders)
+    *   [2.5 How do I create an MPart from an MPartDescriptor?](#How-do-I-create-an-MPart-from-an-MPartDescriptor)
 *   [3 Problems on Configuration, Start-Up, and Shutdown](#Problems-on-Configuration.2C-Start-Up.2C-and-Shutdown)
-    *   [3.1 Why won't my application start?](#Why-won.27t-my-application-start.3F)
-    *   [3.2 I modified my App.e4xmi/fragment.e4xmi but the changes aren't being loaded. Why?](#I-modified-my-App.e4xmi.2Ffragment.e4xmi-but-the-changes-aren.27t-being-loaded.-Why.3F)
-    *   [3.3 How can I prevent my workbench model from being saved on exit?](#How-can-I-prevent-my-workbench-model-from-being-saved-on-exit.3F)
+    *   [3.1 Why won't my application start?](#Why-won.27t-my-application-start)
+    *   [3.2 I modified my App.e4xmi/fragment.e4xmi but the changes aren't being loaded. Why?](#I-modified-my-App.e4xmi.2Ffragment.e4xmi-but-the-changes-aren.27t-being-loaded.-Why)
+    *   [3.3 How can I prevent my workbench model from being saved on exit?](#How-can-I-prevent-my-workbench-model-from-being-saved-on-exit)
 *   [4 Dependency Injection & Contexts](#Dependency-Injection-.26-Contexts)
-    *   [4.1 Why aren't my @Inject-able/@PostConstruct methods being injected?](#Why-aren.27t-my-.40Inject-able.2F.40PostConstruct-methods-being-injected.3F)
+    *   [4.1 Why aren't my @Inject-able/@PostConstruct methods being injected?](#Why-aren.27t-my-.40Inject-able.2F.40PostConstruct-methods-being-injected)
         *   [4.1.1 Cause #1: Mismatched Annotations](#Cause-.231:-Mismatched-Annotations)
         *   [4.1.2 Cause #2: Unresolvable Injections](#Cause-.232:-Unresolvable-Injections)
-    *   [4.2 What services are available for injection?](#What-services-are-available-for-injection.3F)
-    *   [4.3 How can I override a provided object?](#How-can-I-override-a-provided-object.3F)
-    *   [4.4 How do I provide singleton objects?](#How-do-I-provide-singleton-objects.3F)
-    *   [4.5 Why am I getting a new instance of an object?](#Why-am-I-getting-a-new-instance-of-an-object.3F)
-    *   [4.6 Why is my widget/part not displaying? Why am I getting a new Shell?](#Why-is-my-widget.2Fpart-not-displaying.3F-Why-am-I-getting-a-new-Shell.3F)
-    *   [4.7 Why am I being injected with _null_?](#Why-am-I-being-injected-with-null.3F)
-    *   [4.8 Why aren't my parts being injected with my value set from my bundle activator?](#Why-aren.27t-my-parts-being-injected-with-my-value-set-from-my-bundle-activator.3F)
-    *   [4.9 What is the difference between IEclipseContext#set and IEclipseContext#modify?](#What-is-the-difference-between-IEclipseContext.23set-and-IEclipseContext.23modify.3F)
-    *   [4.10 Why aren't my _@EventTopic_ or _@UIEventTopic_ methods being called?](#Why-aren.27t-my-.40EventTopic-or-.40UIEventTopic-methods-being-called.3F)
+    *   [4.2 What services are available for injection?](#What-services-are-available-for-injection)
+    *   [4.3 How can I override a provided object?](#How-can-I-override-a-provided-object)
+    *   [4.4 How do I provide singleton objects?](#How-do-I-provide-singleton-objects)
+    *   [4.5 Why am I getting a new instance of an object?](#Why-am-I-getting-a-new-instance-of-an-object)
+    *   [4.6 Why is my widget/part not displaying? Why am I getting a new Shell?](#Why-is-my-widget.2Fpart-not-displaying-Why-am-I-getting-a-new-Shell)
+    *   [4.7 Why am I being injected with _null_?](#Why-am-I-being-injected-with-null)
+    *   [4.8 Why aren't my parts being injected with my value set from my bundle activator?](#Why-aren.27t-my-parts-being-injected-with-my-value-set-from-my-bundle-activator)
+    *   [4.9 What is the difference between IEclipseContext#set and IEclipseContext#modify?](#What-is-the-difference-between-IEclipseContext.23set-and-IEclipseContext.23modify)
+    *   [4.10 Why aren't my _@EventTopic_ or _@UIEventTopic_ methods being called?](#Why-aren.27t-my-.40EventTopic-or-.40UIEventTopic-methods-being-called)
 *   [5 Commands and Handlers](#Commands-and-Handlers)
-    *   [5.1 Why is my handler's @Execute not being triggered?](#Why-is-my-handler.27s-.40Execute-not-being-triggered.3F)
-    *   [5.2 Why aren't my handler fields being re-injected?](#Why-aren.27t-my-handler-fields-being-re-injected.3F)
-    *   [5.3 Why is my parameterized handler not triggered?](#Why-is-my-parameterized-handler-not-triggered.3F)
-    *   [5.4 Why does org.eclipse.core.commands.Command's isEnabled() and getHandler() not work?](#Why-does-org.eclipse.core.commands.Command.27s-isEnabled.28.29-and-getHandler.28.29-not-work.3F)
+    *   [5.1 Why is my handler's @Execute not being triggered?](#Why-is-my-handler.27s-.40Execute-not-being-triggered)
+    *   [5.2 Why aren't my handler fields being re-injected?](#Why-aren.27t-my-handler-fields-being-re-injected)
+    *   [5.3 Why is my parameterized handler not triggered?](#Why-is-my-parameterized-handler-not-triggered)
+    *   [5.4 Why does org.eclipse.core.commands.Command's isEnabled() and getHandler() not work?](#Why-does-org.eclipse.core.commands.Command.27s-isEnabled.28.29-and-getHandler.28.29-not-work)
 *   [6 UI](#UI)
-    *   [6.1 How do I enable Drag N Drop (DND) of parts?](#How-do-I-enable-Drag-N-Drop-.28DND.29-of-parts.3F)
-    *   [6.2 Why are my CSS theming not taking effect?](#Why-are-my-CSS-theming-not-taking-effect.3F)
-    *   [6.3 Why is my part's selection never set as the active selection?](#Why-is-my-part.27s-selection-never-set-as-the-active-selection.3F)
+    *   [6.1 How do I enable Drag N Drop (DND) of parts?](#How-do-I-enable-Drag-N-Drop-.28DND.29-of-parts)
+    *   [6.2 Why are my CSS theming not taking effect?](#Why-are-my-CSS-theming-not-taking-effect)
+    *   [6.3 Why is my part's selection never set as the active selection?](#Why-is-my-part.27s-selection-never-set-as-the-active-selection)
 *   [7 Customizing and Controlling the Platform](#Customizing-and-Controlling-the-Platform)
-    *   [7.1 How do I provide my own prompt-to-save when closing a part?](#How-do-I-provide-my-own-prompt-to-save-when-closing-a-part.3F)
+    *   [7.1 How do I provide my own prompt-to-save when closing a part?](#How-do-I-provide-my-own-prompt-to-save-when-closing-a-part)
 
 Adopting the Eclipse 4 Application Platform
 -------------------------------------------
@@ -367,7 +367,7 @@ So the flow looks something like this.
 
 ### Why is my widget/part not displaying? Why am I getting a new Shell?
 
-This type of problem is another symptom of the [DI autogeneration issue](#Why-am-I-getting-a-new-instance-of-an-object.3F), and usually occurs with code like the following:
+This type of problem is another symptom of the [DI autogeneration issue](#Why-am-I-getting-a-new-instance-of-an-object), and usually occurs with code like the following:
 
     class ShowDialogHandler {
      
@@ -437,7 +437,7 @@ Commands and Handlers
 
 ### Why is my handler's @Execute not being triggered?
 
-See ["Why isn't my @Inject-able method being injected?"](#Why-isn.27t-my-.40Inject-able-method-being-injected.3F) above.
+See ["Why isn't my @Inject-able method being injected?"](#Why-isn.27t-my-.40Inject-able-method-being-injected) above.
 
   
 
