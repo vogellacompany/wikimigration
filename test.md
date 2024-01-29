@@ -1,468 +1,523 @@
-Rich Client Platform/FAQ
-======================== 
-
-The following are **Frequently Asked Questions** (**FAQs**) about the Eclipse Rich Client Platform. 
-For relevant tutorials, help topics, newsgroups, examples, and other resources, see the main [RCP page](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform.md).
-
-For general Eclipse FAQs, which address many RCP issues, see [The Official Eclipse FAQs](https://wiki.eclipse.org/The_Official_Eclipse_FAQs). 
-For Eclipse 4, see the [Eclipse 4 RCP FAQ](/Eclipse4/RCP/FAQ "Eclipse4/RCP/FAQ").
+Eclipse4/RCP/FAQ
+================
 
 Contents
 --------
 
-*   [1 What is the Eclipse Rich Client Platform?](#What-is-the-Eclipse-Rich-Client-Platform)
-*   [2 Why should I build my application on the Eclipse Rich Client Platform?](#Why-should-I-build-my-application-on-the-Eclipse-Rich-Client-Platform)
-*   [3 What is included in the Rich Client Platform?](#What-is-included-in-the-Rich-Client-Platform)
-*   [4 What is the disk footprint for the Rich Client Platform?](#What-is-the-disk-footprint-for-the-Rich-Client-Platform)
-*   [5 Is the resources plug-in (org.eclipse.core.resources) considered part of the Rich Client Platform?](#Is-the-resources-plug-in-.28org.eclipse.core.resources.29-considered-part-of-the-Rich-Client-Platform)
-*   [6 Is the IDE plug-in (org.eclipse.ui.ide) considered part of the Rich Client Platform?](#Is-the-IDE-plug-in-.28org.eclipse.ui.ide.29-considered-part-of-the-Rich-Client-Platform)
-*   [7 What other Eclipse components can be used in constructing RCP applications?](#What-other-Eclipse-components-can-be-used-in-constructing-RCP-applications)
-*   [8 How do I get started with RCP?](#How-do-I-get-started-with-RCP)
-*   [9 What is the recommended target platform setup? Or: How can I build and run my RCP app against a different version of the Eclipse base?](#What-is-the-recommended-target-platform-setup-Or-How-can-I-build-and-run-my-RCP-app-against-a-different-version-of-the-Eclipse-base)
-*   [10 How can I change the window icon in my application?](#How-can-I-change-the-window-icon-in-my-application)
-*   [11 How can I change the embedded app icon in my application?](#How-can-I-change-the-embedded-app-icon-in-my-application)
-*   [12 How can I change the default UI settings for the perspective bar location, fast view bar location, etc?](#How-can-I-change-the-default-UI-settings-for-the-perspective-bar-location.2C-fast-view-bar-location.2C-etc)
-*   [13 How can I get action set menus to appear in the right order, between my app's main menus?](#How-can-I-get-action-set-menus-to-appear-in-the-right-order.2C-between-my-app.27s-main-menus)
-*   [14 Can multiple instances of the same view be made to appear at the same time?](#Can-multiple-instances-of-the-same-view-be-made-to-appear-at-the-same-time)
-*   [15 How can I deploy my RCP app?](#How-can-I-deploy-my-RCP-app)
-*   [16 When I try running, nothing happens, or it complains that the application could not be found in the registry, or that other plug-ins are missing. How can I track the problem down?](#When-I-try-running.2C-nothing-happens.2C-or-it-complains-that-the-application-could-not-be-found-in-the-registry.2C-or-that-other-plug-ins-are-missing.-How-can-I-track-the-problem-down)
-*   [17 My own RCP plug-ins are contributed by a feature. Why is the update manager complaining that my configuration is invalid?](#My-own-RCP-plug-ins-are-contributed-by-a-feature.-Why-is-the-update-manager-complaining-that-my-configuration-is-invalid)
-*   [18 Are editors tied to the workspace resource model or to the broader notion of files?](#Are-editors-tied-to-the-workspace-resource-model-or-to-the-broader-notion-of-files)
-*   [19 How can I integrate my existing Swing components into an RCP application?](#How-can-I-integrate-my-existing-Swing-components-into-an-RCP-application)
-*   [20 How can I define key bindings for commands?](#How-can-I-define-key-bindings-for-commands)
-*   [21 How can I get my views and editors to coordinate with each other?](#How-can-I-get-my-views-and-editors-to-coordinate-with-each-other)
-*   [22 Which plug-ins are needed for the Eclipse Help system?](#Which-plug-ins-are-needed-for-the-Eclipse-Help-system)
-*   [23 How can I add the Eclipse Update Manager to my application?](#How-can-I-add-the-Eclipse-Update-Manager-to-my-application)
-*   [24 What is ICU4J and is it required?](#What-is-ICU4J-and-is-it-required)
-*   [25 How to bundle the JRE's for Windows and for Linux in my RCP application?](#How-to-bundle-the-JRE.27s-for-Windows-and-for-Linux-in-my-RCP-application)
-*   [26 How to add menu item, command and handler?](#How-to-add-menu-item.2C-command-and-handler)
-*   [27 How can I show line numbers by default in my RCP application?](#How-can-I-show-line-numbers-by-default-in-my-RCP-application)
+*   [1 Adopting the Eclipse 4 Application Platform](#Adopting-the-Eclipse-4-Application-Platform)
+    *   [1.1 How do the Eclipse 3.x and 4.x programming models differ?](#How-do-the-Eclipse-3.x-and-4.x-programming-models-differ.3F)
+        *   [1.1.1 Handlers](#Handlers)
+        *   [1.1.2 Parts](#Parts)
+        *   [1.1.3 Lazy Instantiantion](#Lazy-Instantiantion)
+    *   [1.2 How would I accomplish X in Eclipse 4?](#How-would-I-accomplish-X-in-Eclipse-4.3F)
+        *   [1.2.1 Accessing the status line](#Accessing-the-status-line)
+        *   [1.2.2 Associating help context with a control](#Associating-help-context-with-a-control)
+        *   [1.2.3 Handling errors and exceptions](#Handling-errors-and-exceptions)
+        *   [1.2.4 Accessing preference values](#Accessing-preference-values)
+        *   [1.2.5 How to use Sleak in e4AP](#How-to-use-Sleak-in-e4AP)
+            *   [1.2.5.1 Setup of the Java Build Path Libraries](#Setup-of-the-Java-Build-Path-Libraries)
+            *   [1.2.5.2 Setup for testing just a Java Class in the Eclipse IDE](#Setup-for-testing-just-a-Java-Class-in-the-Eclipse-IDE)
+            *   [1.2.5.3 Setup of the e4AP IDE](#Setup-of-the-e4AP-IDE)
+            *   [1.2.5.4 Setup for a e4AP RCP](#Setup-for-a-e4AP-RCP)
+            *   [1.2.5.5 Open the "Sleak" view](#Open-the-.22Sleak.22-view)
+*   [2 The E4 Model](#The-E4-Model)
+    *   [2.1 What is an _xmi:id_? How is it different from the _elementId_?](#What-is-an-xmi:id.3F-How-is-it-different-from-the-elementId.3F)
+    *   [2.2 How do I reference an object defined in another .e4xmi?](#How-do-I-reference-an-object-defined-in-another-.e4xmi.3F)
+    *   [2.3 Are identifiers (elementId) supposed to be unique?](#Are-identifiers-.28elementId.29-supposed-to-be-unique.3F)
+    *   [2.4 How do I use MPlaceholders?](#How-do-I-use-MPlaceholders.3F)
+    *   [2.5 How do I create an MPart from an MPartDescriptor?](#How-do-I-create-an-MPart-from-an-MPartDescriptor.3F)
+*   [3 Problems on Configuration, Start-Up, and Shutdown](#Problems-on-Configuration.2C-Start-Up.2C-and-Shutdown)
+    *   [3.1 Why won't my application start?](#Why-won.27t-my-application-start.3F)
+    *   [3.2 I modified my App.e4xmi/fragment.e4xmi but the changes aren't being loaded. Why?](#I-modified-my-App.e4xmi.2Ffragment.e4xmi-but-the-changes-aren.27t-being-loaded.-Why.3F)
+    *   [3.3 How can I prevent my workbench model from being saved on exit?](#How-can-I-prevent-my-workbench-model-from-being-saved-on-exit.3F)
+*   [4 Dependency Injection & Contexts](#Dependency-Injection-.26-Contexts)
+    *   [4.1 Why aren't my @Inject-able/@PostConstruct methods being injected?](#Why-aren.27t-my-.40Inject-able.2F.40PostConstruct-methods-being-injected.3F)
+        *   [4.1.1 Cause #1: Mismatched Annotations](#Cause-.231:-Mismatched-Annotations)
+        *   [4.1.2 Cause #2: Unresolvable Injections](#Cause-.232:-Unresolvable-Injections)
+    *   [4.2 What services are available for injection?](#What-services-are-available-for-injection.3F)
+    *   [4.3 How can I override a provided object?](#How-can-I-override-a-provided-object.3F)
+    *   [4.4 How do I provide singleton objects?](#How-do-I-provide-singleton-objects.3F)
+    *   [4.5 Why am I getting a new instance of an object?](#Why-am-I-getting-a-new-instance-of-an-object.3F)
+    *   [4.6 Why is my widget/part not displaying? Why am I getting a new Shell?](#Why-is-my-widget.2Fpart-not-displaying.3F-Why-am-I-getting-a-new-Shell.3F)
+    *   [4.7 Why am I being injected with _null_?](#Why-am-I-being-injected-with-null.3F)
+    *   [4.8 Why aren't my parts being injected with my value set from my bundle activator?](#Why-aren.27t-my-parts-being-injected-with-my-value-set-from-my-bundle-activator.3F)
+    *   [4.9 What is the difference between IEclipseContext#set and IEclipseContext#modify?](#What-is-the-difference-between-IEclipseContext.23set-and-IEclipseContext.23modify.3F)
+    *   [4.10 Why aren't my _@EventTopic_ or _@UIEventTopic_ methods being called?](#Why-aren.27t-my-.40EventTopic-or-.40UIEventTopic-methods-being-called.3F)
+*   [5 Commands and Handlers](#Commands-and-Handlers)
+    *   [5.1 Why is my handler's @Execute not being triggered?](#Why-is-my-handler.27s-.40Execute-not-being-triggered.3F)
+    *   [5.2 Why aren't my handler fields being re-injected?](#Why-aren.27t-my-handler-fields-being-re-injected.3F)
+    *   [5.3 Why is my parameterized handler not triggered?](#Why-is-my-parameterized-handler-not-triggered.3F)
+    *   [5.4 Why does org.eclipse.core.commands.Command's isEnabled() and getHandler() not work?](#Why-does-org.eclipse.core.commands.Command.27s-isEnabled.28.29-and-getHandler.28.29-not-work.3F)
+*   [6 UI](#UI)
+    *   [6.1 How do I enable Drag N Drop (DND) of parts?](#How-do-I-enable-Drag-N-Drop-.28DND.29-of-parts.3F)
+    *   [6.2 Why are my CSS theming not taking effect?](#Why-are-my-CSS-theming-not-taking-effect.3F)
+    *   [6.3 Why is my part's selection never set as the active selection?](#Why-is-my-part.27s-selection-never-set-as-the-active-selection.3F)
+*   [7 Customizing and Controlling the Platform](#Customizing-and-Controlling-the-Platform)
+    *   [7.1 How do I provide my own prompt-to-save when closing a part?](#How-do-I-provide-my-own-prompt-to-save-when-closing-a-part.3F)
 
-What is the Eclipse Rich Client Platform?
------------------------------------------
+Adopting the Eclipse 4 Application Platform
+-------------------------------------------
 
-While the Eclipse platform is designed to serve as an open tools platform, it is architected so that its components could be used to build just about any client application. The minimal set of plug-ins needed to build a rich client application is collectively known as the **Rich Client Platform**.
+### How do the Eclipse 3.x and 4.x programming models differ?
 
-For more details, see the main [RCP page](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform.md).
+Conceptually, the models aren't very different. The Eclipse 4 programming model is strongly influenced by the Eclipse 3.x model, but rectifies some of the mistakes that were only realized in hindsight. If you are a proficient Eclipse 3.x RCP developer, then most concepts and approaches will be fairly familiar.
 
-Why should I build my application on the Eclipse Rich Client Platform?
-----------------------------------------------------------------------
+#### Handlers
 
-Many people that have built, or are building, RCP applications state that the main value they get from using RCP is that it allows them to quickly build a professional-looking application, with native look-and-feel, on multiple platforms, allowing them to focus on their value-add. They appreciate that the components that form RCP are of high quality, are actively maintained, and are open source. They often discover after the initial adoption of RCP that there are many other Eclipse components available for reuse (e.g. Help UI, Update Manager, Cheat Sheets, Intro, etc.). Several have also discovered that the inherent extensibility of Eclipse allows them to build not only a closed-form product, but also an open-ended platform (like the Eclipse IDE) in their own domain.
+With E3.x, the handlers were in a flat global namespace. The handler service used activeWhen expressions to choose the most specific handler for the current situation (e.g., active when the activePartId = xxx).
 
-For a nice description of the benefits of RCP, see [Jeff Norris' forward on NASA/JPL's use of RCP](http://web.archive.org/web/20100307050224/eclipsercp.org/book/chapters/RCP_Foreward2.pdf) (archived link), a free excerpt from the [RCP Book](/RCP_Book "RCP Book").
+With E4.x, handlers can be installed on parts, windows, as well as globally on the MApplication. Handler look up starts from the active part and proceeds upwards. So many of the uses for the activeWhen expressions disappeared. Enablement expressions are now handled by the handler class itself through @CanExecute methods.
 
-See also the case studies available on the [RCP Community page](http://www.eclipse.org/community/rcp.php).
+#### Parts
 
-What is included in the Rich Client Platform?
----------------------------------------------
+Eclipse 4 has no formal notion of an 'editor', though one could be defined by virtue of the EMF-based model. Eclipse 4 instead distinguishes between a Part and an InputPart. An input part has a URI to provide the input and can also be marked as dirty.
 
-The Eclipse Rich Client Platform consists of the following components:
+#### Lazy Instantiantion
 
-| Component    | Description    | Plug-ins    | Documentation    |
-| --- | --- | --- | --- |
-| Eclipse Runtime    | Provides the foundational support for plug-ins, extension points and extensions (among other facilities).  The Eclipse runtime is built on top of the OSGi framework. | org.eclipse.core.runtime    org.eclipse.osgi   org.eclipse.osgi.services   | Dev guide: [Runtime overview](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/runtime.htm)   Article: [Notes on the Eclipse Plug-in Architecture](http://eclipse.org/articles/Article-Plug-in-architecture/plugin_architecture.html)      |
-| SWT    | The Standard Widget Toolkit. SWT is designed to provide efficient, portable access to the user-interface facilities of the operating systems on which it is implemented | org.eclipse.swt    \+ platform-specific fragments      | [Platform SWT home page](https://www.eclipse.org/swt/) |
-| JFace    | A UI framework, layered on top of SWT, for handling many common UI programming tasks. | org.eclipse.jface | [JFace](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/JFace.md) |
-| Workbench | The Workbench builds on top of the Runtime, SWT and JFace to provide a highly scalable, open-ended, multi-window environment for managing views, editors, perspectives (task-oriented layouts), actions, wizards, preference pages, and more.    The Workbench is sometimes called the Generic Workbench, to distinguish it from the IDE Workbench facilities defined in the org.eclipse.ui.ide plug-in.   | org.eclipse.ui    org.eclipse.ui.workbench   | Dev guide: [Plugging into the workbench](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/workbench.htm),[Dialogs and wizards](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/dialogs.htm), [Advanced workbench concepts](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/wrkAdv.htm)      |
-|   Other prerequisites for the Workbench   | Support for XML expressions language, commands, and help core content model.    | org.eclipse.core.expressions    org.eclipse.core.commands   org.eclipse.help   |     |
-
-Note that as of Eclipse 3.3M6, org.eclipse.help requires [com.ibm.icu](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform/Rich_Client_Platform_FAQ.md#What-is-ICU4J-and-is-it-required) which takes a sizeable amount of footprint (that [can be reduced](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform/Rich_Client_Platform_FAQ.md#What-is-ICU4J-and-is-it-required)). [Bug 183761](https://bugs.eclipse.org/bugs/show_bug.cgi?id=183761) has been filed to investigate removing this dependency from org.eclipse.help.
-
-What is the disk footprint for the Rich Client Platform?
---------------------------------------------------------
-
-As of Eclipse 3.7, the disk footprint is about 20 Meg.
-
-Is the resources plug-in (org.eclipse.core.resources) considered part of the Rich Client Platform?
---------------------------------------------------------------------------------------------------
-
-No. The workspace resource model provided by the org.eclipse.core.resources plug-in is not considered part of the Rich Client Platform. While this is the underlying data model for the Eclipse IDE, the RCP makes no assumptions about the underlying data model of the application being built. The data model could just as well be files in the local filesystem, a remote database, an RDF data store, or anything else. If it makes sense for the application, **org.eclipse.core.resources** can be included and used as the application's data model, but this is not required. Much effort was put into Eclipse 3.0 to remove the dependencies on **org.eclipse.core.resources** from the generic workbench. Any resource dependencies (for example, the New Project, Folder and File wizards, and the Resource Navigator, Tasks and Problems views), were considered IDE-specific and factored out into the IDE plugin (**org.eclipse.ui.ide**).
+Most classes referenced by model objects are immediately instantiated on the rendering of the model. This means that bundles contributing to the UI will be invariably activated on startup.
 
   
 
-Is the IDE plug-in (org.eclipse.ui.ide) considered part of the Rich Client Platform?
-------------------------------------------------------------------------------------
+### How would I accomplish X in Eclipse 4?
 
-No. The **org.eclipse.ui.ide** plug-in is layered on top of the generic workbench (**org.eclipse.ui**) and adds IDE-specific views, preference pages and other extensions. The IDE uses the workspace resource model as its underlying data model. :The org.eclipse.ui.ide plug-in, and the extensions defined within it, are not part of the Rich Client Platform, but they can be used in a resource- (and workspace-)based RCP application.
+The following snippets show how to access various services from pure E4 components (created using injection). These snippets cannot be used directly from Eclipse 3.x parts using the E4 Compatibility Layer as these parts are not injected.
 
-Prior to Eclipse 3.3, the **org.eclipse.ui.ide** was not designed to be reused in other RCP applications because it also defined the application for the Eclipse IDE, which instantiates the generic workbench, configuring it with IDE-specific menu and toolbar items. As of Eclipse 3.3, the application definition has been moved to a new plug-in **org.eclipse.ui.ide.application**.
+|   #### Accessing the status line   |  |
+| --- | --- |
+| Eclipse 3.x | Eclipse 4.0 |
+|   getViewSite()   .getActionsBars()       .getStatusLineManager()           .setMessage(msg);             getViewSite()       .getActionsBars()           .getStatusLineManager()               .setMessage(msg);           |   @Inject IStatusLineManager statusLine; ... statusLine.setMessage(msg);             @Inject     IStatusLineManager statusLine;     ...     statusLine.setMessage(msg);           |
+|   #### Associating help context with a control   |  |
+|   getSite()   .getWorkbenchWindow()     .getWorkbench()        .getHelpSystem().setHelp(                viewer.getControl(), some_id)             getSite()       .getWorkbenchWindow()         .getWorkbench()            .getHelpSystem().setHelp(                    viewer.getControl(), some_id)           |   @Inject IWorkbenchHelpSystem helpSystem; ... helpSystem.setHelp(         viewer.getControl(), some_id);             @Inject     IWorkbenchHelpSystem helpSystem;     ...     helpSystem.setHelp(             viewer.getControl(), some_id);           |
+|   #### Handling errors and exceptions   |  |
+|   try {     ... } catch (Exception ex) {     IStatus status = new Status(        IStatus.ERROR, "plugin-id",        "Error while ...", ex);     StatusManager.getManager()         .handle(status, StatusManager.SHOW); }             try {         ...     } catch (Exception ex) {         IStatus status = new Status(            IStatus.ERROR, "plugin-id",            "Error while ...", ex);         StatusManager.getManager()             .handle(status, StatusManager.SHOW);     }           |   @Inject StatusReporter statusReporter; ... try{     ... } catch (Exception ex) {     statusReporter.show("Error while ...", ex); }             @Inject     StatusReporter statusReporter;     ...     try{         ...     } catch (Exception ex) {         statusReporter.show("Error while ...", ex);     }           |
+|   #### Accessing preference values   |  |
+|   IPreferenceStore store =     IDEWorkbenchPlugin.getDefault()         .getPreferenceStore(); boolean saveBeforeBuild = store     .getBoolean(SAVE\_BEFORE\_BUILD);             IPreferenceStore store =         IDEWorkbenchPlugin.getDefault()             .getPreferenceStore();     boolean saveBeforeBuild = store         .getBoolean(SAVE_BEFORE_BUILD);           |   @Inject @Preference(SAVE\_BEFORE\_BUILD) boolean saveBeforeBuild;             @Inject @Preference(SAVE_BEFORE_BUILD)     boolean saveBeforeBuild;           |
+|   IPreferenceStore store =     IDEWorkbenchPlugin.getDefault()         .getPreferenceStore(); store.putBoolean(SAVE\_BEFORE\_BUILD, false);             IPreferenceStore store =         IDEWorkbenchPlugin.getDefault()             .getPreferenceStore();     store.putBoolean(SAVE_BEFORE_BUILD, false);           |   @Inject @Preference IEclipsePreferences prefs; ... prefs.setBoolean(SAVE\_BEFORE\_BUILD, false);             @Inject @Preference     IEclipsePreferences prefs;     ...     prefs.setBoolean(SAVE_BEFORE_BUILD, false);           |
 
-What other Eclipse components can be used in constructing RCP applications?
----------------------------------------------------------------------------
+#### How to use Sleak in e4AP
 
-Here is a list of some of the reusable components in the broader Eclipse codebase that can be incorporated into RCP applications.
+In e3 the following code snippet needed to be included in the code to be tested.
 
-| Component    | Description    | Plug-ins    | Documentation    |
-| --- | --- | --- | --- |
-| Help    | Web-app-based Help UI, with support for dynamic content.    | org.apache.lucene    org.eclipse.help.appserver   org.eclipse.help.base   org.eclipse.help.ui   org.eclipse.help.webapp   org.eclipse.tomcat   org.eclipse.ui.forms   | Dev guide: [Plugging in help](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/help.htm)      |
-| Update Manager    | Allows users to discover and install updated versions of products and extensions. | org.eclipse.update.configurator    org.eclipse.update.core   org.eclipse.update.scheduler   org.eclipse.update.ui   \+ platform-specific fragments      | Dev guide: [Updating a product or extension](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/product_update.htm)      |
-| Text    | Framework for building high-function text editors.    | org.eclipse.text    org.eclipse.jface.text   org.eclipse.workbench.texteditor   | Dev guide: [Text editors and platform text](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/editors_jface.htm)      |
-| Forms    | Flat look control library and multi-page editor framework (used in PDE editors).    | org.eclipse.ui.forms | Article: [Eclipse Forms: Rich UI for the Rich Client](http://www.eclipse.org/articles/Article-Forms/article.html) |
-| Welcome Page (aka Intro) | Initial welcome experience and guided assistance.    | org.eclipse.ui.intro    | Dev guide: [Intro support](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/workbench_advext_intro.htm) |
-| Cheat Sheets    | A Cheat Sheet guides the user through a long-running, multi-step task.    | org.eclipse.ui.cheatsheets    | Dev guide: [Cheat Sheets](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/workbench_advext_cheatsheets.htm) |
-| Resources    | Workspace resource model, with managed projects, folders and files.    | org.eclipse.core.resources    | [Platform Core home page](http://www.eclipse.org/eclipse/platform-core/)   Dev guide: [Resources overview](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/resInt.htm) |
-| Console | Extensible console view.    | org.eclipse.ui.console    | Javadoc: [org.eclipse.ui.console](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/reference/api/org/eclipse/ui/console/package-summary.html), [org.eclipse.ui.console.actions](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/reference/api/org/eclipse/ui/console/actions/package-summary.html) |
-| Outline and Properties views | Outline and Properties views    | org.eclipse.ui.views    | TBD |
-| Graphical Editing Framework (GEF) | Framework for building graphical editors. Includes Draw2D, a vector graphics framework.    | org.eclipse.draw2d    org.eclipse.gef      | [GEF home page](http://www.eclipse.org/gef)      |
-| Eclipse Modeling Framework (EMF) and Service Data Objects (SDO) | EMF is a modeling framework and code generation facility for building tools and other applications based on a structured data model.  SDO is a framework that simplifies and unifies data application development in a service oriented architecture (SOA). | [EMF plug-in list from CVS](http://dev.eclipse.org/viewcvs/indextools.cgi/org.eclipse.emf/plugins/)    | [EMF home page](http://www.eclipse.org/emf/)   Overviews:[EMF, EMF Edit, EMF Validation ...](http://www.eclipse.org/modeling/emf/docs/#overviews), [SDO](http://www-106.ibm.com/developerworks/java/library/j-sdo/) |
-
-How do I get started with RCP?
-------------------------------
-
-The [Eclipse RCP tutorials](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform.md) are a good starting points. 
-See also the [examples](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform.md#Examples) and the [suggested help topics](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform.md#Help-Topics).
-
-What is the recommended target platform setup? Or: How can I build and run my RCP app against a different version of the Eclipse base?
---------------------------------------------------------------------------------------------------------------------------------------
-
-With the default setup of the Eclipse SDK, plug-ins are developed against the same plug-in configuration used by the IDE itself. 
-However, it is possible to configure the IDE to build, run and deploy against a different version of the eclipse base, via the Plug-in Development > Target Platform preference page. 
-Configuring the target platform is highly recommended in order to avoid introducing unwanted dependencies on IDE plug-ins into your RCP app.
-
-For more details, see the ["Target Platform Preferences"](http://help.eclipse.org/ganymede/topic/org.eclipse.pde.doc.user/guide/tools/preference_pages/target_platform.htm) help topic in the PDE Guide. 
-The tutorial in the [RCP Book](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform/Rich_Client_Platform_Book.md) also walks you through this process.
-
-For a recommended setup, use the following steps. We assume the Eclipse SDK (aka the IDE) is already installed, e.g. in c:\\eclipse.
-
-1.  Go to the [Platform downloads page](http://download.eclipse.org/eclipse/downloads/).
-2.  Pick the build you want to use as your RCP target (e.g. the 3.2 M6 milestone build).
-3.  In the RCP SDK section (not the Eclipse SDK, Platform SDK, or RCP Binary sections) download the RCP SDK for your platform. This contains just the base RCP plug-ins for that platform.
-4.  Extract it to a different directory than the IDE's (e.g. c:\\eclipse-RCP-SDK).
-5.  Optionally, if you want to deploy to other platforms, download the Delta Pack (the link is at the bottom of the RCP SDK section). This contains the platform-specific plug-ins for all platforms. Extract it to the same location as the RCP SDK (say OK to any prompts to overwrite files).
-6.  Run the IDE (e.g. c:\\eclipse\\eclipse.exe).
-7.  Go to Window > Preferences > Plugin-Development > Target Platform, and configure the location to be the eclipse subdirectory of the RCP SDK install (e.g. c:\\eclipse-RCP-SDK\\eclipse). Note: if you type or paste the path, you'll need to press the Reload button.
-8.  The list of plug-ins on the Plug-ins tab should update to show the RCP SDK plug-ins; other plug-ins like those for JDT and PDE should not appear.
-
-Now, any plug-in projects in your workspace will build and run against the RCP SDK plug-ins rather than the IDE's.
-
-If you are developing against the same version as the Eclipse SDK, there is new support in since 3.2 M5 that simplifies setting up the Target Platform for RCP development, and makes it easier to incrementally include other plug-ins from the SDK build.
-
-1.  Go to Window > Preferences > Plugin-Development > Target Platform.
-2.  In the "Pre-defined Targets" section at the bottom, choose one of the "Base RCP" entries, e.g. "Base RCP (with Source)" and press the "Load Target" button.
-3.  The list of plug-ins on the Plug-ins tab still shows all SDK plug-ins, but only the RCP base plug-ins are checked; other plug-ins like those for JDT and PDE should not be checked. Only checked plug-ins constitute your target. Unchecked plug-ins are ignored.
-
-PDE currently supports two versions back for plug-in development. That is, with Eclipse 3.2 you can develop 3.0 plugins and launch 3.0 systems, but not 2.1 or earlier.
-
-How can I change the window icon in my application?
----------------------------------------------------
-
-[Define a product](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/product_def.htm) via the [products extension point](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/product_def_extpt.htm) and specify the `windowImages` property to refer to two image files, a 16x16 one and a 32x32 one.
-
-It is best to specify both, since a 16x16 icon is typically used in the window trim, and a 32x32 icon is typically used in the OS's application switcher (e.g. Alt+Tab on Windows). If only one is specified, it is scaled up or down as needed, which can result in poor quality.
-
-For example, the [Browser Example](/RCP_Browser_Example "RCP Browser Example") has the following in its plugin.xml:
-
-    <extension point="org.eclipse.core.runtime.products" id="product">
-      <product
-        name="%productName"
-        application="org.eclipse.ui.examples.rcp.browser.app">
-        <property
-          name="windowImages"
-          value="icons/eclipse.gif,icons/eclipse32.gif"/>
-        ...
-      </product>
-    </extension>
-
-For more details, see the [Branding Your Application](http://eclipse.org/articles/Article-Branding/branding-your-application.html) article.
-
-How can I change the embedded app icon in my application?
----------------------------------------------------------
-
-This can be customized via the product file which is used for the export.
-
-How can I change the default UI settings for the perspective bar location, fast view bar location, etc?
--------------------------------------------------------------------------------------------------------
-
-Several UI settings such as the perspective bar location, fast view bar location, traditional vs. curvy tabs, etc., are controlled by preferences on the UI plug-in. These have default values defined by the generic workbench. However, the product can override these default values using the product preference customization mechanism.
-
-[Define a product](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/product_def.htm) via the [products extension point](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/product_def_extpt.htm) and add the following property:
-
-    <property
-      name="preferenceCustomization"
-      value="plugin_customization.ini"/>
-
-Then create a file called `plugin_customization.ini`, in the same directory as the `plugin.xml` file, with contents of the form:
-
-    <pluginId>/<preferenceName>=<preferenceValue>
-
-For example, to show the perspective bar and fast view bar on the left, and to use curvy tabs, add the following to the `plugin_customization.ini` file:
-
-    org.eclipse.ui/DOCK_PERSPECTIVE_BAR=left
-    org.eclipse.ui/SHOW_TEXT_ON_PERSPECTIVE_BAR=false
-    org.eclipse.ui/initialFastViewBarLocation=left
-    org.eclipse.ui/SHOW_TRADITIONAL_STYLE_TABS=false
+       DeviceData data = new DeviceData();
+       data.tracking = true;
+       display = new Display(data);
+       display = new Display();
+       Sleak sleak = new Sleak();
+       sleak.open();
     
-For a list of public preferences available on the UI plug-in and their valid values, see the interface [org.eclipse.ui.IWorkbenchPreferenceConstants](http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/ui/IWorkbenchPreferenceConstants.html).
+That is no longer the case in e4AP. In e4AP Sleak is a eclipse view under the "SWT Tools" category.
 
-For more details, see the [Branding Your Application](http://eclipse.org/articles/Article-Branding/branding-your-application.html) article and the [Customizing a product](http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/product_configproduct.htm) section in Help.
+##### Setup of the Java Build Path Libraries
 
-How can I get action set menus to appear in the right order, between my app's main menus?
------------------------------------------------------------------------------------------
+1.  Add the "org.eclipse.swt.tools_x.xxx.x.v.jar"
+2.  If running MS Windows operating system also add the following
+    1.  org.eclipse.swt.win32.win32.x86\_64\_3.104.0.v20150528-0211.jar
+    2.  _If not running MS Windows operating system I don't know what, if any, additional jar is needed. I don't have a Apple workstation or a Linux workstation to test. (maybe some kind soul will see this and update as needed.)_
 
-When adding main menus to the menu manager in your WorkbenchAdvisor's fillActionBars method, add an "additions" group marker where you'd like action sets to appear.
+##### Setup for testing just a Java Class in the Eclipse IDE
 
-    menuBar.add(fileMenu);
-    menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-    menuBar.add(helpMenu);
+**Setup at the Operating System Command line.**
 
-Can multiple instances of the same view be made to appear at the same time?
----------------------------------------------------------------------------
+1.  Add "-debug" to the command line.
 
-Yes. See IWorkbenchPage.showView(String primaryId, String secondaryId, int mode).
+**Before**
 
-The <view> element in the plugin.xml must also specify allowMultiple="true".
+        eclipse.exe -data "C:\EWS\sandbox00"
 
-Be sure to use a different `secondaryId` for each instance, otherwise `showView` will find any existing view with the same primaryId and secondaryId rather than showing a new one.
+**After**
 
-To pass instance-specific data to the view, you will need to cast the resulting IViewPart down to the concrete view class and call your own setData method.
+        eclipse.exe -debug -data "C:\EWS\sandbox00"
 
-Note that views with a secondaryId will not match placeholders specifying just the primaryId. In a perspective factory, placeholders can be added for multi-instance views using the format `primaryId + ':' + secondaryId`, where '*' wildcards are supported.
+1.  The addition of "-debug" will now cause a second command line window to appeared.
 
-How can I deploy my RCP app?
-----------------------------
+**Before**  
+Only this one window appeared.
 
-[Lars Vogel's RCP tutorial](http://www.vogella.de/articles/EclipseRCP/article.html) discusses this in the section entitled _Products and Branding_.
+![Eclipse.exe command window.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Eclipse.exe_command_window.jpg)
 
-When I try running, nothing happens, or it complains that the application could not be found in the registry, or that other plug-ins are missing. How can I track the problem down?
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**After**  
+Now these two windows will appeared.
 
-Try running first from within Eclipse using the Runtime Workbench (3.0 and 3.0.1) or Eclipse Application (3.1) launch configuration (Run > Debug...). Ensure that the application's plug-in(s) and all its prerequisites are selected in the Plug-ins tab. The easiest way is to select "Choose plug-ins and fragments to launch from the list", press Deselect All, check off the application's plug-in(s), and press Add Required Plug-ins. In 3.1, there is also a Validate Plug-in Set button to check that all prerequisites have been satisfied, without having to launch first. On the Main tab, be sure that the correct product or application is selected (using a product is preferred -- see the [Branding Your Application](http://eclipse.org/articles/Article-Branding/branding-your-application.html) article).
+![Eclipse.exe command window.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Eclipse.exe_command_window.jpg)
 
-When running a deployed RCP application (not running from within Eclipse), ensure that the config.ini file in the configuration directory points to the correct product or application extension via the eclipse.product or eclipse.application entry (using a product is preferred -- see the [Branding Your Application](http://eclipse.org/articles/Article-Branding/branding-your-application.html) article). Either all plug-ins need to be specified in the osgi.bundles entry of the config.ini, or the **org.eclipse.update.configurator** plug-in should be included to discover all available plug-ins the first time the application is run.
+![Debug output window.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Debug_output_window.jpg)
 
-If eclipse fails silently, look in the configuration and/or workspace directories for a .log file. If you use the eclipse.exe launcher (or equivalent on other platforms) it will tell you where to find any relevant log file.
+##### Setup of the e4AP IDE
 
-Try adding -consolelog, -debug and -clean to the command line (as program arguments, not VM arguments). For example, to run the browser example with an explicitly specified product:
+*   Add a file named ".options" to the current working directory when eclipse.exe is invoked.
+*   Using the -Dosgi.debug {location of the .options file} method did not work for me.
+*   At this time the help is wrong in saying to put the ".options" file "under the install directory". An error will occur saying the ".options" file could not be found. Populate ".options" with the following two lines.
 
+`  
+org.eclipse.ui/debug=true  
+org.eclipse.ui/trace/graphics=true`
 
-    d:\j2sdk1.4.2_01\bin\java org.eclipse.core.launcher.Main -product org.eclipse.ui.examples.rcp.browser.product -consolelog -clean -debug
+*   Read the debug log and make sure the ".options" file was found. If the ".options" was found a "loaded" message is in the debug log. The below screen capture shows a debug log with the "loaded" message that the ".options" file could was found.
 
+![Debug options file found.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Debug_options_file_found.jpg)
+
+*   If the ".options" was not found a "not found" error is in the debug log. The below screen capture shows a debug log with the "not found" error that the ".options" file could not be found.
+
+![Debug options file not found.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Debug_options_file_not_found.jpg)
+
+##### Setup for a e4AP RCP
+
+**Setup of the Launch Configuration**
+
+1.  Navigate to the "Tracing" tab of the "Run Configurations" panel. (Run -> Run Configurations.)
+2.  Check the "Enable tracing" check box.
+3.  Find "org.eclipse.ui(x.xxx.x.vxxxxxxxx-xxxx)" in the list on the left hand side of the split panel and check the check box on the same line.
+4.  Find the "debug" in the list on the right hand side of the split panel and check the check box on the same line.
+5.  Find the "trace/graphics" in the list on the right hand side of the split panel and check the check box on the same line.
+
+![RunConfiguration.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/RunConfiguration.jpg)
+
+1.  Press the "Apply" button.
+2.  Press the "Run" button.
+
+##### Open the "Sleak" view
+
+1.  Window -> Show View -> Other -> SWT Tools -> Sleak
+2.  Use Sleak as normal.
+
+The E4 Model
+------------
+
+### What is an _xmi:id_? How is it different from the _elementId_?
+
+if you look at the contents of an .e4xmi file, you'll see that every object has a unique _xmi:id_ attribute. The _xmi:id_ are unique identifiers are internal to EMF and used for resolving model-level references between objects, similar to a memory reference. The _elementId_s are Eclipse 4 identifiers and serve to provide a well-known name to an object.
+
+Unlike EMF's _xmi:id_ identifiers, which are expected by EMF to be unique, Eclipse 4's _elementId_s do not _necessarily_ have to be unique. For example, it may make sense for every part stack containing editors to have elementId _editor-stack_ (though we might instead recommend using a tag). Some _elementId_s are expected to be unique for particular uses. For example, an _MCommand_s _elementId_ serves as the unique command identifier.
+
+In the following example, notice the (anonymous) handler has a reference to the command instance. The command instance's _elementId_ is used as the Eclipse command identifier.
+
+      <handlers xmi:id="_385TQr5EEeGzleFI7lW1Fg"
+          contributorURI="platform:/plugin/org.eclipse.platform"
+          contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.ExitHandler"
+          command="_385TTr5EEeGzleFI7lW1Fg"/>
+      <commands xmi:id="_385TTr5EEeGzleFI7lW1Fg"
+          elementId="e4.exit" 
+          contributorURI="platform:/plugin/org.eclipse.platform"
+          commandName="%command.name.exit"
+          description=""/>
+
+### How do I reference an object defined in another .e4xmi?
+
+Referencing an object defined elsewhere is often necessary, such as to provide an MHandler for a particular MCommand. To reference an object defined in a different .e4xmi you need an _import_, basically creating an alias that is replaced at load-time to the xmi:id of the imported object.
+
+Ensure the object to be imported has a unique elementId, and then do the following steps in the Model Editor:
+
+1.  Open the fragment.e4xmi
+2.  Select the "Imports" section from the overview pane on the left.
+3.  In the details pane, on the right, select the type of object to be imported and click the "Add" button. This adds and opens the new import in the details pane.
+4.  Select the "Default" tab ({bug|384500})
+5.  Provide the elementId of the desired object
+
+Note: only model fragments can reference objects defined elsewhere. You cannot have an Application.e4xmi reference an object defined in a fragment.e4xmi.
+
+### Are identifiers (elementId) supposed to be unique?
+
+It depends on the context in which the elementIds are being used. In practice, searches of the model are performed within some scope such as for a particular type of object (e.g., all MBindingContexts) or within some object graph (e.g., the children of an MPerspective).
+
+The E4 model does not require that elementIds be unique. Otherwise every "File" menu in different windows would require a different identifier, which would be very annoying. But each MCommand defined on an MApplication is _expected_ to have a unique identifier. (Note: command-identifier uniqueness is not actually enforced, but could lead to unexpected UI behaviours since there will be multiple possible command objects.) If you are attempting to import an object into a fragment, then it's important that the elementIds are unique for that type.
+
+  
+
+### How do I use MPlaceholders?
+
+### How do I create an MPart from an MPartDescriptor?
+
+Use the EPartService.
+
+Problems on Configuration, Start-Up, and Shutdown
+-------------------------------------------------
+
+### Why won't my application start?
+
+E4AP products require having the following plugins:
+
+*   org.apache.felix.scr (> 4.7 Oxygen) or org.eclipse.equinox.ds (4.0 - 4.6) (must be started)
+*   org.eclipse.equinox.event (must be started)
+
+Note that org.eclipse.equinox.ds and org.eclipse.equinox.event _must_ be explicitly started. In your product file, you should have a section like the following:
+
+      <configurations>
+         <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
+         <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
+         <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      </configurations>
+    
 or
 
-    eclipse -vm d:\j2sdk1.4.2_01\bin\java -product org.eclipse.ui.examples.rcp.browser.product -consolelog -clean -debug
-
--consolelog causes any log entries to be sent to the console as well (to get a console window, be sure to use java as the VM instead of javaw).
-
--debug causes Eclipse to log extra information about plug-in dependency problems (see [here](https://bugs.eclipse.org/bugs/show_bug.cgi?id=75648) for more background).
-
--clean forces Eclipse to re-read all the plugin.xml files rather than using its cached representation of the plug-in registry.
-
-While these options are helpful for debugging, note that there is a performance penalty for -debug and -clean, so it is not recommended that they be used in the final product.
-
-For other troubleshooting hints, see the **Troubleshooting** section of the [RCP Tutorial, part 1](http://eclipse.org/articles/Article-RCP-1/tutorial1.html).
-
-My own RCP plug-ins are contributed by a feature. Why is the update manager complaining that my configuration is invalid?
--------------------------------------------------------------------------------------------------------------------------
-
-If you're using a feature only for the plug-ins you write, the update manager does not check dependencies on "orphan" plug-ins (i.e. plug-ins not contributed by a feature) so the configuration appears invalid. You will need to either:
-
-*   include all the plug-ins (yours and the RCP plug-ins) into your feature, or
-*   create another feature for the RCP plug-ins.
-
-Are editors tied to the workspace resource model or to the broader notion of files?
------------------------------------------------------------------------------------
-
-No. 
-The concept of an editor in the workbench and the corresponding types (IEditorPart, EditorPart, IEditorInput) are not tied to the workspace resource model, or even to the notion of files (whether in the workspace or the file system). 
-Editors can be used for any kind of model, and can be textual or graphical.
-
-The Text component provides support for text editors. 
-See the entry for the Text component in the list of optional components above. 
-See also the [RCP text editor example](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform.md#Examples).
-
-How can I integrate my existing Swing components into an RCP application?
--------------------------------------------------------------------------
-
-See [this SWT FAQ entry](http://www.eclipse.org/swt/faq.php#swinginswt). Note, however, that the SWT_AWT bridge does not currently work on all platforms, e.g. Mac ([bug 67384](https://bugs.eclipse.org/bugs/show_bug.cgi?id=67384)).
-
-Also take a look at [SwingWT](http://swingwt.sourceforge.net/), an SWT-based implementation of the Swing API.
-
-How can I define key bindings for commands?
--------------------------------------------
-
-As of 3.3, the preferred means of binding keys is to use commands, handlers, and contexts. 
-See [Platform Command Framework#KeyBindings](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/PlatformCommandFramework.md#KeyBindings) for the extension points.
-
-There are some wrinkles for the RCP case. 
-See [Keybindings for Eclipse Commands](https://www.vogella.com/tutorials/EclipseCommands/article.html) for a tutorial.
-
-The key binding system is designed with the general idea that it is under the control of the user, not the program. 
-If you want to control key bindings in an RCP application, you have to decide whether to expose the preference system or whether to be inflexible.
-
-To begin with, note that each org.eclipse.ui.binding is a member of a scheme. Unless you interact with the preference system, or replace the BindingService with your own class, you must put all your bindings in org.eclipse.ui.defaultAcceleratorConfiguration. If you put them in some other scheme, you will find that here is no simple API to activate your scheme.
-
-The other obscure detail you will want is context management. If you want some commands (and thus bindings) to be active only in some parts, you will want to associate a context with your part. In createPartControl, write something like:
-
-    	IContextService contextService = (IContextService) getSite()
-    		.getService(IContextService.class);
-    	contextService.activateContext(CONTEXT_ID);
-
-At the lowest level, you can obtain the IBindingService has no 'set' functions, and BindingService is a final class in an internal package. So, if you want to get complete control, you would have to create your own implementation of IBindingService that wraps the standards one.
-
-How can I get my views and editors to coordinate with each other?
------------------------------------------------------------------
-
-You can also track part activation and other lifecycle using [IPartService](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/reference/api/org/eclipse/ui/IPartService.html), [IPartListener](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/reference/api/org/eclipse/ui/IPartListener.html) and [IPartListener2](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/reference/api/org/eclipse/ui/IPartListener2.html).
-
-To track part lifecycle from within an existing view or editor, use the part service on the part's containing IWorkbenchPage:
-
-    getSite().getPage().addPartListener(listener);
-
-From outside the page (e.g. from an action added to the window in the ActionBarAdvisor), use the part service on the IWorkbenchWindow:
-
-    IWorkbenchWindow window = actionBarAdvisor.getActionBarConfigurer().getWindowConfigurer().getWindow();
-    window.getPartService().addPartListener(listener);
-
-Be sure to remove the part listener in the appropriate dispose method.
-
-Which plug-ins are needed for the Eclipse Help system?
-------------------------------------------------------
-
-See ["What other Eclipse components can be used in constructing RCP applications?"](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform/Rich_Client_Platform_FAQ.md#What-other-Eclipse-components-can-be-used-in-constructing-RCP-applications). 
-Be sure to include the **org.eclipse.tomcat** plug-in since the dependency on it is indirect. 
-The **org.eclipse.help.ui** plug-in requires the **org.eclipse.help.appserver** plug-in, which defines the **org.eclipse.help.appserver.server** extension point. 
-The **org.eclipse.tomcat** plug-in adds an extension to this extension point. 
-So although **org.eclipse.tomcat** is required, it's not found by adding all prerequisites of **org.eclipse.help.ui**, and needs to be added manually.
-
-See also the ["Plugging in help"](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/help.htm) help topic.
-
-See also the "Adding Help" chapter in the [RCP Book](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Rich_Client_Platform/Rich_Client_Platform_Book.md).
-
-How can I add the Eclipse Update Manager to my application?
------------------------------------------------------------
-
-See section 9 of the ["Developing Eclipse Rich Client Applications" tutorial](http://www.eclipsecon.org/2005/presentations/EclipseCon2005_Tutorial8.pdf) from EclipseCon 2005.
-
-See also the ["Updating a product or extension"](http://help.eclipse.org/help31/topic/org.eclipse.platform.doc.isv/guide/product_update.htm) help topic.
-
-See also the "Adding Update" chapter of the [RCP Book](/RCP_Book "RCP Book").
-
-What is ICU4J and is it required?
----------------------------------
-
-ICU4J is a set of Java libraries that provides more comprehensive support for Unicode, software globalization, and internationalization. 
-In order to provide this functionality to the Eclipse community, ICU4J was added to the Eclipse platform in 3.2. 
-You will see it in the build as a plug-in named com.ibm.icu.
-
-The ICU4J plug-in has a non-negligable footprint of ~3M, which is a significant fraction of the RCP base footprint. 
-If reduced footprint is more important for your application than the enhancements provided by ICU4J, it can be replaced with a plug-in that is about 100KB in size and that simply calls through to the java.* packages (default JDK implementation) of the most commonly used classes and APIs in ICU4J.
-
-How to bundle the JRE's for Windows and for Linux in my RCP application?
-------------------------------------------------------------------------
-
-I edited the build.properties of my product's "Feature", and I put the lines bellow:
-
-    bin.includes = feature.xml
-    root.linux.gtk.x86=jre_linux/
-    root.linux.gtk.x86.permissions.755=jre_linux/
-    root.win32.win32.x86=jre_win/
+      <configurations>
+         <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
+         <plugin id="org.apache.felix.scr" autoStart="true" startLevel="3" />
+         <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      </configurations>
     
-The second line `root.linux.gtk.x86=jre_linux/`, tells the builder to take the contents of the "jre_linux/" directory and copy it to the root of my distribution.
+Failure to set the auto-start levels usually manifest as runtime errors like
 
-The third line `root.linux.gtk.x86.permissions.755=jre_linux/` applies the chmod 755 over all the files under jre_linux/ after they are copied to the destination directory. Without it the java executable cannot be run, since it is chmod'ed to 644 (no execution permission).
-
-Note: The above permissions line didn't work for me. Maybe this is because root.linux.gtk.x86 has already been set to jre_linux/ in the line before? When I change it to
-
-     root.linux.gtk.x86.permissions.755=jre/bin/java
+      Unable to acquire application service. Ensure that the org.eclipse.core.runtime bundle is resolved and started (see config.ini)
     
-(only) the jre/bin/java executable is being set +x. Could someone check this, please?
+See also [\[1\]](https://www.eclipse.org/eclipse/news/4.7/platform_isv.php#equinox-ds-felix-scr)
 
-TIP: the contents of the `jre_linux/` directory is a single directory called `jre`. Inside this directory are the jre's subdirectories "bin", "lib", etc. Calling it "jre" is extremely important because the launcher executable, at the absence of the `-vm path\_to\_java_executable` option will search by default for the java executable at the directory `./jre/bin`, being this directory relative from the directory where the executable was installed.
+### I modified my App.e4xmi/fragment.e4xmi but the changes aren't being loaded. Why?
 
-Conclusion: With this configuration the "jre/" directory tree is copied to the root of my distribution and the java executable at jre/bin/java is run by default, even if my system has other java's on its $PATH. And it wasn't necessary to set any "-vm path" to the launcher.
+The E4 workbench persists the current model on shutdown and, if found, restores that model on startup. Any changes in the Application.e4xmi and previously-loaded fragments will be ignored. If you're debugging, use the -persistState false option to prevent the model from being persisted on shutdown.
 
-More options for the build.properties file can be found at [http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.pde.doc.user/reference/pde\_feature\_generating_build.htm](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.pde.doc.user/reference/pde_feature_generating_build.htm)
+### How can I prevent my workbench model from being saved on exit?
 
-How to add menu item, command and handler?
-------------------------------------------
+You can prevent the workbench from being persisted on shutdown by launching with "-persistState false" or setting the system property "persistState=false".
 
-*   Add dependency: MANIFEST.MF -> Dependencies tab -> Add -> _org.eclipse.ui_
-*   Add extension point org.eclipse.ui.menus: plugin.xml -> Extension -> Add -> _org.eclipse.ui.menus_
-    *   Right-click -> New -> menuContribution
-        *   Enter locationURI: menu:file
-            *   Right click -> New -> command
-            *   Enter commandId: _**sampleCommand**_
-            *   Enter label: Sample Menu Item
-*   Add extension point org.eclipse.ui.commands: plugin.xml -> Extensions -> Add -> _org.eclipse.ui.commands_
-    *   Right-click -> New -> command
-        *   Enter id: _**sampleCommand**_
-        *   Enter label: Sample Command
-*   Add extension point org.eclipse.ui.handlers: plugin.xml -> Extensions -> Add -> _org.eclipse.ui.handlers_
-    *   Right-click -> New -> handler
-        *   Enter commandId: _**sampleCommand**_
-        *   Enter class: sample.SampleHandler
-        *   Click class link and create class
-        *   Provide sample implementation of the handler class implementing _org.eclipse.core.commands.IHandler_ or extending _org.eclipse.core.commands.AbstractHandler_
+You can prevent the persisted workbench from being loaded on startup by launching with "-clearPersistedState" or setting the property "clearPersistedState=true"
 
-MANIFEST.MF
+Dependency Injection & Contexts
+-------------------------------
 
-     Manifest-Version: 1.0
-     Bundle-ManifestVersion: 2
-     Bundle-Name: Sample Handler
-     Bundle-SymbolicName: sample;singleton:=true
-     Bundle-Version: 1.0.0.qualifier
-     Bundle-Vendor: sample
-     Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-     Require-Bundle: org.eclipse.ui
-    
+### Why aren't my @Inject-able/@PostConstruct methods being injected?
 
-plugin.xml
+There are typically two reasons why injection fails.
 
-    <?xml version="1.0" encoding="UTF-8"?>
-    <?eclipse version="3.4"?>
-    <plugin>
-       <extension
-             point="org.eclipse.ui.menus">
-          <menuContribution
-                locationURI="menu:file">
-             <command
-                   commandId="sampleCommand"
-                   label="Sample Menu Item"
-                   style="push">
-             </command>
-          </menuContribution>
-       </extension>
-       <extension
-             point="org.eclipse.ui.commands">
-          <command
-                id="sampleCommand"
-                name="Sample Command">
-          </command>
-       </extension>
-       <extension
-             point="org.eclipse.ui.handlers">
-          <handler
-                class="sample.SampleHandler"
-                commandId="sampleCommand">
-          </handler>
-       </extension>
-    </plugin>
+#### Cause #1: Mismatched Annotations
 
-Handler – sample implementation showing a message
+![Note.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Note.png)
 
-    package sample;
+**As of Eclipse Neon (4.6), the advice, to place a package-version on javax.annotation, is no longer required. See [bug 463292](https://bugs.eclipse.org/bugs/show_bug.cgi?id=463292) for details.**  
+
+  
+Ensure your bundles use Import-Package with a package version to pull in the standard annotations rather than a Require-Bundle on the javax.annotation bundle.
+
+    Import-Package: javax.annotation; version="1.1.0"
+
+Basically the injector is resolving to a different PostConstruct class from your code. You can try "packages javax.annotation" from the OSGi console to see if your bundle is bound to a different package version than org.eclipse.e4.core.di. The reasons behind this are complex (see [bug 348155](https://bugs.eclipse.org/bugs/show_bug.cgi?id=348155) for a long discussion about the issue and the problems with various solutions. A workaround was committed for Kepler SR2 for bundles that require the org.eclipse.core.runtime bundle (see [bug 424274](https://bugs.eclipse.org/bugs/show_bug.cgi?id=424274)). The real solution is for the OSGi Framework to annotate the VM definitions with their respective versions ([bug 348630](https://bugs.eclipse.org/bugs/show_bug.cgi?id=348630)), but it's a hard problem.
+
+  
+
+#### Cause #2: Unresolvable Injections
+
+The injector attempts to resolve objects in the context. If an object cannot be resolved in the context, and it's not marked as @Optional, then the method will not be injected. The injector does not normally log when such situations occur as it is an expected occurrence.
+
+Two approaches to help diagnose such problems:
+
+*   enable tracing on org.eclipse.e4.core.di for debug/injector; as of 4.6 M4, the injector will warn of found annotation mismatches ([bug 482136](https://bugs.eclipse.org/bugs/show_bug.cgi?id=482136));
+*   put an exception breakpoint on InjectionException.
+
+### What services are available for injection?
+
+See the [list of provided services](/Eclipse4/RCP/EAS/List_of_All_Provided_Services "Eclipse4/RCP/EAS/List of All Provided Services")
+
+### How can I override a provided object?
+
+FIXME For example, to provide an alternative StatusReporter or Logger
+
+### How do I provide singleton objects?
+
+Typical E4AP applications have a single injector, accessible through _org.eclipse.e4.core.di.InjectorFactory#getDefault()_. Within this injector, any class or interface annotated with the _javax.inject.Singleton_ will be treated as a singleton instance.
+
+Another approach is to use a _IContextFunction_ that checks and sets a value in the top context.
+
+FIXME: Can the injector also be configured to bind @Singleton to a particular class?
+
+### Why am I getting a new instance of an object?
+
+\[NB: the injector's behaviour changed as of 4.2M7. After M7, objects are only created if annotated with @Creatable.\]
+
+The injector attempts to resolve objects in the context. If they are not found in the context, but the class exists, then the injector will instantiate and return a new instance _providing_ that its injectable dependencies can be resolved.
+
+This behaviour can be a bit confusing, so let's walk through a somewhat subtle example that frequently causes confusion to new developers with E4 and DI. Consider an E4 RCP app with two MParts, OverviewPart and DetailPart. Since the OverviewPart provides an overview of the contents shown by DetailPart, it needs to get ahold of the DetailPart. A first attempt at writing OverviewPart and DetailPart might be:
+
+    public class OverviewPart {
+       @Inject private Composite detail;
+       @Inject private DetailPart detail; 
      
-    import org.eclipse.core.commands.AbstractHandler;
-    import org.eclipse.core.commands.ExecutionEvent;
-    import org.eclipse.core.commands.ExecutionException;
-    import org.eclipse.jface.dialogs.MessageDialog;
-    import org.eclipse.swt.widgets.Display;
+       @PostConstruct private void init() { /* ... */ }
+    }
      
-    public class SampleHandler extends AbstractHandler {
+    public class DetailPart {
+       @Inject private Composite detail;
      
-    	@Override
-    	public Object execute(ExecutionEvent event) throws ExecutionException {
-    		MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-    				"Sample Handler", "Sample Handler");
-    		return null;
-    	}
+       @PostConstruct private void init() { /* ... */ }
     }
 
-How can I show line numbers by default in my RCP application?
--------------------------------------------------------------
+If you try to run with this code, it seems to work — but somehow the OverviewPart and DetailPart receive the same Composite! What's wrong?
 
-Add the following line to your plugin_customization.ini file:
+There are several problems in the code above:
 
-    org.eclipse.ui.editors/lineNumberRuler=true
+1.  Objects are resolved through the context ancestry, and never through the context tree. Since MParts are siblings, an MPart will never be resolved through injection alone.
+2.  Despite their names, neither OverviewPart nor DetailPart are actually MParts. They are the _contributed objects_ of an MPart that implement the behaviour. These contributed object are not available through the injection context.
+3.  Even if contributed objects could be injected, there could be several instances in the model. Consider the Eclipse IDE with multiple windows with the _Outline_ view in each.
+
+So how did the code above seem to work? It works because of a subtle feature of the Dependency Injector called _instance autogeneration_ (also supported by Guice). When trying to inject a field or method argument of type T, our DI tries to resolve an object of type T using the provided context. If an object of type T cannot be found, it examines the type T: if it is a concrete class, and either has a 0-argument constructor or a constructor marked with @Inject, it will _autogenerate_ an instance using the provided context.
+
+So the flow looks something like this.
+
+1.  MPart(OverviewPart) is to be rendered. A new IEclipseContext is created hanging off of the MPart(OverviewPart)'s parent.
+    1.  DI is requested to create OverviewPart, using the IEclipseContext for <tt>MPart(OverviewPart)
+    2.  OverviewPart's constructor was called.
+    3.  The OverviewPart instance's fields were examined for injection
+        1.  DI found the field for DetailPart. It tried to resolve that type in the MPart(OverviewPart)'s context, but nothing was found.
+            1.  DI then looked to see if DetailPart was concrete and either had a 0-argument constructor or an @Injectable constructor; it found a 0-argument constructor. DI then created an instance of DetailPart and _began injecting this new DetailPart using MPart(OverviewPart)'s context_. Note that DI did not create a new context for this object!
+            2.  DI looked to see if this new DetailPart object had any injectable fields.
+                1.  DI found a field of type Composite. DI checked in MPart(OverviewPart)'s context for Composite — and found an instance. But this instance was the Composite for OverviewPart. The field was injected.
+            3.  DI then looked for methods of the new object to be injected.
+    4.  DI looked for any methods in OverviewPart to be injected.
+2.  The OverviewPart object is returned.
+
+(The correct solution is to use the EModelService to find the detail part.)
+
+### Why is my widget/part not displaying? Why am I getting a new Shell?
+
+This type of problem is another symptom of the [DI autogeneration issue](#Why-am-I-getting-a-new-instance-of-an-object.3F), and usually occurs with code like the following:
+
+    class ShowDialogHandler {
+     
+       @Execute
+       private void showDialog(Shell shell) {
+          dialog = new Dialog(shell, ...);
+       }
+    }
+
+As there is no Shell in the DI context, but [Shell](http://help.eclipse.org/indigo/topic/org.eclipse.platform.doc.isv/reference/api/org/eclipse/swt/widgets/Shell.html) has a 0-argument constructor, the DI will create a new Shell for the purpose of injection.
+
+The fix is to annotate the Shell request with "@Named(ACTIVE_SHELL)" to fetch the shell for the active window, as in:
+
+       @Execute
+       private void showDialog(@Named(ACTIVE_SHELL) Shell shell) { ... }
+
+This value is set in the context for each window.
+
+### Why am I being injected with _null_?
+
+Typically null values are only injected when an argument or field is marked as @Optional. But a null value will be injected if the value has previously been explicitly set to null in the context.
+
+For example, the valueChanged() method will be injected with null:
+
+    @PostConstruct
+    public void init(IEclipseContext context) {
+       context.set("value", null);
+    }
+     
+    @Inject
+    public void valueChanged(@Named("value") String selection) {
+       // ...
+    }
+
+### Why aren't my parts being injected with my value set from my bundle activator?
+
+The context obtained using `EclipseContextFactory.getServiceContext(bundleContext)` is completely dissociated from the context created for an application in `E4Application`. If you want to populate a context such that a part can be injected, you either need to use an addon or an `IContextFunction`.
+
+### What is the difference between IEclipseContext#set and IEclipseContext#modify?
+
+    public class MyPart {
+        @Inject IEclipseContext context;
+     
+        ...
+     
+        private void repositoryChanged(IRepository repository) {
+            //  set the variable "repository" in this part's context: the value is only visible to
+            // this part and any children
+            context.set("repository", repository);
+     
+            // search up the context stack to see if the variable exists in one of the the context's 
+            // ancestors; otherwise it does a set in the specified context
+            context.modify("repository", repository);
+        }
+     
+        ...
+    }
+
+A placeholder can be made for _#modify_ with _IEclipseContext#declareModifiable()_ or a _<variable>_ declaration in an _Application.e4xmi_.
+
+### Why aren't my _@EventTopic_ or _@UIEventTopic_ methods being called?
+
+This problem usually occurs in testing, where an object is created explictly via injection that would normally be created by the Eclipse 4 framework (e.g., an addon). The event registrations are created when the object is injected and _are removed_ when the object is GC'd. You must ensure your object reference are held somewhere.
+
+Commands and Handlers
+---------------------
+
+### Why is my handler's @Execute not being triggered?
+
+See ["Why isn't my @Inject-able method being injected?"](#Why-isn.27t-my-.40Inject-able-method-being-injected.3F) above.
+
+  
+
+### Why aren't my handler fields being re-injected?
+
+Handler instances are singleton-ish — that is, only a single instance is created within the Eclipse-4 workbench — and the handler may actually be invoked by different threads in parallel. So the handler instance can’t be re-injected since that may result in field clobbering. Only the method arguments of the @CanExecute and @Execute arguments are injected, since they can't be clobbered with parallel invocations.
+
+### Why is my parameterized handler not triggered?
+
+When binding a command to a UI element (e.g., an _MHandledToolItem_ or _MHandledMenuItem_), the binding must provide a parameter for each of the parameters defined by the command. The attribute names used (as of 4.2M3) for establishing a correspondance between command parameters and handler arguments can lead to some confusion.
+
+The parameters to a command are specified as instances of _MCommandParameter_. The identifier for each parameter, used for matching, is taken from the _elementId_ attribute. The _name_ attribute is a descriptive label for the parameter.
+
+The confusion arises as each _binding_ parameter (an instance of _MParameter_) also have an _elementId_, but it is the _name_ attribute that is used for matching against the command parameters. The binding parameter's _elementId_ merely serves to identify that parameter instance within the model.
+
+For example, consider defining a command to perform a CSS theme switch, where the theme identifier is provided as a command parameter _themeId_. We might configure the command (programmatically) as follows:
+
+    MCommand switchThemeCommand = MCommandsFactory.INSTANCE.createCommand();
+    // set the unique command id
+    switchThemeCommand.setElementId("command.switchTheme");   
+    MCommandParameter themeId = MCommandsFactory.INSTANCE.createCommandParameter();
+    themeId.setElementId("themeId");
+    themeId.setName("The Theme Identifier");
+    themeId.setOptional(false);
+    switchThemeCommand.getParameters().add(themeId);
+    // make the command known
+    app.getCommands().add(switchThemeCommand);
+
+To configure a menu item to trigger a theme switch:
+
+    // somehow find the MCommand definition
+    MCommand switchThemeCommand = helper.findCommand("command.switchTheme");
+    MMenu themeMenu = ...;
+    for(ITheme theme : engine.getThemes()) {
+       MHandledMenuItem menuItem = MMenuFactory.INSTANCE.createHandledMenuItem();
+       menuItem.setLabel(theme.getLabel());
+       menuItem.setCommand(switchThemeCommand);
+       menuItem.setContributorURI("platform:/plugin/bundle-name/class-name");
+       MParameter parameter = MCommandsFactory.INSTANCE.createParameter();
+       // set the identifier for the corresponding command parameter
+       parameter.setName("themeId");
+       parameter.setValue(themeIdentifier);
+       menuItem.getParameters().add(parameter);
+       themeMenu.getChildren().add(menuItem);
+    }
+
+  
+
+### Why does org.eclipse.core.commands.Command's isEnabled() and getHandler() not work?
+
+`Command`'s `isEnabled()` and `getHandler()` and are specific to Eclipse 3.x based API and are not supported in Eclipse 4. Hence they will always return false or null in Eclipse 4 applications. Applications should use the `EHandlerService` to query against a command.
+
+UI
+--
+
+### How do I enable Drag N Drop (DND) of parts?
+
+The DND addon is found in the org.eclipse.e4.ui.workbench.addons.swt plugin. However it requires the compatibility layer and is not available for native E4AP applications.
+
+### Why are my CSS theming not taking effect?
+
+Assuming that you are using the CSS theming through the 'org.eclipse.e4.ui.css.swt.theme _extension point:_
+
+*   Ensure the org.eclipse.e4.ui.css.swt.theme bundle is included with its prereqs
+*   Verify that a plugin.xml defines one or more themes on the _org.eclipse.e4.ui.css.swt.theme_ extension point
+*   Verify that your product specifies a "cssTheme" property, or is passed "-cssTheme" on the command-line, with a valid theme-id
+*   Verify that your product specifies the _applicationCSSResources_ property, a URI prefix to the location containing your CSS resources
+    *   A common symptom: your switch-theme handler cannot be injected as _IThemeEngine_ could not be resolved
+*   Verify that your CSS files have no errors: add a breakpoint to _org.eclipse.e4.ui.css.core.exceptions.UnsupportedClassCSSPropertyException_, _org.eclipse.e4.ui.css.core.exceptions.DOMExceptionImpl_, and _org.w3c.css.sac.CSSException_
+
+### Why is my part's selection never set as the active selection?
+
+You must ensure that your part implements a method annotated with @Focus, and this method must set the SWT focus to one of your created widgets. Setting the focus to that widget is an essential part for triggering the change of the active selection.
+
+We generally recommend that your part create a container composite in your constructor or @PostConstruct, and this container is the perfect widget to use for your @Focus as Composite.setFocus() traverses its children to restore focus to its child widget that last had focus. You should _not_ use the parent composite provided to your part's constructor/@PostConstruct, though as this composite is (1) not under your control, and (2) may contain other UI elements that should not receive the focus.
+
+Customizing and Controlling the Platform
+----------------------------------------
+
+### How do I provide my own prompt-to-save when closing a part?
+
+Put your own custom org.eclipse.e4.ui.workbench.modeling.ISaveHandler implementation somewhere in the part's context hierarchy. Note that this handler is only called if the part is already marked as dirty.
 
