@@ -362,7 +362,7 @@ So how did the code above seem to work? It works because of a subtle feature of 
 So the flow looks something like this.
 
 1.  MPart(OverviewPart) is to be rendered. A new IEclipseContext is created hanging off of the MPart(OverviewPart)'s parent.
-    1.  DI is requested to create OverviewPart, using the IEclipseContext for <tt>MPart(OverviewPart)
+    1.  DI is requested to create OverviewPart, using the IEclipseContext for MPart(OverviewPart)
     2.  OverviewPart's constructor was called.
     3.  The OverviewPart instance's fields were examined for injection
         1.  DI found the field for DetailPart. It tried to resolve that type in the MPart(OverviewPart)'s context, but nothing was found.
