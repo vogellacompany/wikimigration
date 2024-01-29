@@ -82,13 +82,29 @@ Most classes referenced by model objects are immediately instantiated on the ren
 
 The following snippets show how to access various services from pure E4 components (created using injection). These snippets cannot be used directly from Eclipse 3.x parts using the E4 Compatibility Layer as these parts are not injected.
 
-|  | Eclipse 3.x | Eclipse 4.0 |
-| --- | --- | --- |
-| Accessing the status line | <pre>getViewSite()<br>   .getActionsBars()<br>      .getStatusLineManager()<br>         .setMessage(msg);</pre> | <pre>@Inject<br>IStatusLineManager statusLine;<br>...<br>statusLine.setMessage(msg);</pre>|
-| Associating help context with a control | <pre>getSite()<br>   .getWorkbenchWindow()<br>      .getWorkbench()<br>         .getHelpSystem().setHelp(<br>         viewer.getControl(), some_id)</pre> | <pre>@Inject<br>IWorkbenchHelpSystem helpSystem;<br>...<br>helpSystem.setHelp(<br>viewer.getControl(), some_id);</pre>|
-| Handling errors and exceptions |   try {     ... } catch (Exception ex) {     IStatus status = new Status(        IStatus.ERROR, "plugin-id",        "Error while ...", ex);     StatusManager.getManager()         .handle(status, StatusManager.SHOW); }             try {         ...     } catch (Exception ex) {         IStatus status = new Status(            IStatus.ERROR, "plugin-id",            "Error while ...", ex);         StatusManager.getManager()             .handle(status, StatusManager.SHOW);     }           |   @Inject StatusReporter statusReporter; ... try{     ... } catch (Exception ex) {     statusReporter.show("Error while ...", ex); }             @Inject     StatusReporter statusReporter;     ...     try{         ...     } catch (Exception ex) {         statusReporter.show("Error while ...", ex);     }           |
-|   Accessing preference values |   IPreferenceStore store =     IDEWorkbenchPlugin.getDefault()         .getPreferenceStore(); boolean saveBeforeBuild = store     .getBoolean(SAVE\_BEFORE\_BUILD);             IPreferenceStore store =         IDEWorkbenchPlugin.getDefault()             .getPreferenceStore();     boolean saveBeforeBuild = store         .getBoolean(SAVE_BEFORE_BUILD);           |   @Inject @Preference(SAVE\_BEFORE\_BUILD) boolean saveBeforeBuild;             @Inject @Preference(SAVE_BEFORE_BUILD)     boolean saveBeforeBuild;           |
-|   IPreferenceStore store =     IDEWorkbenchPlugin.getDefault()         .getPreferenceStore(); store.putBoolean(SAVE\_BEFORE\_BUILD, false);             IPreferenceStore store =         IDEWorkbenchPlugin.getDefault()             .getPreferenceStore();     store.putBoolean(SAVE_BEFORE_BUILD, false);           |   @Inject @Preference IEclipsePreferences prefs; ... prefs.setBoolean(SAVE\_BEFORE\_BUILD, false);             @Inject @Preference     IEclipsePreferences prefs;     ...     prefs.setBoolean(SAVE_BEFORE_BUILD, false);           |
+**Accessing the status line**
+
+| Eclipse 3.x | Eclipse 4.0 |
+| --- | --- |
+|  <pre>getViewSite()<br>   .getActionsBars()<br>      .getStatusLineManager()<br>         .setMessage(msg);</pre> | <pre>@Inject<br>IStatusLineManager statusLine;<br>...<br>statusLine.setMessage(msg);</pre>|
+
+**Associating help context with a control**
+
+| Eclipse 3.x | Eclipse 4.0 |
+| --- | --- |
+|  <pre>getSite()<br>   .getWorkbenchWindow()<br>      .getWorkbench()<br>         .getHelpSystem().setHelp(<br>         viewer.getControl(), some_id)</pre> | <pre>@Inject<br>IWorkbenchHelpSystem helpSystem;<br>...<br>helpSystem.setHelp(<br>viewer.getControl(), some_id);</pre>|
+
+**Handling errors and exceptions**
+
+| Eclipse 3.x | Eclipse 4.0 |
+| --- | --- |
+| <pre>try {<br>   ...<br>} catch (Exception ex) {<br>   IStatus status = new Status(<br>      IStatus.ERROR, "plugin-id",<br>      "Error while ...", ex);<br>   StatusManager.getManager()<br>      .handle(status, StatusManager.SHOW);<br>}</pre>|<pre>@Inject<br>StatusReporter statusReporter;<br>...<br>try{<br>   ...<br>} catch (Exception ex) {<br>   statusReporter.show("Error while ...", ex);<br>}|
+
+**Accessing preference values**
+| Eclipse 3.x | Eclipse 4.0 |
+| --- | --- |
+| <pre>IPreferenceStore store =<br>   IDEWorkbenchPlugin.getDefault()<br>      .getPreferenceStore();<br>boolean saveBeforeBuild = store<br>   .getBoolean(SAVE\_BEFORE\_BUILD);</pre> | <pre>@Inject @Preference(SAVE\_BEFORE\_BUILD)<br>boolean saveBeforeBuild;</pre>  |
+| <pre>IPreferenceStore store =<br>   IDEWorkbenchPlugin.getDefault()<br>      .getPreferenceStore();<br>store.putBoolean(SAVE_BEFORE_BUILD, false);</pre>|  <pre>@Inject @Preference<br>IEclipsePreferences prefs;<br>...<br>prefs.setBoolean(SAVE\_BEFORE\_BUILD, false);</pre> |
 
 
 #### How to use Sleak in e4AP
@@ -145,9 +161,8 @@ Now these two windows will appeared.
 *   Using the -Dosgi.debug {location of the .options file} method did not work for me.
 *   At this time the help is wrong in saying to put the ".options" file "under the install directory". An error will occur saying the ".options" file could not be found. Populate ".options" with the following two lines.
 
-`  
-org.eclipse.ui/debug=true  
-org.eclipse.ui/trace/graphics=true`
+`org.eclipse.ui/debug=true`  
+`org.eclipse.ui/trace/graphics=true`
 
 *   Read the debug log and make sure the ".options" file was found. If the ".options" was found a "loaded" message is in the debug log. The below screen capture shows a debug log with the "loaded" message that the ".options" file could was found.
 
@@ -277,9 +292,7 @@ There are typically two reasons why injection fails.
 
 #### Cause #1: Mismatched Annotations
 
-![Note.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Note.png)
-
-**As of Eclipse Neon (4.6), the advice, to place a package-version on javax.annotation, is no longer required. See [bug 463292](https://bugs.eclipse.org/bugs/show_bug.cgi?id=463292) for details.**  
+Note: As of Eclipse Neon (4.6), the advice, to place a package-version on javax.annotation, is no longer required. See [bug 463292](https://bugs.eclipse.org/bugs/show_bug.cgi?id=463292) for details.  
 
   
 Ensure your bundles use Import-Package with a package version to pull in the standard annotations rather than a Require-Bundle on the javax.annotation bundle.
