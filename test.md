@@ -82,10 +82,11 @@ Most classes referenced by model objects are immediately instantiated on the ren
 
 The following snippets show how to access various services from pure E4 components (created using injection). These snippets cannot be used directly from Eclipse 3.x parts using the E4 Compatibility Layer as these parts are not injected.
 
-|   #### Accessing the status line   |  |
+|  |  |
 | --- | --- |
 | Eclipse 3.x | Eclipse 4.0 |
 |   getViewSite()   .getActionsBars()       .getStatusLineManager()           .setMessage(msg);             getViewSite()       .getActionsBars()           .getStatusLineManager()               .setMessage(msg);           |   @Inject IStatusLineManager statusLine; ... statusLine.setMessage(msg);             @Inject     IStatusLineManager statusLine;     ...     statusLine.setMessage(msg);           |
+
 |   #### Associating help context with a control   |  |
 |   getSite()   .getWorkbenchWindow()     .getWorkbench()        .getHelpSystem().setHelp(                viewer.getControl(), some_id)             getSite()       .getWorkbenchWindow()         .getWorkbench()            .getHelpSystem().setHelp(                    viewer.getControl(), some_id)           |   @Inject IWorkbenchHelpSystem helpSystem; ... helpSystem.setHelp(         viewer.getControl(), some_id);             @Inject     IWorkbenchHelpSystem helpSystem;     ...     helpSystem.setHelp(             viewer.getControl(), some_id);           |
 |   #### Handling errors and exceptions   |  |
