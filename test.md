@@ -1,382 +1,239 @@
-Platform Expression Framework
-=============================
-
-Expressions are declarative or programmatic expressions based on the org.eclipse.core.expressions plugin. 
-They are declared in plugin.xml and evaluated by the Expressions Framework. 
-The advantages of declaring an expression in plugin.xml are:
-
-*   Lazy loading: Expressions can be evaluated without loading the plug-in
-*   Flexible and pluggable, users can re-use expressions and provide custom property testers
-
-  
+Naming Conventions
+==================
 
 Contents
 --------
 
-*   [1 Where they are useful](#Where-they-are-useful)
-*   [2 Declaration of Expressions](#Declaration-of-Expressions)
-    *   [2.1 Re-Usable expressions](#Re-Usable-expressions)
-*   [3 Evaluation Context](#Evaluation-Context)
-    *   [3.1 Evaluation of Collections](#Evaluation-of-Collections)
-    *   [3.2 Additional Variables](#Additional-Variables)
-*   [4 Operators of the expressions framework](#Operators-of-the-expressions-framework)
-    *   [4.1 adapt](#adapt)
-    *   [4.2 and / or / not](#and-.2F-or-.2F-not)
-    *   [4.3 count](#count)
-    *   [4.4 equals](#equals)
-    *   [4.5 instanceof](#instanceof)
-    *   [4.6 iterate](#iterate)
-    *   [4.7 reference](#reference)
-    *   [4.8 resolve](#resolve)
-    *   [4.9 systemTest](#systemTest)
-    *   [4.10 test](#test)
-    *   [4.11 with](#with)
-*   [5 Property Testers](#Property-Testers)
-*   [6 Links](#Links)
+*   [1 General](#General)
+    *   [1.1 Eclipse Workspace Projects](#Eclipse-Workspace-Projects)
+    *   [1.2 Java Packages](#Java-Packages)
+    *   [1.3 API Packages](#API-Packages)
+    *   [1.4 Internal Implementation Packages](#Internal-Implementation-Packages)
+    *   [1.5 Test Suite Packages](#Test-Suite-Packages)
+    *   [1.6 Examples Packages](#Examples-Packages)
+    *   [1.7 Additional rules](#Additional-rules)
+*   [2 Classes and Interfaces](#Classes-and-Interfaces)
+*   [3 Methods](#Methods)
+*   [4 Variables](#Variables)
+*   [5 Constants](#Constants)
+*   [6 Plug-ins and Extension Points](#Plug-ins-and-Extension-Points)
+*   [7 System Files and Settings](#System-Files-and-Settings)
 
-Where they are useful
-=====================
+General
+-------
 
-Expressions are used in extension points that have to decide things based on a context, but without loading the plugin implementing that decision. 
-The most popular examples where they are used are the [Platform Command Framework](/Platform_Command_Framework "Platform Command Framework"), and the [Common Navigator Framework](/Common_Navigator_Framework "Common Navigator Framework"). 
-Depending on the extension implementation, expressions are used to decide any number of things. 
+Like other open source projects, the code base for the Eclipse project should avoid using names that reference a particular company or their commercial products.
+
+### Eclipse Workspace Projects
+
+When Eclipse is being used to develop plug-ins for the Eclipse project, the name of the Eclipse workspace project should match the name of the plug-in. 
+For example, org.eclipse.core.runtime plug-in is developed in an Eclipse workspace project named org.eclipse.core.runtime.
+
+### Java Packages
+
+The Eclipse Platform consists of a collection of Java packages. 
+The package namespace is managed in conformance with Sun's package naming guidelines; subpackages should not be created without prior approval from the owner of the package subtree. 
+The packages for the open-source Eclipse project are all subpackages of org.eclipse.
+
+The first package name segment after org.eclipse is generally the project name, followed by the component name.
+
+       org.eclipse.<project>.<component>[.*]- General form of package names
+    
+
+The following projects are assigned at the time of writing:
+
+       org.eclipse.equinox.<component>[.*] - Equinox OSGi framework
+       org.eclipse.jdt.<component>[.*] - Java development tooling
+       org.eclipse.pde.<component>[.*] - Plug-in development environment
+    
+The following package name segments are reserved:
+
+       internal - indicates an internal implementation package that contains no API
+       tests - indicates a non-API package that contains only test suites
+       examples - indicates a non-API package that contains only examples
+ 
+
+These names are used as qualifiers and appear between the project and component name:
+
+       org.eclipse.<project>.internal.<component>[.*] - internal package
+       org.eclipse.<project>.tests.<component>[.*] - tests
+       org.eclipse.<project>.examples.<component>[.*] - examples
+    
+
+In the case of the Eclipse Platform proper, there is no project name, and the qualifiers appear immediately after the component name:
+ 
+       org.eclipse.<component>[.*] -  Eclipse Platform proper
+       org.eclipse.<component>.internal[.*] - Eclipse Platform internal package
+       org.eclipse.<component>.tests[.*] - Eclipse Platform tests
+       org.eclipse.<component>.examples[.*] - Eclipse Platform examples
+ 
+
+The following components of the Eclipse Platform proper are assigned at the time of writing:
+ 
+
+       org.eclipse.ant[.*] - Ant support
+       org.eclipse.compare[.*] - Compare support
+       org.eclipse.core[.*] - Platform core
+       org.eclipse.debug[.*] - Debug
+       org.eclipse.help[.*] - Help support
+       org.eclipse.jdi[.*] - Eclipse implementation of Java Debug Interface (JDI)
+       org.eclipse.jface[.*] - JFace
+       org.eclipse.platform[.*] - Documentation
+       org.eclipse.scripting[.*] - Scripting support
+       org.eclipse.sdk[.*] - SDK configuration
+       org.eclipse.search[.*] - Search support
+       org.eclipse.swt[.*] - Standard Widget Toolkit
+       org.eclipse.ui[.*] - Workbench
+       org.eclipse.update[.*] - Plug-in live update
+       org.eclipse.vcm[.*] - Version and Configuration Management
+       org.eclipse.webdav[.*] - WebDAV support
+    
+
+For example,
+
+       org.eclipse.jdt.internal.core.compiler - Correct usage
+       org.eclipse.jdt.core.internal.compiler - Incorrect. internal should immediately follow project name.
+       org.eclipse.core.internal.resources - Correct usage
+       org.eclipse.internal.core.resources - Incorrect. internal should never immediately follow org.eclipse.
+       org.eclipse.core.resources.internal - Incorrect. internal should immediately follow Eclipse Platform component name.
+    
+### API Packages
+
+API packages are ones that contain classes and interfaces that must be made available to ISVs. 
+The names of API packages need to make sense to the ISV. 
+The number of different packages that the ISV needs to remember should be small, since a profusion of API packages can make it difficult for ISVs to know which packages they need to import. 
+Within an API package, all public classes and interfaces are considered API. 
+The names of API packages should not contain internal, tests, or examples to avoid confusion with the scheme for naming non-API packages. 
+Consult [Eclipse/API Central](/Eclipse/API_Central "Eclipse/API Central") for more detailed information on choosing and naming API elements.
+
+### Internal Implementation Packages
+
+All packages that are part of the platform implementation but contain no API that should be exposed to ISVs are considered internal implementation packages. 
+All implementation packages should be flagged as internal, with the tag occurring just after the major package name. 
+ISVs will be told that all packages marked internal are out of bounds. 
+(A simple text search for ".internal." detects suspicious reference in source files; likewise, "/internal/" is suspicious in .class files).
+
+### Test Suite Packages
+
+All packages containing test suites should be flagged as tests, with the tag occurring just after the major package name. 
+Fully automated tests are the norm; so, for example, org.eclipse.core.tests.resources would contain automated tests for API in org.eclipse.core.resources. 
+Interactive tests (ones requiring a hands-on tester) should be flagged with interactive as the last package name segment; so, for example, org.eclipse.core.tests.resources.interactive would contain the corresponding interactive tests.
+
+### Examples Packages
+
+All packages containing examples that ship to ISVs should be flagged as examples, with the tag occurring just after the major package name. 
+For example, org.eclipse.swt.examples would contain examples for how to use the SWT API.
+
+### Additional rules
+
+*   Package names should contain only lowercase ASCII alphanumerics, and avoid underscore _ or dollar sign $ characters.
+
+Classes and Interfaces
+----------------------
+
+Sun's naming guidelines states
+
+Class names should be nouns, in mixed case with the first letter of each internal word capitalized. 
+Try to keep your class names simple and descriptive. Use whole words - avoid acronyms and abbreviations (unless the abbreviation is much more widely used than the long form, such as URL or HTML).
+
 Examples:
 
-*   Should an context menu be enabled and/or visible in a context menu
-*   Which implementation for a command handler to use depending on the current context
-*   Which label provider to use for an object
-*   Which content provider can provide children for an object in a tree
+*   class Raster;
+*   class ImageSprite;
 
-It is also possible to use the expression framework in custom extension points.
+Interface names should be capitalized like class names.
 
-Declaration of Expressions
-==========================
+For interface names, we follow the "I"-for-interface convention: all interface names are prefixed with an "I". 
+For example, "IWorkspace" or "IIndex". 
+This convention aids code readability by making interface names more readily recognizable.
 
-First of all, an expression must be defined in plugin.xml. 
-Here is an example for an enablement expression in the common navigator framework:
+Additional rules:
 
-     <enablement>
-         <or>
-             <instanceof value="com.acme.navigator.ContainerObject"/>
-             <instanceof value="com.acme.navigator.RootObject"/>
-             <adapt type="org.eclipse.core.resources.IResource">
-                 <test
-                       property="org.eclipse.core.resources.projectNature"
-                       value="com.acme.navigator.nature">
-                 </test>
-             </adapt>
-         </or>
-     </enablement>
+The names of exception classes (subclasses of Exception) should follow the common practice of ending in "Exception".
 
-Note how the `<or>` element contains three elements: two `<instanceof>` and one `<adapt>`. 
-The `<adapt>` contains one further `<test>` element; what they all do will be explained later. 
-For now just focus on the structure of the expression: when it is evaluated, the result of the instanceof and the adapt tests will be logically or-ed because they are nested in a `<or>` element. 
-The same expression could also be written as follows in a [polish pseudo-notation](http://en.wikipedia.org/wiki/Polish_notation):
-
-    or (
-        instanceof com.acme.navigator.ContainerObject,
-        instanceof com.acme.navigator.RootObject,
-        and (
-            adapt org.eclipse.core.resources.IResource,
-            test org.eclipse.core.resources.projectNature = "com.acme.navigator.nature"
-        )
-    )
-    
-  
-
-Re-Usable expressions
----------------------
-
-Sometimes you will end up with having the same expression in many different places. 
-When one of them changes, you have to change them all. 
-Obviously, this is inefficient and not very handy - let alone error prone. 
-You can get around this problem by using definitions and re-use expressions that are declared elsewhere.
-
-The expression from the example above can be declared using the `org.eclipse.core.expressions.definitions` extension point, and then re-used using the `<reference>` element:
-
-     <extension
-           point="org.eclipse.core.expressions.definitions">
-        <definition id="org.acme.navigator.enablement">
-           <or>
-              <instanceof
-                    value="com.acme.navigator.ContainerObject">
-              </instanceof>
-              <instanceof
-                    value="com.acme.navigator.RootObject">
-              </instanceof>
-              <adapt type="org.eclipse.core.resources.IResource">
-                 <test
-                       property="org.eclipse.core.resources.projectNature"
-                       value="com.acme.navigator.nature">
-                 </test>
-              </adapt>
-           </or>
-        </definition>
-     </extension>
-
-Then you can just use `<reference>` to that definition:
-
-     <enablement>
-        <reference
-              definitionId="org.acme.navigator.enablement">
-        </reference>
-     </enablement>
-
-The definition can be declared in any plug-in, and then cross-referenced from all other plugins. 
-They don't even have to have a dependency on each other.
-
-Evaluation Context
-==================
-
-An expression alone means nothing without the object that is being tested. 
-Which object that is, and what it contains, is defined by the evaluation context. 
-The content of the evaluation context depends on who is initiating the evaluation.
-
-An evaluation context contains:
-
-*   The default variable
-*   Optional additional variables
-
-Usually, expressions check the default variable in the evaluation context. 
-However, it is possible for an expression to select a specific variable from the context using the `<with>` element (examples below).
-
-A common source for confusion are the different default variables provided by the [Common Navigator Framework](/Common_Navigator_Framework "Common Navigator Framework") and the [Platform Command Framework](/Platform_Command_Framework "Platform Command Framework"). 
-While the command framework provides a _collection containing the current selection_ as the default variable, the navigator framework just uses _the current object in the tree_. 
-For this reason, you cannot use the same expression for both frameworks.
-
-  
-
-Evaluation of Collections
--------------------------
-
-When dealing with a collection, you usually want to test against the _contents_ of the collection, and not the collection itself. 
-For this case, the expressions framework provides `<iterate>` and `<count>`. 
-They require an iterable object to work (otherwise they fail with an error message on the console).
-
-The default variable in the command framework always contains a collection with the current selection. 
-It might be empty, contain just one element (like an `ITextSelection`), or contain the elements of an `IStructuredSelection`.
-
-The following expression will work for the common navigator framework, but _not_ for the commands framework:
-
-     <enablement>
-        <instanceof
-             value="org.acme.navigator.RootObject">
-        </instanceof>
-     </enablement>
-
-Doing the same evaluation against the content of a collection:
-
-     <visibleWhen>
-         <iterate ifEmpty="false">
-             <instanceof
-                  value="org.acme.navigator.RootObject">
-             </instanceof>
-         </iterate>
-     </visibleWhen>
-
-This iterates over all elements in the collection and tests if all elements are an instance of `org.acme.navigator.RootObject`. 
-Note the `ifEmpty="false"`: this tells the expression framework that the evaluation should be false for an empty selection, which defaults to `true` (good tip: check this if you happen to see lots and lots of stuff in your context menu that should not be there, your selection might be empty).
-
-Count and iterate have always worked against java.util.Collection. 
-The count and iterate elements can also be used on any variable that adapts to `org.eclipse.core.expressions.ICountable` or `org.eclipse.core.expressions.IIterable`, or implements these interfaces directly.
-
-Additional Variables
---------------------
-
-An evaluation context (at least the ones provided by eclipse core) usually contains a whole bunch of additional variables, like:
-
-*   **activePart**: the currently active part (could f.i. be an instance of `org.eclipse.ui.navigator.CommonNavigator`)
-*   **activePartId**: the id of the currently active part (like org.acme.navigator)
-*   **activeEditorId**: the id of the currently active editor
-*   **activeWorkbenchWindowShell**: the currently active shell
-
-The variables are defined in `ISources` (try Ctrl+Shift+T to open that one from within JDT) and there are others. 
-Note that not all those variables actually contain something at runtime, and that some of them might not be set in the context.
-
-For a complete list of variables, read the [eclipse documentation on core expressions](http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/workbench_cmd_expressions.htm).
-
-Operators of the expressions framework
-======================================
-
-Currently, the expression framework supports a total of 13 operation elements. 
-Some of them can have further operations in them (like `<adapt>`). 
-If that is the case, the result of the nested operations will be logically and-ed.
-
-adapt
------
-
-Checks if the evaluated object is either an instance of, or adapts to the given class. 
-Can contain nested elements that will be logically and-ed. See `AdaptExpression.evaluate()`.
-
-  
-
-and / or / not
---------------
-
-The usual boolean operators, can contain nested elements. 
-Do what they say on the tin.
-
-  
-
-count
------
-
-Used to count the elements in a collection. 
-Cannot contain nested elements, but can be used in combination with `<iterate>`. 
-`<count>` has one argument "value", wich can be one of the following:
-
-*   `*`: matches any number (even 0)
-*   `?`: one or none
-*   `!`: none
-*   `+`: one or more
-*   `-NN)`: less than _NN_ (_NN_ is an integer)
-*   `(NN-`: greater than _NN_
-*   `NN`: exactly _NN_
-
-So, the following example will match all collections that contain 2 elements:
-
-     <visibleWhen>
-         <count value="2"/>
-     </visibleWhen>
-
-In combination with `<iterate>`, you can count the elements in the collection that match the expression inside the iterate statement. 
-For example, to match all collections that contain two or more `ContainerObject` objects, use:
-
-     <visibleWhen>
-         <count value="(1-"/>
-         <iterate ifEmpty="false">
-             <instanceof value="org.acme.navigator.ContainerObject"/>
-         </iterate>
-     </visibleWhen>
-
-equals
-------
-
-Checks if the variable equals the given argument.
-
-*   Numbers will be treated as such (float or integer)
-*   Strings can be un-escaped: use `\\string\`
-*   "true" will be Boolean.TRUE
-*   "false" will be Boolean.FALSE
-*   Everything else will be treated as string.
-
-Example:
-
-     <visibleWhen>
-         <equals value="3.4"/>
-     </visibleWhen>
-
-instanceof
-----------
-
-Tests if the object under inspection is an instance of the given class.
-
-  
-
-iterate
+Methods
 -------
 
-Iterates over the contents of a Collection (the evaluated variable must be a Collection, of course). 
-Can (and should) contain nested elements. 
-Example see [above](#Evaluation-of-Collections).
+Sun's naming guidelines states
 
-Iterate comes with two arguments: `operator` and `ifEmpty`.
+Methods should be verbs, in mixed case with the first letter lowercase, with the first letter of each internal word capitalized.
 
-**operator**: either "and" or "or" (default is "and"). `<iterate>` _and_s the results of evaluating its child expressions for each element in the collection, unless you set the operator to "or".
+  
+Examples:
 
-**ifEmpty**: the value to return for empty collections. 
-If not specified, `true` is used with operator "or", `false` for "and".
+*   run();
+*   runFast();
+*   getBackground();
 
-reference
+  
+Additional rules:
+
+The names of methods should follow common practice for naming getters (getX()), setters (setX()), and predicates (isX(), hasX()).
+
+Variables
 ---------
 
-Reference to a predefined expression. See [above](#Re-Usable-expressions).
+Sun's naming guidelines states
 
-resolve
--------
+Except for variables, all instance, class, and class constants are in mixed case with a lowercase first letter. 
+Internal words start with capital letters. 
+Variable names should not start with underscore _ or dollar sign $ characters, even though both are allowed.
 
-One of the more esotheric operators. 
-It is comparable to the `with` operator, but it allows resolving the variable dynamically and to pass additional arguments needed to resolve the argument. 
-For example to resolve the plug-in descriptor for a specific plug-in, the following expression can be used:
+Variable names should be short yet meaningful. 
+The choice of a variable name should be mnemonic - that is, designed to indicate to the casual observer the intent of its use. 
+One-character variable names should be avoided except for temporary "throwaway" variables. 
+Common names for temporary variables are i, j, k, m, and n for integers; c, d, and e for characters.
 
-     <visibleWhen>
-        <resolve variable="pluginDescriptor" args="org.eclipse.core.runtime">
-            <test property="org.demo.isActive"/>
-        </resolve>
-     <visibleWhen>
+Examples:
 
-The actual resolving is delegated to the evaluation context (see `IVariableResolver`). 
-As of eclipse 3.5, there is no implementation in either the command framework or the common navigator framework for IVariableResolver, so the `<resolve>` operator is of no use for them.
+*   int i;
+*   char c;
+*   float myWidth;
 
-systemTest
-----------
+Constants
+---------
 
-Tests against the system properties (see `java.lang.System.getProperties()`).
+Sun's naming guidelines states
 
-Example:
+The names of variables declared class constants and of ANSI constants should be all uppercase with words separated by underscores ("_").
 
-     <visibleWhen>
-        <systemTest property="user.name" value="martin"/>
-     </visibleWhen>
+Examples:
 
-test
-----
+*   static final int MIN_WIDTH = 4;
+*   static final int MAX_WIDTH = 999;
+*   static final int GET\_THE\_CPU = 1;
 
-Calls a property tester with the given parameters and arguments to check the variable. 
-This is how you can call user code from an expression.
+Plug-ins and Extension Points
+-----------------------------
 
-The following example would call the property tester registered with the namespace `org.acme` and the property name `matchesPattern`, if the variable is, or adapts to, `IFile`:
+All plug-ins (and plug-in fragments), including the ones that are part of the Eclipse Platform, like the Resources and Workbench plug-ins, must have unique identifiers following the same style of naming convention as Java packages. 
+For example, the workbench plug-in is named org.eclipse.ui.
 
-     <visibleWhen>
-         <adapt value="org.eclipse.core.resources.IFile">
-             <test property="org.acme.matchesPattern" value="*.html"/>
-         </adapt>
-     </visibleWhen>
+The names of a plug-in and the names of the Java packages declared within the code library of that plug-in commonly align. 
+For example, the org.eclipse.ui plug-in declares much of its code in packages named org.eclipse.ui.* . 
+While alignment is the recommended practice, it is not an absolute requirement. 
+For instance, the org.eclipse.ui plug-in also declares code in packages named org.eclipse.jface.*. 
+The org.eclipse.ant.core plug-in declares code in packages named org.eclipse.ant.core and org.apache.tools.ant.*.
 
-See [below](#Property-Testers) for more information about property testers. 
-Tests using an unknown property cause a core exception (this is a programming error).
+The plug-in namespace is managed hierarchically; do not create plug-in without prior approval from the owner of the enclosing namespace.
 
-with
-----
+Extension points that expect multiple extensions should have plural names. For example, "builders" rather than "builder".
 
-Selects a variable different than the default variable for evaluation. 
-Can, and should, contain nested elements. Example:
+System Files and Settings
+-------------------------
 
-     <visibleWhen>
-         <with variable="activePartId">
-             <equals value="org.acme.navigator"/>
-         </with>
-     </visibleWhen>
+By convention, files or folders that start with a period ('.') are considered "system files" and should not be edited by users or, directly, by other components that do not "own" them.
 
-This selects the "activePartId" variable from the evaluation context and checks if it equals "org.acme.navigator".
+Of special note is the ".settings" folder in a workspace project. 
+This folder holds various forms of preference or metadata specific to that workspace project. 
+Files in this directory do not have to start with a period (they are assumed "system files" as they are in a "system folder") but they must follow the same naming conventions outlined elsewhere in this guide. 
+That is, they must identify themselves with their Eclipse Project's namespace (e.g. org.eclipse.jdt, org.eclipse.jst, etc). and they should be as specific as possible to denote the package they come from, or the function they are serving. 
+For example,
 
-Property Testers
-================
-
-Property testers are added to the system using the extension point `org.eclipse.core.expressions.propertyTesters`. 
-The above matchesPattern property would be declared like:
-
-     <extension point="org.eclipse.core.expressions.propertyTesters">
-        <propertyTester
-              class="org.acme.PatternPropertyTester"
-              id="org.acme.patternPropertyTester"
-              namespace="org.acme"
-              properties="matchesPattern, equalsPattern"
-              type="org.eclipse.core.resources.IResource">
-        </propertyTester>
-     </extension>
-
-Note that this example would declare a property tester for the properties `org.acme.matchesPattern` and `org.acme.equalsPattern`, and could be extended to any number of additional properties. 
-The name of the property to be used from a `<test>` operator is always combined from namespace and one of the property names, the properties belong to that namespace. 
-This allows for two plugins (siblings) to define the same property without ambiguity.
-
-The concrete implementation of the property tester has to extend `PropertyTester`. 
-Look around, you will find existing property testers to get you started with your own.
-
-  
-
-Links
-=====
-
-*   [http://help.eclipse.org/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/workbench\_cmd\_expressions.htm](http://help.eclipse.org/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/workbench_cmd_expressions.htm)
+     org.eclipse.jdt.core.prefs
+     org.eclipse.jst.common.project.facet.core.prefs
+     org.eclipse.wst.common.project.facet.core.xml
+    
+Two obvious exceptions to this convention are the .classpath and .project files, but ... that's just because they were the first, before the large community of Eclipse was grasped. 
+Following these namespace guidelines will help avoid conflicts where two plugins or projects could accidently pick the same name for a metadata file.
 
