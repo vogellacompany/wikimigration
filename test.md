@@ -43,9 +43,9 @@ Some of the variables may not be set, depending on the current application conte
 | activeShell | `org.eclipse.swt.widgets.Shell` |   The currently active shell. It can be a dialog or workbench window shell.   | 3.2 |
 | activeWorkbenchWindowShell | `org.eclipse.swt.widgets.Shell` |   The active workbench window shell.   | 3.2 |
 | activeWorkbenchWindow | `org.eclipse.ui.IWorkbenchWindow` |   The active workbench window.   | 3.2 |
-| activeWorkbenchWindow.isCoolbarVisible | `java.lang.Boolean` |   Reports coolbar visibility for the currently active workbench window.   | 3.3 |
-| activeWorkbenchWindow.isPerspectiveBarVisible | `java.lang.Boolean` |   Reports perspective bar visibility for the currently active workbench window.   | 3.3 |
-| activeWorkbenchWindow.activePerspective | `java.lang.String` |   Reports the name of the current perspective of the active workbench window.   | 3.4 |
+| activeWorkbenchWindow.<br>isCoolbarVisible | `java.lang.Boolean` |   Reports coolbar visibility for the currently active workbench window.   | 3.3 |
+| activeWorkbenchWindow.<br>isPerspectiveBarVisible | `java.lang.Boolean` |   Reports perspective bar visibility for the currently active workbench window.   | 3.3 |
+| activeWorkbenchWindow.<br>activePerspective | `java.lang.String` |   Reports the name of the current perspective of the active workbench window.   | 3.4 |
 | activeEditor | `org.eclipse.ui.IEditorPart` |   The currently active editor. This is remembered even if the editor is not the currently active part.   | 3.2 |
 | activeEditorId | `java.lang.String` |   The ID of the currently active editor. This can be used for expressions on the editor type.   | 3.2 |
 | activePart | `org.eclipse.ui.IWorkbenchPart` |   The active part, which can be the same as the active editor.   | 3.2 |
@@ -70,9 +70,9 @@ The Eclipse SDK provides a couple of property testers that can be used in core e
 | Namespace | Type | Implementation |
 | --- | --- | --- |
 | org.eclipse.core.runtime |   `org.eclipse.core.runtime.Platform`   |   [PlatformPropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.runtime.git/tree/bundles/org.eclipse.core.expressions/src/org/eclipse/core/internal/expressions/propertytester/PlatformPropertyTester.java)   |
-| Property | Description |  |
-|   product   |   Test the id of the currently active product.   |  |
-|   isBundleInstalled   |   Test if a given bundle is installed in the running environment. Use the args attribute to pass in the bundle id.   |  |
+| **Property** || **Description** ||
+|   product   |   Test the id of the currently active product.   ||
+|   isBundleInstalled   |   Test if a given bundle is installed in the running environment. Use the args attribute to pass in the bundle id.   ||
 |  |  |  |
 | Namespace | Type | Implementation |
 | org.eclipse.core.resources |   `org.eclipse.core.resources.IResource`   |   [ResourcePropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.resources.git/tree/bundles/org.eclipse.core.resources/src/org/eclipse/core/internal/propertytester/ResourcePropertyTester.java)   |
