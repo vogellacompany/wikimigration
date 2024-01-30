@@ -1,216 +1,382 @@
+Platform Expression Framework
+=============================
 
+Expressions are declarative or programmatic expressions based on the org.eclipse.core.expressions plugin. 
+They are declared in plugin.xml and evaluated by the Expressions Framework. 
+The advantages of declaring an expression in plugin.xml are:
 
-Command Core Expressions
-========================
+*   Lazy loading: Expressions can be evaluated without loading the plug-in
+*   Flexible and pluggable, users can re-use expressions and provide custom property testers
 
-Core expressions are declarative or programmatic expressions based on the org.eclipse.core.expressions plugin.
+  
 
 Contents
 --------
 
-*   [1 Expressions and the Command Framework](#Expressions-and-the-Command-Framework)
-*   [2 Variables and the Command Framework](#Variables-and-the-Command-Framework)
-*   [3 Property Testers](#Property-Testers)
-*   [4 Expression examples](#Expression-examples)
-    *   [4.1 Basic IStructuredSelection](#Basic-IStructuredSelection)
-    *   [4.2 Package Explorer IStructuredSelection](#Package-Explorer-IStructuredSelection)
-    *   [4.3 Active editor type](#Active-editor-type)
-    *   [4.4 Complex nested boolean expressions](#Complex-nested-boolean-expressions)
-*   [5 New Core Expressions in 3.3](#New-Core-Expressions-in-3.3)
-    *   [5.1 count and iterate](#count-and-iterate)
-    *   [5.2 definitions](#definitions)
+*   [1 Where they are useful](#Where-they-are-useful)
+*   [2 Declaration of Expressions](#Declaration-of-Expressions)
+    *   [2.1 Re-Usable expressions](#Re-Usable-expressions)
+*   [3 Evaluation Context](#Evaluation-Context)
+    *   [3.1 Evaluation of Collections](#Evaluation-of-Collections)
+    *   [3.2 Additional Variables](#Additional-Variables)
+*   [4 Operators of the expressions framework](#Operators-of-the-expressions-framework)
+    *   [4.1 adapt](#adapt)
+    *   [4.2 and / or / not](#and-.2F-or-.2F-not)
+    *   [4.3 count](#count)
+    *   [4.4 equals](#equals)
+    *   [4.5 instanceof](#instanceof)
+    *   [4.6 iterate](#iterate)
+    *   [4.7 reference](#reference)
+    *   [4.8 resolve](#resolve)
+    *   [4.9 systemTest](#systemTest)
+    *   [4.10 test](#test)
+    *   [4.11 with](#with)
+*   [5 Property Testers](#Property-Testers)
+*   [6 Links](#Links)
 
-Expressions and the Command Framework
-=====================================
+Where they are useful
+=====================
 
-The [Platform Command Framework](/Platform_Command_Framework "Platform Command Framework") uses [core expressions](/Platform_Expression_Framework "Platform Expression Framework") for enabledWhen and activeWhen for handlers, programmatic activation of contexts, and for visibleWhen for menu contributions. The command framework provides the IEvaluationContext that command core expressions are evaluate against.
+Expressions are used in extension points that have to decide things based on a context, but without loading the plugin implementing that decision. 
+The most popular examples where they are used are the [Platform Command Framework](/Platform_Command_Framework "Platform Command Framework"), and the [Common Navigator Framework](/Common_Navigator_Framework "Common Navigator Framework"). 
+Depending on the extension implementation, expressions are used to decide any number of things. 
+Examples:
 
-The IEvaluationContext provides a default variable for evaluations, and a number of named variables. In the command framework, we provide the global selection as a `java.util.Collection` as the default variable. It can either be empty, have one entry (if the ISelection was something like an ITextSelection), or have the contents of an IStructuredSelection.
+*   Should an context menu be enabled and/or visible in a context menu
+*   Which implementation for a command handler to use depending on the current context
+*   Which label provider to use for an object
+*   Which content provider can provide children for an object in a tree
 
-The <with/> element can be used to change which variable the child expression elements are evaluating against.
+It is also possible to use the expression framework in custom extension points.
 
-Variables and the Command Framework
-===================================
+Declaration of Expressions
+==========================
 
-The variables used for command framework evaluation are listed in [ISources.java](https://git.eclipse.org/c/platform/eclipse.platform.ui.git/tree/bundles/org.eclipse.ui.workbench/Eclipse%20UI/org/eclipse/ui/ISources.java)
+First of all, an expression must be defined in plugin.xml. 
+Here is an example for an enablement expression in the common navigator framework:
 
-Some of the variables may not be set, depending on the current application context when they are evaluated.
+     <enablement>
+         <or>
+             <instanceof value="com.acme.navigator.ContainerObject"/>
+             <instanceof value="com.acme.navigator.RootObject"/>
+             <adapt type="org.eclipse.core.resources.IResource">
+                 <test
+                       property="org.eclipse.core.resources.projectNature"
+                       value="com.acme.navigator.nature">
+                 </test>
+             </adapt>
+         </or>
+     </enablement>
 
-| Name | Type | Description | Since |
-| --- | --- | --- | --- |
-| activeContexts | A `java.util.Collection` of `java.lang.String` |   This is a collection of the active context IDs as strings. Most commonly used with <iterate/>, <count/>, and <test/> with a combined `org.eclipse.common.expressions.PropertyTester`. In **3.3** action sets are mirrored by contexts whose parent is `org.eclipse.ui.actionSet`, and the active action sets show up in the list of active contexts.   | 3.2 |
-| activeActionSets | An `IActionSetDescriptor\[\]` |   **Note:** This is currently not used as it points to an internal class and the type might change in any release.   | 3.2 |
-| activeShell | `org.eclipse.swt.widgets.Shell` |   The currently active shell. It can be a dialog or workbench window shell.   | 3.2 |
-| activeWorkbenchWindowShell | `org.eclipse.swt.widgets.Shell` |   The active workbench window shell.   | 3.2 |
-| activeWorkbenchWindow | `org.eclipse.ui.IWorkbenchWindow` |   The active workbench window.   | 3.2 |
-| activeWorkbenchWindow.<br>isCoolbarVisible | `java.lang.Boolean` |   Reports coolbar visibility for the currently active workbench window.   | 3.3 |
-| activeWorkbenchWindow.<br>isPerspectiveBarVisible | `java.lang.Boolean` |   Reports perspective bar visibility for the currently active workbench window.   | 3.3 |
-| activeWorkbenchWindow.<br>activePerspective | `java.lang.String` |   Reports the name of the current perspective of the active workbench window.   | 3.4 |
-| activeEditor | `org.eclipse.ui.IEditorPart` |   The currently active editor. This is remembered even if the editor is not the currently active part.   | 3.2 |
-| activeEditorId | `java.lang.String` |   The ID of the currently active editor. This can be used for expressions on the editor type.   | 3.2 |
-| activePart | `org.eclipse.ui.IWorkbenchPart` |   The active part, which can be the same as the active editor.   | 3.2 |
-| activePartId | `java.lang.String` |   The ID of the currently active part.   | 3.2 |
-| activeSite | `org.eclipse.ui.IWorkbenchPartSite` |   The site of the currently active part.   | 3.2 |
-| selection | `org.eclipse.jface.viewers.ISelection` |   The current global selection. It is often used with <test/> elements with `org.eclipse.core.expressions.PropertyTester`, in programmatic core expressions, and in **3.3** with <iterate/> and <count/> elements.   | 3.2 |
-| activeMenu | A `java.util.Collection` of `java.lang.String` |   This is the list of IDs of the showing context menu. Examples are like #TextEditorRuler or a part ID. Most commonly used with <iterate/>, <count/>, and <test/> with a combined `org.eclipse.common.expressions.PropertyTester`.   | 3.2 |
-| activeMenuSelection | `org.eclipse.jface.viewers.ISelection` |   This is a selection that is available while a context menu is showing. It is the selection from the selection provider used to register the context menu, usually from `getSite().registerContextMenu(*)`. It is usually the same as the `selection`variable, but not always. This is more for legacy compatibility.   | 3.3 |
-| activeMenuEditorInput | `org.eclipse.jface.viewers.ISelection` |   This is a selection that is available while a context menu is showing. It is the selection from the editor input, usually if includeEditorInput was set to `true` during `getEditorSite().registerContextMenu(*)`. This is more for legacy compatibility.   | 3.3 |
-| activeFocusControl | `org.eclipse.swt.widgets.Control` |   A control that has focus and has been registered with the [IFocusService](https://git.eclipse.org/c/platform/eclipse.platform.ui.git/tree/bundles/org.eclipse.ui.workbench/Eclipse%20UI/org/eclipse/ui/swt/IFocusService.java).   | 3.3 |
-| activeFocusControlId | `java.lang.String` |   The ID of a control that has focus and has been registered with the `org.eclipse.ui.swt.IFocusService`.   | 3.3 |
+Note how the `<or>` element contains three elements: two `<instanceof>` and one `<adapt>`. 
+The `<adapt>` contains one further `<test>` element; what they all do will be explained later. 
+For now just focus on the structure of the expression: when it is evaluated, the result of the instanceof and the adapt tests will be logically or-ed because they are nested in a `<or>` element. 
+The same expression could also be written as follows in a [polish pseudo-notation](http://en.wikipedia.org/wiki/Polish_notation):
 
-Note: All these variables can be used with <test/> and a `org.eclipse.common.expressions.PropertyTester`.
+    or (
+        instanceof com.acme.navigator.ContainerObject,
+        instanceof com.acme.navigator.RootObject,
+        and (
+            adapt org.eclipse.core.resources.IResource,
+            test org.eclipse.core.resources.projectNature = "com.acme.navigator.nature"
+        )
+    )
+    
+  
+
+Re-Usable expressions
+---------------------
+
+Sometimes you will end up with having the same expression in many different places. 
+When one of them changes, you have to change them all. 
+Obviously, this is inefficient and not very handy - let alone error prone. 
+You can get around this problem by using definitions and re-use expressions that are declared elsewhere.
+
+The expression from the example above can be declared using the `org.eclipse.core.expressions.definitions` extension point, and then re-used using the `<reference>` element:
+
+     <extension
+           point="org.eclipse.core.expressions.definitions">
+        <definition id="org.acme.navigator.enablement">
+           <or>
+              <instanceof
+                    value="com.acme.navigator.ContainerObject">
+              </instanceof>
+              <instanceof
+                    value="com.acme.navigator.RootObject">
+              </instanceof>
+              <adapt type="org.eclipse.core.resources.IResource">
+                 <test
+                       property="org.eclipse.core.resources.projectNature"
+                       value="com.acme.navigator.nature">
+                 </test>
+              </adapt>
+           </or>
+        </definition>
+     </extension>
+
+Then you can just use `<reference>` to that definition:
+
+     <enablement>
+        <reference
+              definitionId="org.acme.navigator.enablement">
+        </reference>
+     </enablement>
+
+The definition can be declared in any plug-in, and then cross-referenced from all other plugins. 
+They don't even have to have a dependency on each other.
+
+Evaluation Context
+==================
+
+An expression alone means nothing without the object that is being tested. 
+Which object that is, and what it contains, is defined by the evaluation context. 
+The content of the evaluation context depends on who is initiating the evaluation.
+
+An evaluation context contains:
+
+*   The default variable
+*   Optional additional variables
+
+Usually, expressions check the default variable in the evaluation context. 
+However, it is possible for an expression to select a specific variable from the context using the `<with>` element (examples below).
+
+A common source for confusion are the different default variables provided by the [Common Navigator Framework](/Common_Navigator_Framework "Common Navigator Framework") and the [Platform Command Framework](/Platform_Command_Framework "Platform Command Framework"). 
+While the command framework provides a _collection containing the current selection_ as the default variable, the navigator framework just uses _the current object in the tree_. 
+For this reason, you cannot use the same expression for both frameworks.
+
+  
+
+Evaluation of Collections
+-------------------------
+
+When dealing with a collection, you usually want to test against the _contents_ of the collection, and not the collection itself. 
+For this case, the expressions framework provides `<iterate>` and `<count>`. 
+They require an iterable object to work (otherwise they fail with an error message on the console).
+
+The default variable in the command framework always contains a collection with the current selection. 
+It might be empty, contain just one element (like an `ITextSelection`), or contain the elements of an `IStructuredSelection`.
+
+The following expression will work for the common navigator framework, but _not_ for the commands framework:
+
+     <enablement>
+        <instanceof
+             value="org.acme.navigator.RootObject">
+        </instanceof>
+     </enablement>
+
+Doing the same evaluation against the content of a collection:
+
+     <visibleWhen>
+         <iterate ifEmpty="false">
+             <instanceof
+                  value="org.acme.navigator.RootObject">
+             </instanceof>
+         </iterate>
+     </visibleWhen>
+
+This iterates over all elements in the collection and tests if all elements are an instance of `org.acme.navigator.RootObject`. 
+Note the `ifEmpty="false"`: this tells the expression framework that the evaluation should be false for an empty selection, which defaults to `true` (good tip: check this if you happen to see lots and lots of stuff in your context menu that should not be there, your selection might be empty).
+
+Count and iterate have always worked against java.util.Collection. 
+The count and iterate elements can also be used on any variable that adapts to `org.eclipse.core.expressions.ICountable` or `org.eclipse.core.expressions.IIterable`, or implements these interfaces directly.
+
+Additional Variables
+--------------------
+
+An evaluation context (at least the ones provided by eclipse core) usually contains a whole bunch of additional variables, like:
+
+*   **activePart**: the currently active part (could f.i. be an instance of `org.eclipse.ui.navigator.CommonNavigator`)
+*   **activePartId**: the id of the currently active part (like org.acme.navigator)
+*   **activeEditorId**: the id of the currently active editor
+*   **activeWorkbenchWindowShell**: the currently active shell
+
+The variables are defined in `ISources` (try Ctrl+Shift+T to open that one from within JDT) and there are others. 
+Note that not all those variables actually contain something at runtime, and that some of them might not be set in the context.
+
+For a complete list of variables, read the [eclipse documentation on core expressions](http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/workbench_cmd_expressions.htm).
+
+Operators of the expressions framework
+======================================
+
+Currently, the expression framework supports a total of 13 operation elements. 
+Some of them can have further operations in them (like `<adapt>`). 
+If that is the case, the result of the nested operations will be logically and-ed.
+
+adapt
+-----
+
+Checks if the evaluated object is either an instance of, or adapts to the given class. 
+Can contain nested elements that will be logically and-ed. See `AdaptExpression.evaluate()`.
+
+  
+
+and / or / not
+--------------
+
+The usual boolean operators, can contain nested elements. 
+Do what they say on the tin.
+
+  
+
+count
+-----
+
+Used to count the elements in a collection. 
+Cannot contain nested elements, but can be used in combination with `<iterate>`. 
+`<count>` has one argument "value", wich can be one of the following:
+
+*   `*`: matches any number (even 0)
+*   `?`: one or none
+*   `!`: none
+*   `+`: one or more
+*   `-NN)`: less than _NN_ (_NN_ is an integer)
+*   `(NN-`: greater than _NN_
+*   `NN`: exactly _NN_
+
+So, the following example will match all collections that contain 2 elements:
+
+     <visibleWhen>
+         <count value="2"/>
+     </visibleWhen>
+
+In combination with `<iterate>`, you can count the elements in the collection that match the expression inside the iterate statement. 
+For example, to match all collections that contain two or more `ContainerObject` objects, use:
+
+     <visibleWhen>
+         <count value="(1-"/>
+         <iterate ifEmpty="false">
+             <instanceof value="org.acme.navigator.ContainerObject"/>
+         </iterate>
+     </visibleWhen>
+
+equals
+------
+
+Checks if the variable equals the given argument.
+
+*   Numbers will be treated as such (float or integer)
+*   Strings can be un-escaped: use `\\string\`
+*   "true" will be Boolean.TRUE
+*   "false" will be Boolean.FALSE
+*   Everything else will be treated as string.
+
+Example:
+
+     <visibleWhen>
+         <equals value="3.4"/>
+     </visibleWhen>
+
+instanceof
+----------
+
+Tests if the object under inspection is an instance of the given class.
+
+  
+
+iterate
+-------
+
+Iterates over the contents of a Collection (the evaluated variable must be a Collection, of course). 
+Can (and should) contain nested elements. 
+Example see [above](#Evaluation-of-Collections).
+
+Iterate comes with two arguments: `operator` and `ifEmpty`.
+
+**operator**: either "and" or "or" (default is "and"). `<iterate>` _and_s the results of evaluating its child expressions for each element in the collection, unless you set the operator to "or".
+
+**ifEmpty**: the value to return for empty collections. 
+If not specified, `true` is used with operator "or", `false` for "and".
+
+reference
+---------
+
+Reference to a predefined expression. See [above](#Re-Usable-expressions).
+
+resolve
+-------
+
+One of the more esotheric operators. 
+It is comparable to the `with` operator, but it allows resolving the variable dynamically and to pass additional arguments needed to resolve the argument. 
+For example to resolve the plug-in descriptor for a specific plug-in, the following expression can be used:
+
+     <visibleWhen>
+        <resolve variable="pluginDescriptor" args="org.eclipse.core.runtime">
+            <test property="org.demo.isActive"/>
+        </resolve>
+     <visibleWhen>
+
+The actual resolving is delegated to the evaluation context (see `IVariableResolver`). 
+As of eclipse 3.5, there is no implementation in either the command framework or the common navigator framework for IVariableResolver, so the `<resolve>` operator is of no use for them.
+
+systemTest
+----------
+
+Tests against the system properties (see `java.lang.System.getProperties()`).
+
+Example:
+
+     <visibleWhen>
+        <systemTest property="user.name" value="martin"/>
+     </visibleWhen>
+
+test
+----
+
+Calls a property tester with the given parameters and arguments to check the variable. 
+This is how you can call user code from an expression.
+
+The following example would call the property tester registered with the namespace `org.acme` and the property name `matchesPattern`, if the variable is, or adapts to, `IFile`:
+
+     <visibleWhen>
+         <adapt value="org.eclipse.core.resources.IFile">
+             <test property="org.acme.matchesPattern" value="*.html"/>
+         </adapt>
+     </visibleWhen>
+
+See [below](#Property-Testers) for more information about property testers. 
+Tests using an unknown property cause a core exception (this is a programming error).
+
+with
+----
+
+Selects a variable different than the default variable for evaluation. 
+Can, and should, contain nested elements. Example:
+
+     <visibleWhen>
+         <with variable="activePartId">
+             <equals value="org.acme.navigator"/>
+         </with>
+     </visibleWhen>
+
+This selects the "activePartId" variable from the evaluation context and checks if it equals "org.acme.navigator".
 
 Property Testers
 ================
 
-The Eclipse SDK provides a couple of property testers that can be used in core expressions. The expression defines a property attribute and then takes a combination of args and a value that is tester implementation dependent. The property attribute is the combination of the namespace and property name. For example, to test an IResource name the property would be `org.eclipse.core.resources.name`.
+Property testers are added to the system using the extension point `org.eclipse.core.expressions.propertyTesters`. 
+The above matchesPattern property would be declared like:
+
+     <extension point="org.eclipse.core.expressions.propertyTesters">
+        <propertyTester
+              class="org.acme.PatternPropertyTester"
+              id="org.acme.patternPropertyTester"
+              namespace="org.acme"
+              properties="matchesPattern, equalsPattern"
+              type="org.eclipse.core.resources.IResource">
+        </propertyTester>
+     </extension>
+
+Note that this example would declare a property tester for the properties `org.acme.matchesPattern` and `org.acme.equalsPattern`, and could be extended to any number of additional properties. 
+The name of the property to be used from a `<test>` operator is always combined from namespace and one of the property names, the properties belong to that namespace. 
+This allows for two plugins (siblings) to define the same property without ambiguity.
+
+The concrete implementation of the property tester has to extend `PropertyTester`. 
+Look around, you will find existing property testers to get you started with your own.
 
   
 
-| Namespace | Type | Implementation |
-| --- | --- | --- |
-| org.eclipse.core.runtime |   `org.eclipse.core.runtime.Platform`   |   [PlatformPropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.runtime.git/tree/bundles/org.eclipse.core.expressions/src/org/eclipse/core/internal/expressions/propertytester/PlatformPropertyTester.java)   |
-| **Property** || **Description** ||
-|   product   |   Test the id of the currently active product.   ||
-|   isBundleInstalled   |   Test if a given bundle is installed in the running environment. Use the args attribute to pass in the bundle id.   ||
-|  |  |  |
-| Namespace | Type | Implementation |
-| org.eclipse.core.resources |   `org.eclipse.core.resources.IResource`   |   [ResourcePropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.resources.git/tree/bundles/org.eclipse.core.resources/src/org/eclipse/core/internal/propertytester/ResourcePropertyTester.java)   |
-| Property | Description |  |
-|   name   |   A property indicating the file name (value `"name"`). "*" and "?" wild cards are supported.   |  |
-|   path   |   A property indicating the file path (value `"path"`). "*" and "?" wild cards are supported.   |  |
-|   extension   |   A property indicating the file extension (value `"extension"`). "*" and "?" wild cards are supported.   |  |
-|   readOnly   |   A property indicating whether the file is read only (value `"readOnly"`).   |  |
-|   projectNature   |   A property indicating the project nature (value `"projectNature"`).   |  |
-|   persistentProperty   |   A property indicating a persistent property on the selected resource (value `"persistentProperty"`). If two arguments are given, this treats the first as the property name, and the second as the expected property value. If only one argument (or just the expected value) is given, this treats it as the property name, and simply tests for existence of the property on the resource.   |  |
-|   projectPersistentProperty   |   A property indicating a persistent property on the selected resource's project. (value `"projectPersistentProperty"`). If two arguments are given, this treats the first as the property name, and the second as the expected property value. If only one argument (or just the expected value) is given, this treats it as the property name, and simply tests for existence of the property on the resource.   |  |
-|   sessionProperty   |   A property indicating a session property on the selected resource (value `"sessionProperty"`). If two arguments are given, this treats the first as the property name, and the second as the expected property value. If only one argument (or just the expected value) is given, this treats it as the property name, and simply tests for existence of the property on the resource.   |  |
-|   projectSessionProperty   |   A property indicating a session property on the selected resource's project. (value `"projectSessionProperty"`). If two arguments are given, this treats the first as the property name, and the second as the expected property value. If only one argument (or just the expected value) is given, this treats it as the property name, and simply tests for existence of the property on the resource.   |  |
-|  |  |  |
-| Namespace | Type | Implementation |
-| org.eclipse.core.resources |   `org.eclipse.core.resources.IFile`   |   [FilePropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.resources.git/tree/bundles/org.eclipse.core.resources/src/org/eclipse/core/internal/propertytester/FilePropertyTester.java)   |
-| Property | Description |  |
-|   contentTypeId   |   A property indicating that we are looking to verify that the file matches the content type matching the given identifier. The identifier is provided as the expected value.   |  |
-|  |  |  |
-| Namespace | Type | Implementation |
-| org.eclipse.core.resources |   `org.eclipse.core.resources.IProject`   |   [ProjectPropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.resources.git/tree/bundles/org.eclipse.core.resources/src/org/eclipse/core/internal/propertytester/ProjectPropertyTester.java)   |
-| Property | Description |  |
-|   open   |   A property indicating whether the project is open (value `"open"`).   |  |
-|  |  |  |
-| Namespace | Type | Implementation |
-| org.eclipse.core.resources |   `org.eclipse.core.resources.mapping.ResourceMapping`   |   [ResourceMappingPropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.resources.git/tree/bundles/org.eclipse.core.resources/src/org/eclipse/core/internal/propertytester/ResourceMappingPropertyTester.java)   |
-| Property | Description |  |
-|   projectPersistentProperty   |   A property indicating a persistent property on the selected resource's project. (value `"projectPersistentProperty"`). If two arguments are given, this treats the first as the property name, and the second as the expected property value. If only one argument (or just the expected value) is given, this treats it as the property name, and simply tests for existence of the property on the resource.   |  |
-|  |  |  |
-| Namespace | Type | Implementation |
-| org.eclipse.ui |   `org.eclipse.ui.IWorkbench`   |   [ActivityPropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.ui.git/tree/bundles/org.eclipse.ui.workbench/Eclipse%20UI/org/eclipse/ui/internal/activities/ActivityPropertyTester.java)   |
-| Property | Description |  |
-|   isActivityEnabled   |   Test if the activity in args is enabled.   |  |
-|   isCategoryEnabled   |   Test if the category in args is enabled.   |  |
-|  |  |  |
-| Namespace | Type | Implementation |
-| org.eclipse.ui.workbenchWindow |   `org.eclipse.ui.IWorkbenchWindow`   |   [OpenPerspectivePropertyTester.java](https://git.eclipse.org/c/platform/eclipse.platform.ui.git/tree/bundles/org.eclipse.ui.workbench/Eclipse%20UI/org/eclipse/ui/internal/OpenPerspectivePropertyTester.java)   |
-| Property | Description |  |
-|   isPerspectiveOpen   |   Tests if any perspective is open.   |  |
+Links
+=====
 
-Expression examples
-===================
-
-Here are some examples. I'll pretend all of the examples are deciding when a handler is active.
-
-Basic IStructuredSelection
---------------------------
-
-A view provides a structured selection through its selection provider. An example would be the InfoView in **org.eclipse.ui.examples.contributions**. You can browse the [plugin.xml](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/tree/examples/org.eclipse.ui.examples.contributions/plugin.xml) and [InfoView.java](http://git.eclipse.org/c/platform/eclipse.platform.ui.git/tree/examples/org.eclipse.ui.examples.contributions/src/org/eclipse/ui/examples/contributions/view/InfoView.java) files. The InfoView provides an `IStructuredSelection` with 0 or more `org.eclipse.ui.examples.contributions.model.Person`.
-
-When using the default variable, you must treat it as an `java.util.Collection`. That means using <count> or <iterate>
-
-    <activeWhen>
-        <iterate>
-           <instanceof value="org.eclipse.ui.examples.contributions.model.Person"/>
-        </iterate>
-    </activeWhen>
-
-Package Explorer IStructuredSelection
--------------------------------------
-
-The Package Explorer is a mixture of `org.eclipse.core.resources.IResource`, `org.eclipse.jdt.core.IJavaElement` and other classes. If you are trying to find all of the *.java files, you would need to:
-
-1.  Iterate through the default variable
-2.  adapt the selection elements to your class, in this case `IResource`
-3.  use one of the org.eclipse.core.resources property testers to test the IResource property
-
-For example:
-
-    <activeWhen>
-        <iterate>
-           <adapt type="org.eclipse.core.resources.IResource">
-              <test property="org.eclipse.core.resources.name" 
-                    value="*.java"/>
-           </adapt>
-        </iterate>
-    </activeWhen>
-
-Active editor type
-------------------
-
-If you want your handler to be active for a specific type of editor, you can use **activeEditorId** to target your handler.
-
-    <activeWhen>
-        <with variable="activeEditorId">
-           <equals value="org.eclipse.ui.DefaultTextEditor"/>
-        </with>
-    </activeWhen>
-
-Complex nested boolean expressions
-----------------------------------
-
-You can also write complex nested boolean expressions, like **(a & b & (c | d | (!e)))**:
-
-    <and>
-      <test args="a" property="rcpAuthActivitiesExample.test" />
-      <test args="b" property="rcpAuthActivitiesExample.test" />
-      <or>
-        <test args="c" property="rcpAuthActivitiesExample.test" />
-        <test args="d" property="rcpAuthActivitiesExample.test" />
-        <not>
-          <test args="e" property="rcpAuthActivitiesExample.test" />
-        </not>
-      </or>
-    </and>
-
-You can build the complete boolean expression out of arbitrary single boolean expressions. Not only property testers like in this example.
-
-New Core Expressions in 3.3
-===========================
-
-In 3.3 there were 2 additions to the core expressions framework.
-
-count and iterate
------------------
-
-Count and iterate have always worked against `java.util.Collection`. The <count/> and <iterate> elements can now be used on any variable that adapts to `org.eclipse.core.expressions.ICountable` and `org.eclipse.core.expressions.IIterable` or implements the interfaces directly. It wasn't possible to use the java 1.5 constructs for iterable.
-
-The workbench provides an adapter for `ISelection` and `IStructuredSelection`.
-
-definitions
------------
-
-The **org.eclipse.core.expressions.definitions** extension point was introduced. You can create core expression definitions, and then reference them from other core expressions.
-
-    <extension point="org.eclipse.core.expressions.definitions">
-        <definition id="org.eclipse.ui.examples.contributions.view.inView">
-           <with variable="activePartId">
-              <equals value="org.eclipse.ui.examples.contributions.view"/>
-           </with>
-        </definition>
-    </extension>
-
-Then:
-
-    <activeWhen>
-        <reference definitionId="org.eclipse.ui.examples.contributions.view.inView"/>
-    </activeWhen>
-
-The referenced expression will be evaluated at this point.
+*   [http://help.eclipse.org/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/workbench\_cmd\_expressions.htm](http://help.eclipse.org/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/workbench_cmd_expressions.htm)
 
