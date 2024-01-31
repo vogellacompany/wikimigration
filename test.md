@@ -1,239 +1,267 @@
-Naming Conventions
-==================
+Eclipse4/RCP/Contexts
+=====================
+
+The Eclipse 4 Application Platform manages state and services using a set of _contexts_; this information is used for injection. 
+Contexts are used as the sources for [Dependency Injection](/Eclipse4/RCP/Dependency_Injection "Eclipse4/RCP/Dependency Injection"). 
+In this respect, they are somewhat analogous to _modules_ in Guice. 
+Normally code should not have to use or know about the context.
+
+  
 
 Contents
 --------
 
-*   [1 General](#General)
-    *   [1.1 Eclipse Workspace Projects](#Eclipse-Workspace-Projects)
-    *   [1.2 Java Packages](#Java-Packages)
-    *   [1.3 API Packages](#API-Packages)
-    *   [1.4 Internal Implementation Packages](#Internal-Implementation-Packages)
-    *   [1.5 Test Suite Packages](#Test-Suite-Packages)
-    *   [1.6 Examples Packages](#Examples-Packages)
-    *   [1.7 Additional rules](#Additional-rules)
-*   [2 Classes and Interfaces](#Classes-and-Interfaces)
-*   [3 Methods](#Methods)
-*   [4 Variables](#Variables)
-*   [5 Constants](#Constants)
-*   [6 Plug-ins and Extension Points](#Plug-ins-and-Extension-Points)
-*   [7 System Files and Settings](#System-Files-and-Settings)
+*   [1 What is a Context?](#What-is-a-Context.3F)
+*   [2 The Use of Contexts in Eclipse 4](#The-Use-of-Contexts-in-Eclipse-4)
+*   [3 Context Variables](#Context-Variables)
+*   [4 Context Chains and the Active Context](#Context-Chains-and-the-Active-Context)
+*   [5 Context Functions](#Context-Functions)
+*   [6 Run And Tracks](#Run-And-Tracks)
+*   [7 Exposing Services and State on an Eclipse Context](#Exposing-Services-and-State-on-an-Eclipse-Context)
+    *   [7.1 Context Functions](#Context-Functions-2)
+    *   [7.2 OSGi Services](#OSGi-Services)
+    *   [7.3 Context Functions Exposed As OSGi Declarative Services](#Context-Functions-Exposed-As-OSGi-Declarative-Services)
+*   [8 Creating New Contexts](#Creating-New-Contexts)
+*   [9 Advanced Topics](#Advanced-Topics)
+    *   [9.1 How do I access the current context?](#How-do-I-access-the-current-context.3F)
+    *   [9.2 @Active vs ACTIVE_*](#.40Active-vs-ACTIVE-.2A)
+*   [10 References](#References)
 
-General
--------
+What is a Context?
+------------------
 
-Like other open source projects, the code base for the Eclipse project should avoid using names that reference a particular company or their commercial products.
+A context (a IEclipseContext) is a hierarchical key-value map. The keys are strings, often Java class names, and the values are any Java object. Each context has a parent, such that contexts are linked together to form a tree structure. When a key is not found in a context, the lookup is retried on the parent, repeating until either a value is found or the root of the tree has been reached.
 
-### Eclipse Workspace Projects
 
-When Eclipse is being used to develop plug-ins for the Eclipse project, the name of the Eclipse workspace project should match the name of the plug-in. 
-For example, org.eclipse.core.runtime plug-in is developed in an Eclipse workspace project named org.eclipse.core.runtime.
+The Use of Contexts in Eclipse 4
+--------------------------------
 
-### Java Packages
+![300px-Ui-context-hierarchy.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/300px-Ui-context-hierarchy.png)
 
-The Eclipse Platform consists of a collection of Java packages. 
-The package namespace is managed in conformance with Sun's package naming guidelines; subpackages should not be created without prior approval from the owner of the package subtree. 
-The packages for the open-source Eclipse project are all subpackages of org.eclipse.
 
-The first package name segment after org.eclipse is generally the project name, followed by the component name.
+Eclipse 4 associates contexts to the container elements in the UI
 
-       org.eclipse.<project>.<component>[.*]- General form of package names
-    
+Eclipse 4 uses contexts to simplify access to workbench services (the _service locator_ pattern) and other interesting state. 
+Contexts provide special support for creating and destroying values as necessary, and for tracking changes made to context values.
 
-The following projects are assigned at the time of writing:
+Values are normally added to an Eclipse Context via _IEclipseContext#set(key,value)_ or _#modify(key,value)_. 
+Values are retrieved by _#get(key)_, which returns _null_ if not found. 
+There is a special variant of _get_: Java class names are frequently used as keys and instances as values, so there is a special _T get(Class<T>)_ that casts the value as an instance of _T_.
 
-       org.eclipse.equinox.<component>[.*] - Equinox OSGi framework
-       org.eclipse.jdt.<component>[.*] - Java development tooling
-       org.eclipse.pde.<component>[.*] - Plug-in development environment
-    
-The following package name segments are reserved:
+The power of contexts comes as Eclipse 4 associates a context with most model elements — the logical UI containers — such that the context tree matches the UI hierarchy. 
+So an _MPart_ and its containing _MPerspective_, _MWindow_, and the _MApplication_, each have contexts and are chained together. 
+Looking up a key that is not found in the part will cause the lookup to continue at the perspective, window, and application. 
+At the top of the tree is a special node that looks up keys among the available OSGi services. 
+Many application-, window-, and view-level services are installed by the Eclipse 4 at various levels in the context hierarchy. 
+Thus the placement of values within the context hierarchy, such as in the perspective or window's context, provides a natural form of variable scoping.
 
-       internal - indicates an internal implementation package that contains no API
-       tests - indicates a non-API package that contains only test suites
-       examples - indicates a non-API package that contains only examples
- 
-
-These names are used as qualifiers and appear between the project and component name:
-
-       org.eclipse.<project>.internal.<component>[.*] - internal package
-       org.eclipse.<project>.tests.<component>[.*] - tests
-       org.eclipse.<project>.examples.<component>[.*] - examples
-    
-
-In the case of the Eclipse Platform proper, there is no project name, and the qualifiers appear immediately after the component name:
- 
-       org.eclipse.<component>[.*] -  Eclipse Platform proper
-       org.eclipse.<component>.internal[.*] - Eclipse Platform internal package
-       org.eclipse.<component>.tests[.*] - Eclipse Platform tests
-       org.eclipse.<component>.examples[.*] - Eclipse Platform examples
- 
-
-The following components of the Eclipse Platform proper are assigned at the time of writing:
- 
-
-       org.eclipse.ant[.*] - Ant support
-       org.eclipse.compare[.*] - Compare support
-       org.eclipse.core[.*] - Platform core
-       org.eclipse.debug[.*] - Debug
-       org.eclipse.help[.*] - Help support
-       org.eclipse.jdi[.*] - Eclipse implementation of Java Debug Interface (JDI)
-       org.eclipse.jface[.*] - JFace
-       org.eclipse.platform[.*] - Documentation
-       org.eclipse.scripting[.*] - Scripting support
-       org.eclipse.sdk[.*] - SDK configuration
-       org.eclipse.search[.*] - Search support
-       org.eclipse.swt[.*] - Standard Widget Toolkit
-       org.eclipse.ui[.*] - Workbench
-       org.eclipse.update[.*] - Plug-in live update
-       org.eclipse.vcm[.*] - Version and Configuration Management
-       org.eclipse.webdav[.*] - WebDAV support
-    
-
-For example,
-
-       org.eclipse.jdt.internal.core.compiler - Correct usage
-       org.eclipse.jdt.core.internal.compiler - Incorrect. internal should immediately follow project name.
-       org.eclipse.core.internal.resources - Correct usage
-       org.eclipse.internal.core.resources - Incorrect. internal should never immediately follow org.eclipse.
-       org.eclipse.core.resources.internal - Incorrect. internal should immediately follow Eclipse Platform component name.
-    
-### API Packages
-
-API packages are ones that contain classes and interfaces that must be made available to ISVs. 
-The names of API packages need to make sense to the ISV. 
-The number of different packages that the ISV needs to remember should be small, since a profusion of API packages can make it difficult for ISVs to know which packages they need to import. 
-Within an API package, all public classes and interfaces are considered API. 
-The names of API packages should not contain internal, tests, or examples to avoid confusion with the scheme for naming non-API packages. 
-Consult [Eclipse/API Central](/Eclipse/API_Central "Eclipse/API Central") for more detailed information on choosing and naming API elements.
-
-### Internal Implementation Packages
-
-All packages that are part of the platform implementation but contain no API that should be exposed to ISVs are considered internal implementation packages. 
-All implementation packages should be flagged as internal, with the tag occurring just after the major package name. 
-ISVs will be told that all packages marked internal are out of bounds. 
-(A simple text search for ".internal." detects suspicious reference in source files; likewise, "/internal/" is suspicious in .class files).
-
-### Test Suite Packages
-
-All packages containing test suites should be flagged as tests, with the tag occurring just after the major package name. 
-Fully automated tests are the norm; so, for example, org.eclipse.core.tests.resources would contain automated tests for API in org.eclipse.core.resources. 
-Interactive tests (ones requiring a hands-on tester) should be flagged with interactive as the last package name segment; so, for example, org.eclipse.core.tests.resources.interactive would contain the corresponding interactive tests.
-
-### Examples Packages
-
-All packages containing examples that ship to ISVs should be flagged as examples, with the tag occurring just after the major package name. 
-For example, org.eclipse.swt.examples would contain examples for how to use the SWT API.
-
-### Additional rules
-
-*   Package names should contain only lowercase ASCII alphanumerics, and avoid underscore _ or dollar sign $ characters.
-
-Classes and Interfaces
-----------------------
-
-Sun's naming guidelines states
-
-Class names should be nouns, in mixed case with the first letter of each internal word capitalized. 
-Try to keep your class names simple and descriptive. Use whole words - avoid acronyms and abbreviations (unless the abbreviation is much more widely used than the long form, such as URL or HTML).
-
-Examples:
-
-*   class Raster;
-*   class ImageSprite;
-
-Interface names should be capitalized like class names.
-
-For interface names, we follow the "I"-for-interface convention: all interface names are prefixed with an "I". 
-For example, "IWorkspace" or "IIndex". 
-This convention aids code readability by making interface names more readily recognizable.
-
-Additional rules:
-
-The names of exception classes (subclasses of Exception) should follow the common practice of ending in "Exception".
-
-Methods
--------
-
-Sun's naming guidelines states
-
-Methods should be verbs, in mixed case with the first letter lowercase, with the first letter of each internal word capitalized.
+**Example**  
+For example, many client-server applications may require communicating with multiple servers, but with one server chosen as a master server at any one time. 
+An Eclipse 4 application could record this master server in the application's context using a well-known key (e.g., "MASTER\_SERVER"). 
+All parts requesting injection for that key will have the value resolved from the application's context. 
+Should that value change, all parts will be re-injected with the new value. 
+A particular part could have a different master server from other parts by setting the master in that part's context. 
+All other parts will continue to resolve MASTER\_SERVER from the application. But perhaps the developers later realize that it would be very powerful to have a different master server for each window. 
+The master could instead be set in each window's context. 
+Or perhaps the app would prefer to have a different master server for each perspective, or even on particular part stacks. 
+Or the app could continue to set the normal master server in the application's context, and optionally override it on a per-window basis by setting the override value in the window's context.
 
   
-Examples:
 
-*   run();
-*   runFast();
-*   getBackground();
+Context Variables
+-----------------
+
+Being able to resolve a value from somewhere in the context hierarchyis very powerful. 
+But to change the value, we need to know where in the context hierarchy the value should be set. 
+Rather than hard code this location, we can instead declare a _context variable_: we declare the variable at the appropriate context, and instead _modify_, rather than _set_, the context value: the context then looks up the chain to find the variable declaration and sets the value there. 
+This separates defining _where_ a context value should be placed from the code that actually _sets_ it.
+
+**Example (continued)**  
+
+By declaring a context variable for the master server, if we later decide that we want the master-server to actually be maintained on a per-perspective basis, then we simply move the context variable definition to be on the perspective; the code obtaining and modifying the value is completely oblivious to the change.
+
+
+Context Chains and the Active Context
+-------------------------------------
+
+![300px-Ui-contexts-active.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/300px-Ui-contexts-active.png)
+
+The editor is the active leaf
+
+Contexts are chained together via the parent link. 
+A context may have many children, but a context only exposes its active child. 
+The chain of active children from a node is called its _active branch_, and the end node is the _active leaf_. 
+There are many active branches in a context tree, but there is only ever a single active branch from the root.
+
+A node can be made active in two ways. 
+Calling _#activate()_ makes the receiver the active child of its parent node, but does not otherwise disturb the rest of the tree. 
+Calling _#activateBranch()_ on the other hand effectively the same as:
+
+       void activateBranch() {
+          activate();
+          if(getParent() != null) getParent().activateBranch(); 
+       }
+
+It makes the receiver the active child of its parent, and then recursively calls _#activateBranch()_ on its parent.
+
+It's often useful to resolve values from the active leaf with #getActive(key).
+
+Eclipse 4 keeps its IEclipseContext activation state in sync with the UI state, such that the active window's context is the active window-level context, and each window's active part is that window's active leaf o.
+
+Context Functions
+-----------------
+
+Contexts support a special type of value called a _context function_. 
+When a retrieved key's value is a context function, the IEclipseContext calls _compute(context, key)_ and returns the result of the computation. 
+Context sanctions must subclass _org.eclipse.e4.core.contexts.ContextFunction_.
+
+For example, the Eclipse 4 Workbench makes the current selection available via a context function:
+
+    appContext.set(SELECTION, new ContextFunction() {
+        @Override
+        public Object compute(IEclipseContext context, String contextKey) {
+            IEclipseContext parent = context.getParent();
+            while (parent != null) {
+                context = parent;
+                parent = context.getParent();
+            }
+            return context.getActiveLeaf().get("out.selection");
+        }
+    });
+
+The result of a context function are _memoized_: they are only recomputed when another referenced value is changed. 
+See the section on _Run And Tracks_ below.
 
   
-Additional rules:
 
-The names of methods should follow common practice for naming getters (getX()), setters (setX()), and predicates (isX(), hasX()).
+Run And Tracks
+--------------
 
-Variables
----------
+_RunAndTrack_s, affectionally called _RATs_, are a special form of a _Runnable_. 
+RATs are executed within a context, and the context tracks all of the values accessed. 
+When any of these values are changed, the runnable is automatically re-evaluated. 
+The following example will print _20.9895_ and then _20.12993_:
 
-Sun's naming guidelines states
 
-Except for variables, all instance, class, and class constants are in mixed case with a lowercase first letter. 
-Internal words start with capital letters. 
-Variable names should not start with underscore _ or dollar sign $ characters, even though both are allowed.
+    final IEclipseContext context = EclipseContextFactory.create();
+    context.set("price", 19.99);
+    context.set("tax", 0.05);
+    context.runAndTrack(new RunAndTrack() {
+        @Override
+        public boolean changed(IEclipseContext context) {
+            total = (Double) context.get("price") * (1.0 + (Double) context.get("tax"));
+            return true;
+        }
+     
+        @Override
+        public String toString() {
+            return "calculator";
+        }
+    });
+    print(total);
+    context.set("tax", 0.07);
+    print(total);
 
-Variable names should be short yet meaningful. 
-The choice of a variable name should be mnemonic - that is, designed to indicate to the casual observer the intent of its use. 
-One-character variable names should be avoided except for temporary "throwaway" variables. 
-Common names for temporary variables are i, j, k, m, and n for integers; c, d, and e for characters.
+A RAT continues executing until either its context is disposed, or its changed() method returns _false_.
 
-Examples:
+Note that RATs are only re-evaluated when the value is changed (i.e., IEclipseContext#set() or #modify() are called), and not when the contents of the value are changed.
 
-*   int i;
-*   char c;
-*   float myWidth;
+Exposing Services and State on an Eclipse Context
+-------------------------------------------------
 
-Constants
----------
+Values are normally add to an Eclipse Context via _IEclipseContext#set(key,value)_ or _#modify(key,value)_. 
+But these require knowing and being able to find the context to be modified. 
+But developers sometimes need to be able to add values on-the-fly. 
+There are a few techniques.
 
-Sun's naming guidelines states
+### Context Functions
 
-The names of variables declared class constants and of ANSI constants should be all uppercase with words separated by underscores ("_").
+A [Context Function](/Eclipse4/RCP/Contexts#Context_Functions "Eclipse4/RCP/Contexts") is provided both the key that was requested and the source context, where the retrieval began. 
+The context function can return an instance created for that particular context, or set a value in that context — or elsewhere. 
+This approach is very useful for computing results based on the active part (_IEclipseContext#getActiveLeaf()_).
 
-Examples:
+### OSGi Services
 
-*   static final int MIN_WIDTH = 4;
-*   static final int MAX_WIDTH = 999;
-*   static final int GET\_THE\_CPU = 1;
+The Eclipse 4 workbench roots its context hierarchy from an _EclipseContextOSGi_, a special Eclipse Context that knows to look up keys in the OSGi Service Registry. 
+_EclipseContextOSGi_ instances are obtained via _EclipseContextFactory#getServiceContext(BundleContext)_. 
+These contexts — and the services requested — are bounded by the lifecycle of the provided bundle.
 
-Plug-ins and Extension Points
------------------------------
+  
 
-All plug-ins (and plug-in fragments), including the ones that are part of the Eclipse Platform, like the Resources and Workbench plug-ins, must have unique identifiers following the same style of naming convention as Java packages. 
-For example, the workbench plug-in is named org.eclipse.ui.
+### Context Functions Exposed As OSGi Declarative Services
 
-The names of a plug-in and the names of the Java packages declared within the code library of that plug-in commonly align. 
-For example, the org.eclipse.ui plug-in declares much of its code in packages named org.eclipse.ui.* . 
-While alignment is the recommended practice, it is not an absolute requirement. 
-For instance, the org.eclipse.ui plug-in also declares code in packages named org.eclipse.jface.*. 
-The org.eclipse.ant.core plug-in declares code in packages named org.eclipse.ant.core and org.apache.tools.ant.*.
+This approach exposes a context function as the implementation of a service defined OSGi Declarative Services. 
+This pattern is used for creating the _IEventBroker_, using the new DS annotations support.
 
-The plug-in namespace is managed hierarchically; do not create plug-in without prior approval from the owner of the enclosing namespace.
+    @Component(service = IContextFunction.class, property = "service.context.key=org.eclipse.e4.core.services.events.IEventBroker")
+    public class EventBrokerFactory extends ContextFunction {
+        @Override
+        public Object compute(IEclipseContext context, String contextKey) {
+            EventBroker broker = context.getLocal(EventBroker.class);
+            if (broker == null) {
+                broker = ContextInjectionFactory.make(EventBroker.class, context);
+                context.set(EventBroker.class, broker);
+            }
+            return broker;
+        }
+    }
 
-Extension points that expect multiple extensions should have plural names. For example, "builders" rather than "builder".
+Note that the service is actually exposed as an IContextFunction, not an IEventBroker. 
+This approach is specific to being used for values retrieved from an IEclipseContext.
 
-System Files and Settings
--------------------------
+Creating New Contexts
+---------------------
 
-By convention, files or folders that start with a period ('.') are considered "system files" and should not be edited by users or, directly, by other components that do not "own" them.
+Contexts can be created either as a leaf of another context (see _IEclipseContext#newChild()_) or as a new root (see _EclipseContextFactory#create()_). 
+A special EclipseContext implementation exists (_EclipseContextOSGi_, obtained by _EclipseContextFactory#getServiceContext()_) to expose OSGi Services too.
 
-Of special note is the ".settings" folder in a workspace project. 
-This folder holds various forms of preference or metadata specific to that workspace project. 
-Files in this directory do not have to start with a period (they are assumed "system files" as they are in a "system folder") but they must follow the same naming conventions outlined elsewhere in this guide. 
-That is, they must identify themselves with their Eclipse Project's namespace (e.g. org.eclipse.jdt, org.eclipse.jst, etc). and they should be as specific as possible to denote the package they come from, or the function they are serving. 
-For example,
+  
 
-     org.eclipse.jdt.core.prefs
-     org.eclipse.jst.common.project.facet.core.prefs
-     org.eclipse.wst.common.project.facet.core.xml
-    
-Two obvious exceptions to this convention are the .classpath and .project files, but ... that's just because they were the first, before the large community of Eclipse was grasped. 
-Following these namespace guidelines will help avoid conflicts where two plugins or projects could accidently pick the same name for a metadata file.
+Advanced Topics
+---------------
+
+### How do I access the current context?
+
+_Current_ really depends on the requesting context. 
+An _MPart_ or _IViewPart_ rarely wants the active part, which may not be itself, but a particular part, such as the active editor.
+
+_IServiceLocator_, either implemented by or provided by many components in the Eclipse Workbench, was the primary means to obtain services in the Eclipse Workbench. 
+It is now backed by an IEclipseContext. 
+You can either fetch values directly via _IServiceLocator#getService(key)_ or obtain the _IServiceLocator_s _IEclipseContext_ directly (_IServiceLocator.getService(IEclipseContext.class)_). 
+Most UI containers implement _IServiceLocator_ like _IWorkbench_, _IWorkbenchWindow_, _IWorkbenchPart_.
+
+  
+
+### @Active vs ACTIVE_*
+
+@Active is an annotation that causes our DI to look up a value from the source context's active leaf, where the source context is the context that was used for injecting that object.
+
+ACTIVE_PART, on the other hand, looks for the active leaf as constrained by the source context's window's context.
+
+    public class ActivePartLookupFunction extends ContextFunction {
+        @Override
+        public Object compute(IEclipseContext context, String contextKey) {
+            MContext window = context.get(MWindow.class);
+            if (window == null) {
+                window = context.get(MApplication.class);
+                if (window == null) {
+                    return null;
+                }
+            }
+            IEclipseContext current = window.getContext();
+            if (current == null) {
+                return null;
+            }
+            return current.getActiveLeaf().get(MPart.class);
+        }
+    }
+
+ACTIVE_SHELL is _(needs some work)_
+
+The moral: the implementation of _active X_ is not necessarily as straightforward as might appear.
+
+References
+----------
+
+The old E4 wiki pages provides background \[E4/Contexts|on the influences on IEclipseContext\].
 
