@@ -176,7 +176,7 @@ There are a few techniques.
 
 ### Context Functions
 
-A [Context Function](#Context_Functions) is provided both the key that was requested and the source context, where the retrieval began. 
+A [Context Function](#context-functions) is provided both the key that was requested and the source context, where the retrieval began. 
 The context function can return an instance created for that particular context, or set a value in that context — or elsewhere. 
 This approach is very useful for computing results based on the active part (_IEclipseContext#getActiveLeaf()_).
 
