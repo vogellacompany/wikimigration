@@ -1,267 +1,408 @@
-Eclipse4/RCP/Contexts
-=====================
+Eclipse4/RCP/Dependency Injection
+=================================
 
-The Eclipse 4 Application Platform manages state and services using a set of _contexts_; this information is used for injection. 
-Contexts are used as the sources for [Dependency Injection](/Eclipse4/RCP/Dependency_Injection "Eclipse4/RCP/Dependency Injection"). 
-In this respect, they are somewhat analogous to _modules_ in Guice. 
-Normally code should not have to use or know about the context.
+With 10 years of experience with the Eclipse platform, a number of difficulties were observed.
+
+1.  Code frequently uses global singleton accessors (e.g., Platform, PlatformUI) or required navigating a deep chain of dependencies (e.g., obtaining an _IStatusLineManager_). Singleton services is particularly problematic for app servers like RAP/Riena.
+2.  The use of singletons tightly coupled consumers of "things" to their producer/provider, and inhibits reuse.
+3.  Mechanisms are not very dynamic — plugins react to context changes drastically rather than incrementally (just close the affected controls)
+4.  ~~IEvaluationContext has global state that gets swapped according to context change (such as the focus control)~~
+5.  ~~Current solutions are not multi-threadable - they assume evaluation occurs in the UI thread~~
+6.  Scaling granularity
+    *   Current solutions don't scale down to services with brief lifetimes
+    *   Current solutions may not scale up to very large numbers of services
+7.  Currently don't track service consumers to notify when services come/go
+8.  Client code needs to know the internals of the Eclipse code base
+9.  No support for services lookup that are composed out of other services on the fly
+
+These difficulties are seen in other frameworks and are not unique to the Eclipse application platform. 
+The Eclipse 4 Application Platform has adopted the use of [Dependency Injection (DI)](http://en.wikipedia.org/wiki/Dependency_injection) to circumvent these problems: rather than require client code to know how to access a service, the client instead describes the service required, and the platform is responsible for configuring the object with an appropriate service. 
+DI shields the client code from knowing the provenance of the injected objects.
+
+The Eclipse 4 Application Platform provides a [JSR 330](http://jcp.org/en/jsr/detail?id=330)-compatible, [annotation-based](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/package-summary.html) dependency injection (DI) framework, similar to [Spring](http://springframework.org/) or [Guice](http://code.google.com/p/google-guice). 
+The injector is defined in several plugins: org.eclipse.e4.core.di, org.eclipse.e4.core.di.extensions, and org.eclipse.e4.ui.di.
 
   
 
 Contents
 --------
 
-*   [1 What is a Context?](#What-is-a-Context.3F)
-*   [2 The Use of Contexts in Eclipse 4](#The-Use-of-Contexts-in-Eclipse-4)
-*   [3 Context Variables](#Context-Variables)
-*   [4 Context Chains and the Active Context](#Context-Chains-and-the-Active-Context)
-*   [5 Context Functions](#Context-Functions)
-*   [6 Run And Tracks](#Run-And-Tracks)
-*   [7 Exposing Services and State on an Eclipse Context](#Exposing-Services-and-State-on-an-Eclipse-Context)
-    *   [7.1 Context Functions](#Context-Functions-2)
-    *   [7.2 OSGi Services](#OSGi-Services)
-    *   [7.3 Context Functions Exposed As OSGi Declarative Services](#Context-Functions-Exposed-As-OSGi-Declarative-Services)
-*   [8 Creating New Contexts](#Creating-New-Contexts)
-*   [9 Advanced Topics](#Advanced-Topics)
-    *   [9.1 How do I access the current context?](#How-do-I-access-the-current-context.3F)
-    *   [9.2 @Active vs ACTIVE_*](#.40Active-vs-ACTIVE-.2A)
-*   [10 References](#References)
+*   [1 Overview](#Overview)
+*   [2 Standard Annotations and Classes](#Standard-Annotations-and-Classes)
+    *   [2.1 @Inject (javax.inject)](#.40Inject-.28javax.inject.29)
+    *   [2.2 @Named (javax.inject)](#.40Named-.28javax.inject.29)
+    *   [2.3 @Singleton (javax.inject)](#.40Singleton-.28javax.inject.29)
+    *   [2.4 Provider<T> (javax.inject)](#Provider.3CT.3E-.28javax.inject.29)
+    *   [2.5 @PostConstruct, @PreDestroy (javax.annotation)](#.40PostConstruct.2C-.40PreDestroy-.28javax.annotation.29)
+*   [3 E4AP-specific Annotations](#E4AP-specific-Annotations)
+    *   [3.1 @Optional (org.eclipse.e4.core.di.annotations)](#.40Optional-.28org.eclipse.e4.core.di.annotations.29)
+    *   [3.2 @Active (org.eclipse.e4.core.contexts)](#.40Active-.28org.eclipse.e4.core.contexts.29)
+    *   [3.3 @Preference (org.eclipse.e4.core.di.extensions)](#.40Preference-.28org.eclipse.e4.core.di.extensions.29)
+    *   [3.4 @Creatable (org.eclipse.e4.core.di.annotations)](#.40Creatable-.28org.eclipse.e4.core.di.annotations.29)
+    *   [3.5 @CanExecute, @Execute (org.eclipse.e4.core.di.annotations)](#.40CanExecute.2C-.40Execute-.28org.eclipse.e4.core.di.annotations.29)
+    *   [3.6 @Focus (org.eclipse.e4.ui.di)](#.40Focus-.28org.eclipse.e4.ui.di.29)
+    *   [3.7 @AboutToShow, @AboutToHide (org.eclipse.e4.ui.di)](#.40AboutToShow.2C-.40AboutToHide-.28org.eclipse.e4.ui.di.29)
+    *   [3.8 @GroupUpdates (org.eclipse.e4.core.di.annotations)](#.40GroupUpdates-.28org.eclipse.e4.core.di.annotations.29)
+    *   [3.9 @EventTopic (org.eclipse.e4.core.di.extensions), @UIEventTopic (org.eclipse.e4.ui.di)](#.40EventTopic-.28org.eclipse.e4.core.di.extensions.29.2C-.40UIEventTopic-.28org.eclipse.e4.ui.di.29)
+*   [4 Advanced Topics](#Advanced-Topics)
+    *   [4.1 Injection Order](#Injection-Order)
+    *   [4.2 Extending the DI Framework](#Extending-the-DI-Framework)
+    *   [4.3 Configuring Bindings](#Configuring-Bindings)
+*   [5 Debugging](#Debugging)
+*   [6 Considerations](#Considerations)
+*   [7 Current Caveats](#Current-Caveats)
+*   [8 References](#References)
 
-What is a Context?
-------------------
+Overview
+========
 
-A context (a IEclipseContext) is a hierarchical key-value map. The keys are strings, often Java class names, and the values are any Java object. Each context has a parent, such that contexts are linked together to form a tree structure. When a key is not found in a context, the lookup is retried on the parent, repeating until either a value is found or the root of the tree has been reached.
+DI separates the configuration of an object from its behaviour. 
+Rather than litter an object with details on how to access its required dependencies, the dependencies are instead configured through the use of an injector.
 
+For example, a typical Eclipse 3.x view would access the Eclipse Help system via the PlatformUI singleton, and the status line manager through the part's site:
 
-The Use of Contexts in Eclipse 4
---------------------------------
-
-![300px-Ui-context-hierarchy.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/300px-Ui-context-hierarchy.png)
-
-
-Eclipse 4 associates contexts to the container elements in the UI
-
-Eclipse 4 uses contexts to simplify access to workbench services (the _service locator_ pattern) and other interesting state. 
-Contexts provide special support for creating and destroying values as necessary, and for tracking changes made to context values.
-
-Values are normally added to an Eclipse Context via _IEclipseContext#set(key,value)_ or _#modify(key,value)_. 
-Values are retrieved by _#get(key)_, which returns _null_ if not found. 
-There is a special variant of _get_: Java class names are frequently used as keys and instances as values, so there is a special _T get(Class<T>)_ that casts the value as an instance of _T_.
-
-The power of contexts comes as Eclipse 4 associates a context with most model elements — the logical UI containers — such that the context tree matches the UI hierarchy. 
-So an _MPart_ and its containing _MPerspective_, _MWindow_, and the _MApplication_, each have contexts and are chained together. 
-Looking up a key that is not found in the part will cause the lookup to continue at the perspective, window, and application. 
-At the top of the tree is a special node that looks up keys among the available OSGi services. 
-Many application-, window-, and view-level services are installed by the Eclipse 4 at various levels in the context hierarchy. 
-Thus the placement of values within the context hierarchy, such as in the perspective or window's context, provides a natural form of variable scoping.
-
-**Example**  
-For example, many client-server applications may require communicating with multiple servers, but with one server chosen as a master server at any one time. 
-An Eclipse 4 application could record this master server in the application's context using a well-known key (e.g., "MASTER\_SERVER"). 
-All parts requesting injection for that key will have the value resolved from the application's context. 
-Should that value change, all parts will be re-injected with the new value. 
-A particular part could have a different master server from other parts by setting the master in that part's context. 
-All other parts will continue to resolve MASTER\_SERVER from the application. But perhaps the developers later realize that it would be very powerful to have a different master server for each window. 
-The master could instead be set in each window's context. 
-Or perhaps the app would prefer to have a different master server for each perspective, or even on particular part stacks. 
-Or the app could continue to set the normal master server in the application's context, and optionally override it on a per-window basis by setting the override value in the window's context.
-
-  
-
-Context Variables
------------------
-
-Being able to resolve a value from somewhere in the context hierarchyis very powerful. 
-But to change the value, we need to know where in the context hierarchy the value should be set. 
-Rather than hard code this location, we can instead declare a _context variable_: we declare the variable at the appropriate context, and instead _modify_, rather than _set_, the context value: the context then looks up the chain to find the variable declaration and sets the value there. 
-This separates defining _where_ a context value should be placed from the code that actually _sets_ it.
-
-**Example (continued)**  
-
-By declaring a context variable for the master server, if we later decide that we want the master-server to actually be maintained on a per-perspective basis, then we simply move the context variable definition to be on the perspective; the code obtaining and modifying the value is completely oblivious to the change.
-
-
-Context Chains and the Active Context
--------------------------------------
-
-![300px-Ui-contexts-active.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/300px-Ui-contexts-active.png)
-
-The editor is the active leaf
-
-Contexts are chained together via the parent link. 
-A context may have many children, but a context only exposes its active child. 
-The chain of active children from a node is called its _active branch_, and the end node is the _active leaf_. 
-There are many active branches in a context tree, but there is only ever a single active branch from the root.
-
-A node can be made active in two ways. 
-Calling _#activate()_ makes the receiver the active child of its parent node, but does not otherwise disturb the rest of the tree. 
-Calling _#activateBranch()_ on the other hand effectively the same as:
-
-       void activateBranch() {
-          activate();
-          if(getParent() != null) getParent().activateBranch(); 
-       }
-
-It makes the receiver the active child of its parent, and then recursively calls _#activateBranch()_ on its parent.
-
-It's often useful to resolve values from the active leaf with #getActive(key).
-
-Eclipse 4 keeps its IEclipseContext activation state in sync with the UI state, such that the active window's context is the active window-level context, and each window's active part is that window's active leaf o.
-
-Context Functions
------------------
-
-Contexts support a special type of value called a _context function_. 
-When a retrieved key's value is a context function, the IEclipseContext calls _compute(context, key)_ and returns the result of the computation. 
-Context sanctions must subclass _org.eclipse.e4.core.contexts.ContextFunction_.
-
-For example, the Eclipse 4 Workbench makes the current selection available via a context function:
-
-    appContext.set(SELECTION, new ContextFunction() {
-        @Override
-        public Object compute(IEclipseContext context, String contextKey) {
-            IEclipseContext parent = context.getParent();
-            while (parent != null) {
-                context = parent;
-                parent = context.getParent();
-            }
-            return context.getActiveLeaf().get("out.selection");
-        }
-    });
-
-The result of a context function are _memoized_: they are only recomputed when another referenced value is changed. 
-See the section on _Run And Tracks_ below.
-
-  
-
-Run And Tracks
---------------
-
-_RunAndTrack_s, affectionally called _RATs_, are a special form of a _Runnable_. 
-RATs are executed within a context, and the context tracks all of the values accessed. 
-When any of these values are changed, the runnable is automatically re-evaluated. 
-The following example will print _20.9895_ and then _20.12993_:
-
-
-    final IEclipseContext context = EclipseContextFactory.create();
-    context.set("price", 19.99);
-    context.set("tax", 0.05);
-    context.runAndTrack(new RunAndTrack() {
-        @Override
-        public boolean changed(IEclipseContext context) {
-            total = (Double) context.get("price") * (1.0 + (Double) context.get("tax"));
-            return true;
-        }
+    class MyView extends ViewPart {
+      public void createPartControl(Composite parent) {
+        Button button = ...;
+        PlatformUI.getWorkbench().getHelpSystem().setHelp(button, "com.example.button.help.id");
      
-        @Override
-        public String toString() {
-            return "calculator";
-        }
-    });
-    print(total);
-    context.set("tax", 0.07);
-    print(total);
+        getViewSite().getActionBars().getStatusLineManager().setMessage("Configuring system...");
+      }
+    }
 
-A RAT continues executing until either its context is disposed, or its changed() method returns _false_.
+With E4AP, parts are POJOs and have their application services directly injected into the part:
 
-Note that RATs are only re-evaluated when the value is changed (i.e., IEclipseContext#set() or #modify() are called), and not when the contents of the value are changed.
+    class MyView {
+      @Inject
+      public void create(Composite parent, IWorkbenchHelpSystem help) {
+        Button button = ...;
+        help.setHelp(button, "com.example.button.help.id");
+     
+        slm.setMessage("Configuring system...");
+      }
+    }
 
-Exposing Services and State on an Eclipse Context
+DI provides a number of advantages:
+
+*   Clients are able to write POJOs and list the services they need.
+*   Useful for testing: the assumptions are placed in the DI container rather than in the client code
+
+DI has some disadvantages too:
+
+*   Service discovery: cannot use code completion to find out what is available.
+*   Debugging why injection has not occurred can be frustrating!
+
+  
+
+Standard Annotations and Classes
+================================
+
+E4AP's injector is based on the standard JSR 330 annotations:
+
+[@Inject](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Inject.html) (javax.inject)
+---------------------------------------------------------------------------------------------------
+
+@Inject marks a constructor, method, or field as being available for injection. 
+If you inject OSGi Services, it is possible to filter or reference multiple Services see [https://www.eclipse.org/eclipse/news/4.7/platform_isv.php#di-extension-service](https://www.eclipse.org/eclipse/news/4.7/platform_isv.php#di-extension-service)
+
+[@Named](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Named.html) (javax.inject)
+-------------------------------------------------------------------------------------------------
+
+Injected values are typically identified by a type. But there may be a number of available objects of a particular type (e.g., there are likely a number of available Strings). Multiple objects can be distinguished by providing a name, both on setting them as well as requesting them for injection. 
+For example:
+
+    @Inject
+    @Named(E4Workbench.INSTANCE_LOCATION)
+    private Location instanceLocation;
+
+[@Singleton](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Singleton.html) (javax.inject)
+---------------------------------------------------------------------------------------------------------
+
+@Singleton is class annotation Indicating that the class should only be instantiated once per injection scope. 
+Typical E4AP applications have only a single injector scope for the application.
+
+[Provider<T>](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Provider.html) (javax.inject)
+---------------------------------------------------------------------------------------------------------
+
+The Provider class defers the injection to demand-time. 
+Any value that can be injected can also be obtained through a provider.
+
+[@PostConstruct](http://download.oracle.com/javaee/5/api/javax/annotation/PostConstruct.html), [@PreDestroy](http://download.oracle.com/javaee/5/api/javax/annotation/PreDestroy.html) (javax.annotation)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+The @PostConstruct and @PreDestroy annotations provide lifecycle notification for created objects. 
+All methods annotated with @PostConstruct are called after an object has been fully injected. 
+All methods annotated with @PreDestroy are called before an object is to be uninjected and released.
+
+E4AP-specific Annotations
+=========================
+
+E4AP's injection framework also supports other E4AP-specific annotations.
+
+@Optional (org.eclipse.e4.core.di.annotations)
+----------------------------------------------
+
+The @Optional annotation can be applied to methods, fields, and parameters to mark them as optional for the dependency injection. 
+Typically, if the injector is unable to find a value to inject, then injection will fail. 
+However, if this annotation is specified, then:
+
+*   for parameters: a `null` value will be injected;
+*   for methods: the method calls will be skipped;
+*   for fields: the values will not be injected.
+
+@Active (org.eclipse.e4.core.contexts)
+--------------------------------------
+
+@Active serves a similar purpose to @Named, indicating the the value should be resolved from the [active context](/Eclipse4/RCP/Contexts "Eclipse4/RCP/Contexts").
+
+For example, a handler could obtain the active part with:
+
+    @Execute
+    public void execute(@Active MPart activePart) {
+       ...
+    }
+
+@Preference (org.eclipse.e4.core.di.extensions)
+-----------------------------------------------
+
+The @Preference provides simple interfacing with the Eclipse preferences framework. 
+The following snippet illustrates its use:
+
+    	@Inject @Preference(nodePath="my.plugin.id", value="dateFormat")
+    	protected String dateFormat;
+
+The "dateFormat" field is updated as the preference changes too; the "nodePath" is optional and defaults to the code's defining bundle.
+
+A class can receive notification of a preference change by instead receiving the injection through a setter:
+
+    	@Inject 
+    	private void setDateFormat(@Preference(nodePath="my.plugin.id", value="dateFormat") String dateFormat) {
+    		this.dateFormat = dateFormat;
+    		// ... and do something ...
+    	}
+
+Alternatively the preferences set for a node can be obtained to allow setting values too:
+
+    	@Inject @Preference(nodePath="my.plugin.id") 
+    	IEclipsePreferences preferences;
+     
+    	private void use8601Format() {
+    		preferences.put(dateFormat, ISO8601_FORMAT);
+    	}
+
+@Creatable (org.eclipse.e4.core.di.annotations)
+-----------------------------------------------
+
+Classes annotated with @Creatable will be automatically created by the injector if an instance was not present in the injection context. 
+The automatically-generated instance is not stored in the context.
+
+This annotation was introduced to handle a rather somewhat problematic situation: what should the injector do when presented a injectable but non-@Optional field or method argument that cannot be satisfied? 
+An earlier version of the E4 DI, that followed the approach taken by Guice, would automatically create an object of the field type, providing the type was a concrete class and had a zero-argument constructor. 
+This behaviour was changed in E4 4.2 M6 as it lead to unexpected results by developers. 
+Now unsatisfied injections are only autogened if the object type is annotated with @Creatable.
+
+To understand why this change was made, consider the following example:
+
+    @Inject
+    public void nameChanged(Shell shell, @Preference(nodePath="my.plugin.id", value="username") String name) {
+       MessageDialog.openInformation(shell, "Hi " + name);
+    }
+
+This example would not behave as expected as normally there are no Shell objects available for injection. 
+Under the old DI behaviour, since Shell had a zero-argument constructor, the injector would have autogenerated an instance of Shell. 
+But because the shell wasn't the expected (or intended) shell, the dialog was mis-placed.
+
+With the changed behaviour, the DI will raise an InjectionException since there is no Shell available for injection and Shell is not annotated with @Creatable.
+
+(To obtain the active shell, use @Named(IServiceConstants.ACTIVE_SHELL) Shell.)
+
+@CanExecute, @Execute (org.eclipse.e4.core.di.annotations)
+----------------------------------------------------------
+
+The @CanExecute and @Execute annotations tag methods that should be executed for a command handler. 
+Methods tagged with @CanExecute should return a boolean.
+
+@Focus (org.eclipse.e4.ui.di)
+-----------------------------
+
+Parts can specify this annotation on a method to be called when the part receives focus. 
+Parts **must** implement this method in such a way that a child control of their part can receive focus. 
+Note that label controls cannot take focus.
+
+    @Focus
+    void grantFocus() {
+      // correct
+      textField.setFocus();
+     
+      // incorrect
+      // label.setFocus();
+    }
+
+In the event that your part only has a textual label in it, you should ask your part's inner composite to take focus.
+
+    public class DetailsPart {
+     
+      private Composite composite;
+     
+      @PostConstruct
+      void construct(Composite parent) {
+        composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new FillLayout());
+     
+        Label label = new Label(composite, SWT.LEAD);
+        label.setText(/* ... */);
+      }
+     
+      @Focus
+      void grantFocus() {
+        composite.setFocus();
+      }
+    }
+
+@AboutToShow, @AboutToHide (org.eclipse.e4.ui.di)
 -------------------------------------------------
 
-Values are normally add to an Eclipse Context via _IEclipseContext#set(key,value)_ or _#modify(key,value)_. 
-But these require knowing and being able to find the context to be modified. 
-But developers sometimes need to be able to add values on-the-fly. 
-There are a few techniques.
+Used in dynamic menu contribution elements. The respective annotated methods are called on showing of the menu, and on hiding of the menu. In @AboutToShow an empty list is injected, whereas @AboutToHide is injected with the same list, containing the elements contributed in @AboutToShow. Do not put long-running code into @AboutToShow as this delays the opening process of the menu.
 
-### Context Functions
+Usage examples:
 
-A [Context Function](/Eclipse4/RCP/Contexts#Context_Functions "Eclipse4/RCP/Contexts") is provided both the key that was requested and the source context, where the retrieval began. 
-The context function can return an instance created for that particular context, or set a value in that context — or elsewhere. 
-This approach is very useful for computing results based on the active part (_IEclipseContext#getActiveLeaf()_).
-
-### OSGi Services
-
-The Eclipse 4 workbench roots its context hierarchy from an _EclipseContextOSGi_, a special Eclipse Context that knows to look up keys in the OSGi Service Registry. 
-_EclipseContextOSGi_ instances are obtained via _EclipseContextFactory#getServiceContext(BundleContext)_. 
-These contexts — and the services requested — are bounded by the lifecycle of the provided bundle.
-
-  
-
-### Context Functions Exposed As OSGi Declarative Services
-
-This approach exposes a context function as the implementation of a service defined OSGi Declarative Services. 
-This pattern is used for creating the _IEventBroker_, using the new DS annotations support.
-
-    @Component(service = IContextFunction.class, property = "service.context.key=org.eclipse.e4.core.services.events.IEventBroker")
-    public class EventBrokerFactory extends ContextFunction {
-        @Override
-        public Object compute(IEclipseContext context, String contextKey) {
-            EventBroker broker = context.getLocal(EventBroker.class);
-            if (broker == null) {
-                broker = ContextInjectionFactory.make(EventBroker.class, context);
-                context.set(EventBroker.class, broker);
-            }
-            return broker;
-        }
+    @AboutToShow
+    public void aboutToShow(List<MMenuElement> items) {
+     MDirectMenuItem dynamicItem = MMenuFactory.INSTANCE
+         .createDirectMenuItem();
+     items.add(dynamicItem);
     }
 
-Note that the service is actually exposed as an IContextFunction, not an IEventBroker. 
-This approach is specific to being used for values retrieved from an IEclipseContext.
 
-Creating New Contexts
----------------------
-
-Contexts can be created either as a leaf of another context (see _IEclipseContext#newChild()_) or as a new root (see _EclipseContextFactory#create()_). 
-A special EclipseContext implementation exists (_EclipseContextOSGi_, obtained by _EclipseContextFactory#getServiceContext()_) to expose OSGi Services too.
+    @AboutToHide
+    public void aboutToHide(List<MMenuElement> items) {
+      System.out.println("aboutToHide() items-size: " + items.size());
+      addSecond = !addSecond;
+    }
 
   
+
+@GroupUpdates (org.eclipse.e4.core.di.annotations)
+--------------------------------------------------
+
+The @GroupUpdates annotation indicates to the framework that updates should be batched.
+
+       // injection will be batched
+       @Inject @GroupUpdates
+       void setInfo(@Named("string1") String s, @Named("string2") String s2) {
+          this.s1 = s;
+          this.s2 = s2;
+       }
+
+The setInfo() method will be triggered by a call to IEclipseContext#processWaiting():
+
+       IEclipseContext context = ...;
+       context.set("string1", "a");
+       context.set("string2", "b");
+       context.processWaiting();  // trigger @GroupUpdates
+
+  
+
+@EventTopic (org.eclipse.e4.core.di.extensions), @UIEventTopic (org.eclipse.e4.ui.di)
+-------------------------------------------------------------------------------------
+
+The @EventTopic and @UIEventTopic annotations tag methods and fields that should be notified on event changes. 
+The @UIEventTopic ensures the event notification is performed in the UI thread. Both the event's DATA object and the actual OSGi Event object (org.osgi.service.event.Event) is available. 
+See the [Events](/Eclipse4/RCP/Event_Model "Eclipse4/RCP/Event Model") section for more details about events.
+
+    @Inject
+    public void setSelection(@EventTopic(REFRESH_EVENT) Object data) {
+           fullRefresh();
+    }
 
 Advanced Topics
----------------
+===============
 
-### How do I access the current context?
+Injection is performed using the active [context](/Eclipse4/RCP/Contexts "Eclipse4/RCP/Contexts"). 
+Changes to values in the context will trigger re-injection.
 
-_Current_ really depends on the requesting context. 
-An _MPart_ or _IViewPart_ rarely wants the active part, which may not be itself, but a particular part, such as the active editor.
-
-_IServiceLocator_, either implemented by or provided by many components in the Eclipse Workbench, was the primary means to obtain services in the Eclipse Workbench. 
-It is now backed by an IEclipseContext. 
-You can either fetch values directly via _IServiceLocator#getService(key)_ or obtain the _IServiceLocator_s _IEclipseContext_ directly (_IServiceLocator.getService(IEclipseContext.class)_). 
-Most UI containers implement _IServiceLocator_ like _IWorkbench_, _IWorkbenchWindow_, _IWorkbenchPart_.
+*   *   Adding, setting, or modifying variables
+        *   Why is modify different from set
 
   
 
-### @Active vs ACTIVE_*
+Injection Order
+---------------
 
-@Active is an annotation that causes our DI to look up a value from the source context's active leaf, where the source context is the context that was used for injecting that object.
+The E4AP DI Framework supports three types of injection, and is performed in the following order:
 
-ACTIVE_PART, on the other hand, looks for the active leaf as constrained by the source context's window's context.
+1.  Constructor injection: the public or protected constructor annotated with @Inject with the greatest number of resolvable arguments is selected
+2.  Field injection: values are injected into fields annotated with @Inject and that have a satisfying type
+3.  Method injection: values are injected into methods annotated with@Inject and that have satisfying arguments
 
-    public class ActivePartLookupFunction extends ContextFunction {
-        @Override
-        public Object compute(IEclipseContext context, String contextKey) {
-            MContext window = context.get(MWindow.class);
-            if (window == null) {
-                window = context.get(MApplication.class);
-                if (window == null) {
-                    return null;
-                }
-            }
-            IEclipseContext current = window.getContext();
-            if (current == null) {
-                return null;
-            }
-            return current.getActiveLeaf().get(MPart.class);
-        }
+In certain cases, the injector will trigger methods annotated with @PostConstruct and @PreDestroy when the associated object is created or prior to being disposed. 
+These situations include:
+
+1.  When behavioral objects are created to correspond to a Modeled UI element.
+
+The DI framework processes fields and methods found in the class hierarchy, including static fields and methods too. 
+Shadowed fields are injectable, but overridden methods are not. 
+The injector does not process methods declared on interfaces.
+
+Note that as the backing context changes, changed values will be re-injected.
+
+Extending the DI Framework
+--------------------------
+
+ExtendedObjectSupplier LookupContextStrategy
+
+
+Configuring Bindings
+--------------------
+
+You can have a factory classes by using IBinding:
+
+InjectorFactory.getDefault().addBinding(MyPart.class).implementedBy(MyFactory.class)
+
+    InjectorFactory.getDefault().addBinding(MyPart.class).implementedBy(MyFactory.class)
+
+or using ContextFunctions:
+
+    public class MyFactory extends ContextFunction {
+     public Object compute(IEclipseContext context) {
+      MPart result = ContextInjectionFactory.make(MyPart.class, context);
+      doWhatever(result);
+      return result;
     }
 
-ACTIVE_SHELL is _(needs some work)_
+  
 
-The moral: the implementation of _active X_ is not necessarily as straightforward as might appear.
+Debugging
+=========
+
+Tips for debugging injection issues:
+
+*   set an exception breakpoint on org.eclipse.e4.core.di.InjectionException
+
+  
+
+Considerations
+==============
+
+*   thread-safety: method injection may happen on any thread
+*   final fields can only be supported using constructor injection
+*   if several injectable fields required, then use a single @Inject method with multiple arguments and consider @GroupUpdate rather than using several single setter-style @Inject methods.
+
+Be aware that injected values are dynamic: values that are changed in the context may be immediately propagated into injected fields/methods. 
+Also, we have the "@Optional" annotation which allows values not currently in the context to be injected as "null" and re-injected later when the values are added to the context.
+
+  
+
+Current Caveats
+===============
+
+Although E4AP's DI will inject OSGi services, it does not currently track changes to the service. 
+This means that if the service is not available at time of initial injection, but subsequently becomes available, existing requestors for the the service are not notified. 
+Nor are receivers notified should the service disappear. 
+This work is being tracked across several bugs: [bug 331235](https://bugs.eclipse.org/bugs/show_bug.cgi?id=331235), [bug 330865](https://bugs.eclipse.org/bugs/show_bug.cgi?id=330865), [bug 317706](https://bugs.eclipse.org/bugs/show_bug.cgi?id=317706).
 
 References
-----------
+==========
 
-The old E4 wiki pages provides background \[E4/Contexts|on the influences on IEclipseContext\].
+Dhanji Prasanna's _Dependency Injection_ provides guidance on best practices on using DI in your application.
 
