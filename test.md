@@ -137,7 +137,7 @@ See the section on _Run And Tracks_ below.
 Run And Tracks
 --------------
 
-_RunAndTrack_s, affectionally called _RATs_, are a special form of a _Runnable_. 
+_RunAndTrack_ s, affectionally called _RATs_, are a special form of a _Runnable_. 
 RATs are executed within a context, and the context tracks all of the values accessed. 
 When any of these values are changed, the runnable is automatically re-evaluated. 
 The following example will print _20.9895_ and then _20.12993_:
