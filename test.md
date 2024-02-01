@@ -99,13 +99,13 @@ Standard Annotations and Classes
 
 E4AP's injector is based on the standard JSR 330 annotations:
 
-[@Inject](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Inject.html) (javax.inject)
+@Inject (javax.inject)
 ---------------------------------------------------------------------------------------------------
 
 @Inject marks a constructor, method, or field as being available for injection. 
 If you inject OSGi Services, it is possible to filter or reference multiple Services see [https://www.eclipse.org/eclipse/news/4.7/platform_isv.php#di-extension-service](https://www.eclipse.org/eclipse/news/4.7/platform_isv.php#di-extension-service)
 
-[@Named](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Named.html) (javax.inject)
+@Named (javax.inject)
 -------------------------------------------------------------------------------------------------
 
 Injected values are typically identified by a type. But there may be a number of available objects of a particular type (e.g., there are likely a number of available Strings). Multiple objects can be distinguished by providing a name, both on setting them as well as requesting them for injection. 
@@ -115,13 +115,13 @@ For example:
     @Named(E4Workbench.INSTANCE_LOCATION)
     private Location instanceLocation;
 
-[@Singleton](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Singleton.html) (javax.inject)
+@Singleton (javax.inject)
 ---------------------------------------------------------------------------------------------------------
 
 @Singleton is class annotation Indicating that the class should only be instantiated once per injection scope. 
 Typical E4AP applications have only a single injector scope for the application.
 
-[Provider<T>](http://atinject.googlecode.com/svn/trunk/javadoc/javax/inject/Provider.html) (javax.inject)
+Provider<T> (javax.inject)
 ---------------------------------------------------------------------------------------------------------
 
 The Provider class defers the injection to demand-time. 
@@ -356,8 +356,6 @@ Configuring Bindings
 --------------------
 
 You can have a factory classes by using IBinding:
-
-InjectorFactory.getDefault().addBinding(MyPart.class).implementedBy(MyFactory.class)
 
     InjectorFactory.getDefault().addBinding(MyPart.class).implementedBy(MyFactory.class)
 
