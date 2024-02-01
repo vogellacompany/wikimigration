@@ -6,7 +6,6 @@ Contexts are used as the sources for [Dependency Injection](https://github.com/e
 In this respect, they are somewhat analogous to _modules_ in Guice. 
 Normally code should not have to use or know about the context.
 
-  
 
 Contents
 --------
