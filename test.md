@@ -1,267 +1,305 @@
-Eclipse4/RCP/Contexts
-=====================
 
-The Eclipse 4 Application Platform manages state and services using a set of _contexts_; this information is used for injection. 
-Contexts are used as the sources for [Dependency Injection](https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/docs/Eclipse4_RCP_Dependency_Injection.md). 
-In this respect, they are somewhat analogous to _modules_ in Guice. 
-Normally code should not have to use or know about the context.
 
+Status Handling Best Practices
+==============================
 
 Contents
 --------
 
-*   [1 What is a Context?](#What-is-a-Context)
-*   [2 The Use of Contexts in Eclipse 4](#The-Use-of-Contexts-in-Eclipse-4)
-*   [3 Context Variables](#Context-Variables)
-*   [4 Context Chains and the Active Context](#Context-Chains-and-the-Active-Context)
-*   [5 Context Functions](#Context-Functions)
-*   [6 Run And Tracks](#Run-And-Tracks)
-*   [7 Exposing Services and State on an Eclipse Context](#Exposing-Services-and-State-on-an-Eclipse-Context)
-    *   [7.1 Context Functions](#context-functions-1)
-    *   [7.2 OSGi Services](#OSGi-Services)
-    *   [7.3 Context Functions Exposed As OSGi Declarative Services](#Context-Functions-Exposed-As-OSGi-Declarative-Services)
-*   [8 Creating New Contexts](#Creating-New-Contexts)
-*   [9 Advanced Topics](#Advanced-Topics)
-    *   [9.1 How do I access the current context?](#How-do-I-access-the-current-context)
-    *   [9.2 @Active vs ACTIVE_*](#active-vs-active_)
-*   [10 References](#References)
+*   [1 Introduction](#Introduction)
+*   [2 Messages](#Messages)
+    *   [2.1 Message content](#Message-content)
+    *   [2.2 Provide additional information in your message](#Provide-additional-information-in-your-message)
+    *   [2.3 Attempt to use a unique identifier](#Attempt-to-use-a-unique-identifier)
+    *   [2.4 Developing messages in eclipse: using the NLS.bind method](#Developing-messages-in-eclipse:-using-the-NLS.bind-method)
+*   [3 About logging and Error Dialog](#About-logging-and-Error-Dialog)
+    *   [3.1 The concept of a LogRecord](#The-concept-of-a-LogRecord)
+    *   [3.2 Best practices for logging](#Best-practices-for-logging)
+*   [4 The Eclipse IStatus](#The-Eclipse-IStatus)
+    *   [4.1 Calling the Status API](#Calling-the-Status-API)
+    *   [4.2 Implementing your own Status](#Implementing-your-own-Status)
+*   [5 The Eclipse 3.3 Status handler framework](#the-eclipse-33-status-handler-framework)
+*   [6 Using the new Eclipse status handler API](#Using-the-new-Eclipse-status-handler-API)
+    *   [6.1 Calling the StatusManager handle method](#Calling-the-StatusManager-handle-method)
+*   [7 Developing a StatusHandler](#Developing-a-StatusHandler)
+    *   [7.1 Implementing the handle method](#Implementing-the-handle-method)
+*   [8 Developing an ErrorSupportProvider](#Developing-an-ErrorSupportProvider)
+    *   [8.1 Registering your ErrorSupportProvider](#Registering-your-ErrorSupportProvider)
+    *   [8.2 Implementing the createSupportArea method](#Implementing-the-createSupportArea-method)
+    *   [8.3 The flow](#The-flow)
 
-What is a Context?
-------------------
+Introduction
+============
 
-A context (a IEclipseContext) is a hierarchical key-value map. The keys are strings, often Java class names, and the values are any Java object. Each context has a parent, such that contexts are linked together to form a tree structure. When a key is not found in a context, the lookup is retried on the parent, repeating until either a value is found or the root of the tree has been reached.
+In software engineering serviceability is also known as supportability, and refers to the ability to debug or perform root cause analysis in pursuit of solving a problem with a product.
+Serviceability includes the logging of state and the notification of the user.
 
+Eclipse provides a framework to manage the Log file as well as Dialog to notify the user. 
+This framework allows provider to plug-in their diagnosis tools, providing extra value to the user.
 
-The Use of Contexts in Eclipse 4
---------------------------------
+This paper explains the best practices of using the IStatus class. 
+The second part explains to plug-in provider how to exploit the new ‘StatusHandler’ model, allowing them to contribute to the user interface as well as managing the IStatus we are about to show or log.
 
-![300px-Ui-context-hierarchy.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/300px-Ui-context-hierarchy.png)
+Before we investigate IStatus, we need to agree on a couple basic principle about logging and error message rendering.
 
+Eclipse UI best practices about [Common Error Message](https://eclipse-platform.github.io/ui-best-practices/#common_error_messages)
 
-Eclipse 4 associates contexts to the container elements in the UI
+Messages
+========
 
-Eclipse 4 uses contexts to simplify access to workbench services (the _service locator_ pattern) and other interesting state. 
-Contexts provide special support for creating and destroying values as necessary, and for tracking changes made to context values.
-
-Values are normally added to an Eclipse Context via _IEclipseContext#set(key,value)_ or _#modify(key,value)_. 
-Values are retrieved by _#get(key)_, which returns _null_ if not found. 
-There is a special variant of _get_: Java class names are frequently used as keys and instances as values, so there is a special _T get(Class<T>)_ that casts the value as an instance of _T_.
-
-The power of contexts comes as Eclipse 4 associates a context with most model elements — the logical UI containers — such that the context tree matches the UI hierarchy. 
-So an _MPart_ and its containing _MPerspective_, _MWindow_, and the _MApplication_, each have contexts and are chained together. 
-Looking up a key that is not found in the part will cause the lookup to continue at the perspective, window, and application. 
-At the top of the tree is a special node that looks up keys among the available OSGi services. 
-Many application-, window-, and view-level services are installed by the Eclipse 4 at various levels in the context hierarchy. 
-Thus the placement of values within the context hierarchy, such as in the perspective or window's context, provides a natural form of variable scoping.
-
-**Example**  
-
-For example, many client-server applications may require communicating with multiple servers, but with one server chosen as a master server at any one time. 
-An Eclipse 4 application could record this master server in the application's context using a well-known key (e.g., "MASTER\_SERVER"). 
-All parts requesting injection for that key will have the value resolved from the application's context. 
-Should that value change, all parts will be re-injected with the new value. 
-A particular part could have a different master server from other parts by setting the master in that part's context. 
-All other parts will continue to resolve MASTER\_SERVER from the application. But perhaps the developers later realize that it would be very powerful to have a different master server for each window. 
-The master could instead be set in each window's context. 
-Or perhaps the app would prefer to have a different master server for each perspective, or even on particular part stacks. 
-Or the app could continue to set the normal master server in the application's context, and optionally override it on a per-window basis by setting the override value in the window's context.
+A message is the principal information the user will see in the log or in the User Interface. A message that is logged is supposed to be user consumable and thus follow the same readability and globalization rules as a String rendered in a menu.
 
   
 
-Context Variables
------------------
-
-Being able to resolve a value from somewhere in the context hierarchy is very powerful. 
-But to change the value, we need to know where in the context hierarchy the value should be set. 
-Rather than hard code this location, we can instead declare a _context variable_: we declare the variable at the appropriate context, and instead _modify_, rather than _set_, the context value: the context then looks up the chain to find the variable declaration and sets the value there. 
-This separates defining _where_ a context value should be placed from the code that actually _sets_ it.
-
-**Example (continued)**  
-
-By declaring a context variable for the master server, if we later decide that we want the master-server to actually be maintained on a per-perspective basis, then we simply move the context variable definition to be on the perspective; the code obtaining and modifying the value is completely oblivious to the change.
-
-
-Context Chains and the Active Context
--------------------------------------
-
-![300px-Ui-contexts-active.png](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/300px-Ui-contexts-active.png)
-
-The editor is the active leaf
-
-Contexts are chained together via the parent link. 
-A context may have many children, but a context only exposes its active child. 
-The chain of active children from a node is called its _active branch_, and the end node is the _active leaf_. 
-There are many active branches in a context tree, but there is only ever a single active branch from the root.
-
-A node can be made active in two ways. 
-Calling _#activate()_ makes the receiver the active child of its parent node, but does not otherwise disturb the rest of the tree. 
-Calling _#activateBranch()_ on the other hand effectively the same as:
-
-       void activateBranch() {
-          activate();
-          if(getParent() != null) getParent().activateBranch(); 
-       }
-
-It makes the receiver the active child of its parent, and then recursively calls _#activateBranch()_ on its parent.
-
-It's often useful to resolve values from the active leaf with #getActive(key).
-
-Eclipse 4 keeps its IEclipseContext activation state in sync with the UI state, such that the active window's context is the active window-level context, and each window's active part is that window's active leaf o.
-
-Context Functions
------------------
-
-Contexts support a special type of value called a _context function_. 
-When a retrieved key's value is a context function, the IEclipseContext calls _compute(context, key)_ and returns the result of the computation. 
-Context sanctions must subclass _org.eclipse.e4.core.contexts.ContextFunction_.
-
-For example, the Eclipse 4 Workbench makes the current selection available via a context function:
-
-    appContext.set(SELECTION, new ContextFunction() {
-        @Override
-        public Object compute(IEclipseContext context, String contextKey) {
-            IEclipseContext parent = context.getParent();
-            while (parent != null) {
-                context = parent;
-                parent = context.getParent();
-            }
-            return context.getActiveLeaf().get("out.selection");
-        }
-    });
-
-The result of a context function are _memoized_: they are only recomputed when another referenced value is changed. 
-See the section on _Run And Tracks_ below.
-
-  
-
-Run And Tracks
---------------
-
-_RunAndTrack_ s, affectionally called _RATs_, are a special form of a _Runnable_. 
-RATs are executed within a context, and the context tracks all of the values accessed. 
-When any of these values are changed, the runnable is automatically re-evaluated. 
-The following example will print _20.9895_ and then _20.12993_:
-
-
-    final IEclipseContext context = EclipseContextFactory.create();
-    context.set("price", 19.99);
-    context.set("tax", 0.05);
-    context.runAndTrack(new RunAndTrack() {
-        @Override
-        public boolean changed(IEclipseContext context) {
-            total = (Double) context.get("price") * (1.0 + (Double) context.get("tax"));
-            return true;
-        }
-     
-        @Override
-        public String toString() {
-            return "calculator";
-        }
-    });
-    print(total);
-    context.set("tax", 0.07);
-    print(total);
-
-A RAT continues executing until either its context is disposed, or its changed() method returns _false_.
-
-Note that RATs are only re-evaluated when the value is changed (i.e., IEclipseContext#set() or #modify() are called), and not when the contents of the value are changed.
-
-Exposing Services and State on an Eclipse Context
--------------------------------------------------
-
-Values are normally add to an Eclipse Context via _IEclipseContext#set(key,value)_ or _#modify(key,value)_. 
-But these require knowing and being able to find the context to be modified. 
-But developers sometimes need to be able to add values on-the-fly. 
-There are a few techniques.
-
-### Context Functions
-
-A [Context Function](#context-functions) is provided both the key that was requested and the source context, where the retrieval began. 
-The context function can return an instance created for that particular context, or set a value in that context — or elsewhere. 
-This approach is very useful for computing results based on the active part (_IEclipseContext#getActiveLeaf()_).
-
-### OSGi Services
-
-The Eclipse 4 workbench roots its context hierarchy from an _EclipseContextOSGi_, a special Eclipse Context that knows to look up keys in the OSGi Service Registry. 
-_EclipseContextOSGi_ instances are obtained via _EclipseContextFactory#getServiceContext(BundleContext)_. 
-These contexts — and the services requested — are bounded by the lifecycle of the provided bundle.
-
-  
-
-### Context Functions Exposed As OSGi Declarative Services
-
-This approach exposes a context function as the implementation of a service defined OSGi Declarative Services. 
-This pattern is used for creating the _IEventBroker_, using the new DS annotations support.
-
-    @Component(service = IContextFunction.class, property = "service.context.key=org.eclipse.e4.core.services.events.IEventBroker")
-    public class EventBrokerFactory extends ContextFunction {
-        @Override
-        public Object compute(IEclipseContext context, String contextKey) {
-            EventBroker broker = context.getLocal(EventBroker.class);
-            if (broker == null) {
-                broker = ContextInjectionFactory.make(EventBroker.class, context);
-                context.set(EventBroker.class, broker);
-            }
-            return broker;
-        }
-    }
-
-Note that the service is actually exposed as an IContextFunction, not an IEventBroker. 
-This approach is specific to being used for values retrieved from an IEclipseContext.
-
-Creating New Contexts
----------------------
-
-Contexts can be created either as a leaf of another context (see _IEclipseContext#newChild()_) or as a new root (see _EclipseContextFactory#create()_). 
-A special EclipseContext implementation exists (_EclipseContextOSGi_, obtained by _EclipseContextFactory#getServiceContext()_) to expose OSGi Services too.
-
-  
-
-Advanced Topics
+Message content
 ---------------
 
-### How do I access the current context?
-
-_Current_ really depends on the requesting context. 
-An _MPart_ or _IViewPart_ rarely wants the active part, which may not be itself, but a particular part, such as the active editor.
-
-_IServiceLocator_, either implemented by or provided by many components in the Eclipse Workbench, was the primary means to obtain services in the Eclipse Workbench. 
-It is now backed by an IEclipseContext. 
-You can either fetch values directly via _IServiceLocator#getService(key)_ or obtain the _IServiceLocator_s _IEclipseContext_ directly (_IServiceLocator.getService(IEclipseContext.class)_). 
-Most UI containers implement _IServiceLocator_ like _IWorkbench_, _IWorkbenchWindow_, _IWorkbenchPart_.
+There are tons of information on how to create a usable message. We rely on your Software Engineering experience to avoid messages like: ‘internal error, please see log’.
 
   
 
-### @Active vs ACTIVE_*
+Provide additional information in your message
+----------------------------------------------
 
-@Active is an annotation that causes our DI to look up a value from the source context's active leaf, where the source context is the context that was used for injecting that object.
+We recommend you provide two other pieces of information when you create a message.
 
-ACTIVE_PART, on the other hand, looks for the active leaf as constrained by the source context's window's context.
+1.  An explanation of the message. This is a String that will provide more information to the user than a one line message. The explanation should not be too technical, yet provide more value than the message text itself. Once again, information is available on the web.
+2.  A recommendation of the message. This is a String that will tell the user what he/she should do. When you write this part, put yourself in the shoes of the user and answer the following question: “ok, now what do I do ?”
 
-    public class ActivePartLookupFunction extends ContextFunction {
-        @Override
-        public Object compute(IEclipseContext context, String contextKey) {
-            MContext window = context.get(MWindow.class);
-            if (window == null) {
-                window = context.get(MApplication.class);
-                if (window == null) {
-                    return null;
-                }
-            }
-            IEclipseContext current = window.getContext();
-            if (current == null) {
-                return null;
-            }
-            return current.getActiveLeaf().get(MPart.class);
+  
+
+Attempt to use a unique identifier
+----------------------------------
+
+Unique identifier could be an int or a String that uniquely tag the message. There are two main reasons to add a unique identifier to your message.
+
+1.  It is easier to search a knowledge base with a unique int than the full text of the message.
+2.  Because messages are translated, a user in a foreign country may send your support team a translated message. If you do not have a unique identifier, it will be difficult for your team to translate it back into the original language.
+
+  
+
+Developing messages in eclipse: using the NLS.bind method
+---------------------------------------------------------
+
+Eclipse provides a great mechanism to manage your messages from within your Java code. Look at the NLS class
+
+Developing Message Bundles in Eclipse \[ [http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/message_bundles.html](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/message_bundles.html)\]
+
+Internationalization best practices \[ [http://www-128.ibm.com/developerworks/opensource/library/os-i18n/](http://www-128.ibm.com/developerworks/opensource/library/os-i18n/)\] \[ [http://www.icu-project.org/](http://www.icu-project.org/)\]
+
+About logging and Error Dialog
+==============================
+
+The concept of a LogRecord
+--------------------------
+
+While a message is important, we need to realize it can occurs in many situation. I do not mean by that you should reuse a message in different places in your code..(it is a big no-no). I mean this message will occur on a certain machine at a certain time. This is what we call the ‘metadata’ around the message. This encompasses things like the timestamp, the thread identifier, the ip of the machine etc etc…
+
+Example of such record are found in java.logging.logging.LogRecord from the JSR specification. Other logger like Apache Log4J currently use an Object as a record.
+
+Eclipse does not provide the concept of a record in itself yet. So we usually end up writing our own method like debug(String) or warn(String) in our plug-ins. The equinox team is working on proving a full fledge logging framework, including the concept of a LogRecord in future releases.
+
+_NotaBene: The previous sentence is pure speculation as the team is currently investigating…_
+
+Best practices for logging
+--------------------------
+
+There is a lot of debate about what to log and what not to log.
+
+1.  If you log too little, it will be difficult to troubleshoot a problem. In some cases we will have to reproduce the problem in debug mode (allowing trace to be persisted). In the worse case scenario, if you cannot reproduce the issue, you will have to ship an instrumented version of your code to the client.
+2.  If you log too much, a couple things can happen
+    1.  You could fill the hard drive with information and slow the process of your application
+    2.  You will scare the product administrator who will see tons of 'possible' errors fill the log.
+
+**Rule #1:** if you show it, log it The rationale is that if you do not log it, we have no persistence of the issue. If the user closes the Dialog and closes support, we will have to reproduce the problem. Of course, in the case of a client-server environment, you do not have to log it in both places. If the message comes from the server, the client part can \*just\* present the message that will contain information about the real log record in the server log, so the administrator can retrieve it. Still I would recommend you save the message only (not the whole record) in the client environment, in case the clients forgets the correlator identifier to the server log. Another possibility is to log the message at a DEBUG or TRACE level. Remember to be cautious or you will end up in Scenario #1 : Logging too little.
+
+**Rule #2:** Log even expected exception Some exceptions are expected in your environment. For instance, if you connect to a database using JDBC, you may encounter the java.sql.SQLException. It may be an exception you can recover from (i.e. StaleData) or one you cannot recover from (Server is down). You should not log the StaleData exception or the log will contain too much information. The user/administrator is not interested about your internal code and how you recover. Yet you should log the unexpected exception. We recommend you log the message of an expected exception only, not the whole stackTrace, but at a WARNING or DEBUG level.
+
+Other technique exists that keep a statistic view of your expected errors. This allow an administrator to realize, for instance, that the application is getting a lot of StaleException between 8pm and 9pm on Friday.
+
+The Eclipse IStatus
+===================
+
+As we saw, Eclipse does not have the concept of a LogRecord as per say, but has the concept of an ‘outcome of an operation’. The class org.eclipse.core.runtime.IStatus represents this outcome.
+
+Most of the framework related to Logging and Error rendering uses an IStatus:
+
+       * ILog.log(IStatus status)
+       * IProgressMonitorWithBlocking.setBlocked(IStatus reason)
+       * ErrorDialog.openError(Shell parent, String dialogTitle, String message, IStatus status)
+    
+
+ 
+
+Calling the Status API
+----------------------
+
+You should investigate the Status and MultiStatus classes. 
+We recommend you use the following constructor:
+
+    public Status(int severity, String pluginId, int code, String message, Throwable exception)
+
+
+Implementing your own Status
+----------------------------
+
+You should consider the following when creating an IStatus instance.
+
+1.  Try to create a subclass of IStatus that will carry your specific payload. 
+An Example in Eclipse 3.3 is the class CVSStatus. 
+The class carries information that diagnostic tool can use to validate CVS.
+2.  Do not use IStatus.ERROR as a code. Try to use your own code. As an example, look at the Class CVSSTatus.
+
+	    public class CVSStatus extends TeamStatus {
+	     
+	    /*** Status codes ***/
+	    public static final int SERVER_ERROR = -10;
+	    public static final int NO_SUCH_TAG = -11;
+	    public static final int CONFLICT = -12;
+	    ...
+	    public static final int SERVER_IS_UNKNOWN = -22;
+	    ...
+	     
+	    public CVSStatus(int severity, int code, String message, Throwable t, ICVSRepositoryLocation cvsLocation) {
+	      super(severity, CVSProviderPlugin.ID, code, message, t,null);
+	      this.cvsLocation = cvsLocation;
+	    }
+
+The Eclipse 3.3 Status handler framework
+========================================
+
+In Eclipse 3.3 we added a new framework to handle statuses. The goal was triple:
+
+1.  Providing consistency about Logging and ErrorMessage from an Eclipse UI point of view. The work in the core is in progress in the Equinox subproject (as of March 07)
+2.  Allow products based on eclipse a central way to handle statuses before they are rendered or logged
+3.  Allow products based on eclipse to extend the ErrorDialog for specific errors
+
+In the first part of this paragraph, we will describe the best practices a developer should use to log or render an IStatus. In the second part of this paragraph, we will explain the best practices to create your own StatusHandler.
+
+Using the new Eclipse status handler API
+========================================
+
+First we will present the new StatusManager class and its API. Then we will explain how you could modify your existing code to use the new features of the framework.
+
+Calling the StatusManager handle method
+---------------------------------------
+
+Calling the new framework is straight forward. Once your IStatus is created, you pass it to the singleton instance of the class StatusManager. You can specify if you want the message to be logged (LOG) and.or shown (SHOW).
+
+Remember the Handler has the last decision about showing and logging. Consider the previous information as a hint to the handler, but do not rely on them for your execution.
+
+    public void run(IAction action) {
+      // Throw an error to be handled
+      File aConfigurationFile = obtainConfigurationFileFor(authenticatedUser);
+      FileInputStream aStream = null;
+      try {
+        aStream = new FileInputStream(aConfigurationFile);
+        //... if no error, then continue
+      } catch (IOException exception){
+        // Build a message
+        String message = NLS.bind(Error_Accessing_Configuration, aConfigurationFile);
+        // Build a new IStatus
+        IStatus status = new CompanyStatus(IStatus.ERROR,Activator.PLUGIN_ID,CompanyStatus.CONFIGURATION_ERROR,
+                                            message,exception, aConfigurationFile);
+        // Let the StatusManager handle the Status and provide a hint
+        StatusManager.getManager().handle(status, StatusManager.LOG|StatusManager.SHOW);
+      } finally {
+        if (aStream!=null){
+          try {aStream.close();} catch (Exception e){};
         }
+      } 
     }
 
-ACTIVE_SHELL is _(needs some work)_
+Developing a StatusHandler
+==========================
 
-The moral: the implementation of _active X_ is not necessarily as straightforward as might appear.
+In this section, we will explain how to extend the Status handler framework. There will be a unique extension per application.
 
-References
-----------
+A StatusHandler is the counterpart of StatusManager. As a developer, you will call the StatusManager code, passing the IStatus. The StatusHandler will handle the IStatus based on its policy. For instance, a StatusHandler can determine if they need to be shown and/or logged. A StatusHandler can decide to send an email to an administrator.
 
-The old E4 wiki pages provides background \[E4/Contexts|on the influences on IEclipseContext\].
+Implementing the handle method
+------------------------------
+
+    public void handle(StatusAdapter statusAdapter, int style) {
+     
+      // Retrieve IStatus and message
+      IStatus oldStatus = statusAdapter.getStatus();		
+     
+      // Verify we do not have a CompanyStatusWithID
+      if (!(oldStatus instanceof CompanyStatusWithID)){
+        String message = oldStatus.getMessage();
+     
+        //All our ID start with DYNA
+        if (null!=message && message.startsWith("DYNA")){		
+     
+          //Remove any unique identifier to not show it to the user
+          int lengthOfUniqueId = message.indexOf(' ');
+     
+          String uniqueID = message.substring(0,lengthOfUniqueId);			
+          message = message.substring(lengthOfUniqueId);
+          message = message + getExplanation(oldStatus);	// Retrieve the explanation for this status
+     
+          // Create a new CompanyStatusWithID
+          IStatus newStatus = new CompanyStatusWithID(oldStatus.getPlugin(),oldStatus.getCode(), new IStatus[]{oldStatus}, uniqueID, message,null);
+          statusAdapter.setStatus(newStatus);
+        }
+      }
+     
+      // check the Style. We still want to trace even if we do not log
+      if ((style & StatusManager.LOG)==0){
+        trace(statusAdapter);
+      }
+     
+      super.handle(statusAdapter, style);
+    }
+
+Developing an ErrorSupportProvider
+==================================
+
+Registering your ErrorSupportProvider
+-------------------------------------
+
+To Register your SupportArea, you must call the following code
+
+Policy.setErrorSupportProvider(<instance of org.eclipse.jface.dialogs.ErrorSupportProvider>);
+
+    Policy.setErrorSupportProvider(<instance of org.eclipse.jface.dialogs.ErrorSupportProvider>);
+    
+
+ 
+
+We recommend you do it in the Activator class of your bundle, in the start method. Of course you can change it later, for instance in your handle method. In that case, there is no contract that the ErrorSupportProvider you set will be the one receiving the IStatus your are processing.
+
+Implementing the createSupportArea method
+-----------------------------------------
+
+Implement the createSupportArea method, returning the control you want to show the user.
+
+    public Control createSupportArea(Composite parent, IStatus status) {
+      parent.addDisposeListener(this); // get notified so we can clean our SWT widgets
+     
+      // if the dialog is too short, make it taller
+      ensureMinimumHeight(parent.getShell());
+     
+      toolkit = new FormToolkit(parent.getDisplay());
+      toolkit.getHyperlinkGroup().setHyperlinkUnderlineMode(HyperlinkGroup.UNDERLINE_HOVER);
+      toolkit.getColors().initializeSectionToolBarColors();
+      ...
+    }
+
+Here is a simple example that will open a web page.
+
+    public Control createSupportArea(Composite parent, IStatus status) {
+      viewer = new Browser(parent, SWT.NONE);
+      viewer.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+      viewer.setUrl(<a String representing the URL>);
+      return viewer;
+    }
+
+We highly recommend you implement an IDisposeListener to clean up after yourself, when the ErrorDialog is closed.
+
+The flow
+--------
+
+When a IStatus needs to be handled, the StatusManager will retrieve the StatusHandler associated with the application. It will pass the StatusAdapter to the handle method. An Error dialog will open if you called the super.handle() method with a hint of StatusManager.SHOW. When an IStatus is selected, the ErrorSupportProvider registered in the Policy will be called. StatusManager will pass the IStatus to the ErrorSupportProvider.createSupportArea.
 
