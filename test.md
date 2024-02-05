@@ -1,28 +1,14 @@
 PDE/API Tools
 ========================
 
+
 Contents
 --------
 
-*	[1 Links](#links)
-*	[2 User Guide](#user-guide)
-*	[3 Resources](#resources)
-*	[4 Use Cases](#use-cases)
-
-
-Links
-=====
-
-* [Website](http://www.eclipse.org/pde/pde-api-tools/)
-* [Download](http://download.eclipse.org/eclipse/downloads/)
- 
-**Community** 
-* [Mailing List](https://dev.eclipse.org/mailman/listinfo/pde-dev) 
-* [Forums](http://www.eclipse.org/forums/eclipse.platform) 
-
-**Contribute**
-* [Browse Source](http://dev.eclipse.org/viewcvs/index.cgi/) 
-
+*	[1 User Guide](#user-guide)
+*	[2 Resources](#resources)
+*	[3 Use Cases](#use-cases)
+*	[4 Links](#links)
 
 
 User Guide
@@ -152,10 +138,10 @@ Contents
 *   [1 Articles](#Articles)
 *   [2 Examples](#Examples)
     *   [2.1 Important Notes](#Important-Notes)
-    *   [2.2 Running an API use scan (IDE)](#Running-an-API-use-scan-.28IDE.29)
+    *   [2.2 Running an API use scan (IDE)](#Running-an-API-use-scan-ide)
         *   [2.2.1 Creating a new scan configuration](#Creating-a-new-scan-configuration)
         *   [2.2.2 Configuring the new use scan](#Configuring-the-new-use-scan)
-    *   [2.3 Running an API use scan (commandline)](#Running-an-API-use-scan-.28commandline.29)
+    *   [2.3 Running an API use scan (commandline)](#Running-an-API-use-scan-commandline)
         *   [2.3.1 Initial Setup](#Initial-Setup)
         *   [2.3.2 The Build File](#The-Build-File)
         *   [2.3.3 Use Scan Buildfile](#Use-Scan-Buildfile)
@@ -458,14 +444,14 @@ Contents
 --------
 
 *   [1 Introduction](#Introduction)
-    *   [1.1 Binary Compatibility Reporting (Batch Mode)](#Binary-Compatibility-Reporting-.28Batch-Mode.29)
-    *   [1.2 Binary Compatibility Reporting (IDE Mode)](#Binary-Compatibility-Reporting-.28IDE-Mode.29)
-    *   [1.3 API Usage Reporting (Batch Mode)](#API-Usage-Reporting-.28Batch-Mode.29)
-    *   [1.4 API Usage Reporting (IDE Mode)](#API-Usage-Reporting-.28IDE-Mode.29)
-    *   [1.5 API Usage Searching (IDE Mode)](#API-Usage-Searching-.28IDE-Mode.29)
+    *   [1.1 Binary Compatibility Reporting (Batch Mode)](#Binary-Compatibility-Reporting-Batch-Mode)
+    *   [1.2 Binary Compatibility Reporting (IDE Mode)](#Binary-Compatibility-Reporting-IDE-Mode)
+    *   [1.3 API Usage Reporting (Batch Mode)](#API-Usage-Reporting-Batch-Mode)
+    *   [1.4 API Usage Reporting (IDE Mode)](#API-Usage-Reporting-IDE-Mode)
+    *   [1.5 API Usage Searching (IDE Mode)](#API-Usage-Searching-IDE-Mode)
     *   [1.6 Version Management](#Version-Management)
-    *   [1.7 Building API Components & Baselines](#Building-API-Components-.26-Baselines)
-    *   [1.8 Javadoc Tags, API Visibilities & Restrictions](#Javadoc-Tags.2C-API-Visibilities-.26-Restrictions)
+    *   [1.7 Building API Components & Baselines](#Building-API-Components--Baselines)
+    *   [1.8 Javadoc Tags, API Visibilities & Restrictions](#Javadoc-Tags-API-Visibilities--Restrictions)
 
 Introduction
 ============
@@ -544,5 +530,16 @@ The platform provides a default set of Javadoc tags. The tags and the Java membe
 4.  `@noinstantiate` \- Indicates that other bundles must not create instances of this class. This tag is ignored for all other types that are not classes.
 5.  `@nooverride` \- Indicates that other bundles must not extend (re-implement with a call to the overridden parent) or re-implement (with no call to the overridden parent) this method. This tag is ignored for all other members except method declarations.
 
+Links
+=====
 
+* [Website](http://www.eclipse.org/pde/pde-api-tools/)
+* [Download](http://download.eclipse.org/eclipse/downloads/)
+ 
+**Community** 
+* [Mailing List](https://dev.eclipse.org/mailman/listinfo/pde-dev) 
+* [Forums](http://www.eclipse.org/forums/eclipse.platform) 
+
+**Contribute**
+* [Browse Source](http://dev.eclipse.org/viewcvs/index.cgi/) 
 
