@@ -174,7 +174,8 @@ There are a few things that should be noted prior to getting started with the ex
         </target>
     </project>
 
-Will work just fine when run within Eclipse, but will fail with a build exception about the name `apitooling.apiuse_reportconversion` being unknown. If the qualification is removed like the following it will work just fine:
+Will work just fine when run within Eclipse, but will fail with a build exception about the name `apitooling.apiuse_reportconversion` being unknown. 
+If the qualification is removed like the following it will work just fine:
 
     <project name="convert" basedir="." default="run">
     <target name="run" depends="init">
@@ -189,7 +190,8 @@ Will work just fine when run within Eclipse, but will fail with a build exceptio
 Running an API use scan (IDE)
 -----------------------------
 
-In the IDE API use scans can be run from the External tools dialog. The benefits of providing the scanning as an external tool are many, the foremost being: 1. you can create as many different configurations as you want for scanning different distributions of your products and 2. each configuration can have its own persisted settings.
+In the IDE API use scans can be run from the External tools dialog. 
+The benefits of providing the scanning as an external tool are many, the foremost being: 1. you can create as many different configurations as you want for scanning different distributions of your products and 2. each configuration can have its own persisted settings.
 
 [![The external tools dialog showing a use scan configuration](/images/4/4e/Usescan-ext-dialog.png)](/File:Usescan-ext-dialog.png "The external tools dialog showing a use scan configuration")
 
@@ -234,7 +236,8 @@ Running an API use scan (commandline)
 
 ### Initial Setup
 
-Before you can begin running any of the Ant tasks provided by API Tools you have to get a version of the `org.eclipse.pde.api.tools` bundle that provides the task(s) you want to run. In this example - to run the updated version of the use task - you will need to get a version from any build after August 24, 2009.
+Before you can begin running any of the Ant tasks provided by API Tools you have to get a version of the `org.eclipse.pde.api.tools` bundle that provides the task(s) you want to run. 
+In this example - to run the updated version of the use task - you will need to get a version from any build after August 24, 2009.
 
 Next you will want to extract the `api-tasks.properties` file from `org.eclipse.pde.api.tools` jar found in the `/scripts` folder.
 
@@ -242,9 +245,11 @@ Lastly, you will want to extract the `api-tasks.xml` file, also located in the `
 
 ### The Build File
 
-The build file - `api-tasks.xml` \- is fairly simple and has a plethora of comments to help you out. It performs 3 main tasks: 1. it builds the Ant classpath based on an Eclipse install 2. it extracts the apitooling-ant.jar from the `org.eclipse.pde.api.tools` jar 3. it runs whichever task you specify in the 'run' target
+The build file - `api-tasks.xml` \- is fairly simple and has a plethora of comments to help you out. 
+It performs 3 main tasks: 1. it builds the Ant classpath based on an Eclipse install 2. it extracts the apitooling-ant.jar from the `org.eclipse.pde.api.tools` jar 3. it runs whichever task you specify in the 'run' target
 
-The three most import properties in the build file describe the base set up locations to be able to run any of the Ant tasks. They include:
+The three most import properties in the build file describe the base set up locations to be able to run any of the Ant tasks. 
+They include:
 
 1.  The Eclipse install location - this location is required so that the build can find all of the dependents of API tools and load them on the Ant classpath.
     
@@ -279,7 +284,8 @@ Where the properties used in the example are defined as:
 
 ### Use Scan Buildfile
 
-Now lets have a look at an entire build file that could be used to scan for internal reference to any bundle that starts with the name `org.eclipse` from a product named `TestProduct`. The example build file also includes HTML report generation.
+Now lets have a look at an entire build file that could be used to scan for internal reference to any bundle that starts with the name `org.eclipse` from a product named `TestProduct`. 
+The example build file also includes HTML report generation.
 
     <project name="apitask" basedir="." default="run">
         <property name="eclipse.install.dir" value="/eclipse/eclipse/plugins"/>
@@ -343,11 +349,15 @@ To actually run the build file you must have Ant available on the command line a
 Generating Javadoc
 ------------------
 
-The support of the Javadoc tags in source to help document your codes' usage is fantastic. That being said it might happen that you would like to generate the documentation for your bundle and have it include such tag information. By default this does not work, since the standard Javadoc doclet knows nothing about the API tools Javadoc tags. The following sections describe generating Javadoc for your bundle using the Generate Javadoc wizard within the Eclipse IDE and from the commandline.
+The support of the Javadoc tags in source to help document your codes' usage is fantastic. 
+That being said it might happen that you would like to generate the documentation for your bundle and have it include such tag information. 
+By default this does not work, since the standard Javadoc doclet knows nothing about the API tools Javadoc tags. 
+The following sections describe generating Javadoc for your bundle using the Generate Javadoc wizard within the Eclipse IDE and from the commandline.
 
 ### Using the Wizard
 
-Eclipse contains a very nice wizard for generating Javadoc for your bundles. It can be found by using the Generate Javadoc command located in the Project main menu item.
+Eclipse contains a very nice wizard for generating Javadoc for your bundles. 
+It can be found by using the Generate Javadoc command located in the Project main menu item.
 
 Once the wizard starts you will have to locate the Javadoc executable (if not already specified) and select the bundles you wish to generate Javadoc for.
 
@@ -357,7 +367,8 @@ On the next page, you can configure additional options.
 
 [![The second page of the Generate Javadoc wizard](/images/0/09/Jdoc_wizard_p2.png)](/File:Jdoc_wizard_p2.png "The second page of the Generate Javadoc wizard")
 
-On the last page is where we need to tell the wizard about the custom API tools tags. In the `Extra Javadoc options` area you will want to enter the following tag definitions:
+On the last page is where we need to tell the wizard about the custom API tools tags. 
+In the `Extra Javadoc options` area you will want to enter the following tag definitions:
 
     -tag 'noimplement:a:No Implement:'
     -tag 'noextend:a:No Extend:'
@@ -379,7 +390,8 @@ Once you press finish and the Javadoc tool completes you should see API tools ta
 
 ### Using the Commandline
 
-As mentioned above you must tell Javadoc about the custom API tools tags. To do so in this case, it would be easiest to place the tag definitions in a `argfile` and pass that to the `javadoc` command.
+As mentioned above you must tell Javadoc about the custom API tools tags. 
+To do so in this case, it would be easiest to place the tag definitions in a `argfile` and pass that to the `javadoc` command.
 
     root%>javadoc @apitags
     
@@ -398,11 +410,14 @@ Where the `apitags` file would contain the following:
 
  
 
-You will also have to specify where the source is and any extra parameter for javadoc to be able to complete. For a description of these and further information on using `javadoc` see [the Sun Javadoc guide](http://java.sun.com/j2se/1.4.2/docs/tooldocs/windows/javadoc.html)
+You will also have to specify where the source is and any extra parameter for javadoc to be able to complete. 
+For a description of these and further information on using `javadoc` see [the Sun Javadoc guide](http://java.sun.com/j2se/1.4.2/docs/tooldocs/windows/javadoc.html)
 
 ### Customizing the Custom Tags
 
-In the previous examples we saw how to tell the Javadoc tool about the API tools custom tags. Since we have to explicitly tell the tools about the tags you are afforded some flexibility in how the tags appear in the final documentation. Consider the example given thus far:
+In the previous examples we saw how to tell the Javadoc tool about the API tools custom tags. 
+Since we have to explicitly tell the tools about the tags you are afforded some flexibility in how the tags appear in the final documentation. 
+Consider the example given thus far:
 
 
     -tag 'noimplement:a:No Implement:'
@@ -451,7 +466,8 @@ Contents
 Introduction
 ============
 
-API Tools has been designed to aid developers maintaining good APIs, version numbers, mitigating internal usage across bundles and eliminating internal code leaks to API. The following are the original use cases discussed while designing the tooling.
+API Tools has been designed to aid developers maintaining good APIs, version numbers, mitigating internal usage across bundles and eliminating internal code leaks to API. 
+The following are the original use cases discussed while designing the tooling.
 
 ### Binary Compatibility Reporting (Batch Mode)
 
@@ -462,7 +478,9 @@ The comparison tool can be invoked from the command line as a stand alone Java a
 The report includes errors regarding component version identifiers that have not been incremented properly. 
 As well, if source code is available for the "newer" API profile, the report includes missing `@since` Javadoc tags.
 
-An exclude list should be added to filter out the cases where the binary incompatibility is "under control", i.e. approved by the PMC. The best way to maintain the exclude list would be to have a Javadoc tag in the source code that mentions why this is a breakage. Something like:
+An exclude list should be added to filter out the cases where the binary incompatibility is "under control", i.e. approved by the PMC. 
+The best way to maintain the exclude list would be to have a Javadoc tag in the source code that mentions why this is a breakage. 
+Something like:
 
     @breakage-addition ...... 
     @breakage-remove Type#member .....
@@ -474,11 +492,19 @@ Updating the source code improves the traceability of a breakage and allows read
 
 ### Binary Compatibility Reporting (IDE Mode)
 
-Workspace projects are compared to a baseline API profile for binary compatibility. Incompatibilities are flagged in source files using markers (that also appear in the Problems view). The user configures the severity of errors produced. A set of external API profiles are managed in the workspace and one is specified as the baseline against which workspace projects are compared. The user defines the workspace API profile as combination of workspace projects and external API components.
+Workspace projects are compared to a baseline API profile for binary compatibility. 
+Incompatibilities are flagged in source files using markers (that also appear in the Problems view). 
+The user configures the severity of errors produced. 
+A set of external API profiles are managed in the workspace and one is specified as the baseline against which workspace projects are compared. 
+The user defines the workspace API profile as combination of workspace projects and external API components.
 
-Compatibility errors are updated incrementally or in full depending on the build setting in the workspace (i.e. auto-build vs. manual/full build). Error markers are also produced for components with incorrect version numbers and missing `@since` Javadoc tags. Quick fixes are available to address the problems.
+Compatibility errors are updated incrementally or in full depending on the build setting in the workspace (i.e. auto-build vs. manual/full build). 
+Error markers are also produced for components with incorrect version numbers and missing `@since` Javadoc tags. 
+Quick fixes are available to address the problems.
 
-An exclude list should be added to filter out the cases where the binary incompatibility is "under control", i.e. approved by the PMC. The best way to maintain the exclude list would be to have a Javadoc tag in the source code that mentions why this is a breakage. Something like:
+An exclude list should be added to filter out the cases where the binary incompatibility is "under control", i.e. approved by the PMC. 
+The best way to maintain the exclude list would be to have a Javadoc tag in the source code that mentions why this is a breakage. 
+Something like:
 
     @breakage-addition ...... 
     @breakage-remove Type#member .....
@@ -490,25 +516,36 @@ Updating the source code improves the traceability of a breakage and allows read
 
 ### API Usage Reporting (Batch Mode)
 
-The most common API usage report locates illegal use of APIs among components in a single API profile - i.e. access to non-API types, methods, and fields; and illegal extension, implementing, or instantiating. The API usage scanner can be invoked as a stand alone Java application to examine all or specific portions of an API profile for illegal API use. An XML file is produced as output.
+The most common API usage report locates illegal use of APIs among components in a single API profile - i.e. access to non-API types, methods, and fields; and illegal extension, implementing, or instantiating. 
+The API usage scanner can be invoked as a stand alone Java application to examine all or specific portions of an API profile for illegal API use. 
+An XML file is produced as output.
 
-The API scanner should also support scanning for use of a specific component. For example, rather than scanning component X to determine what use it makes of other APIs, scan a profile to find all uses of the API in X.
+The API scanner should also support scanning for use of a specific component. 
+For example, rather than scanning component X to determine what use it makes of other APIs, scan a profile to find all uses of the API in X.
 
-Another interesting scan would be to report what parts of a profile or component would be broken when migrating to another version of a required component. For example, the internals of a component often change or can be removed in a newer release of the component.
+Another interesting scan would be to report what parts of a profile or component would be broken when migrating to another version of a required component. 
+For example, the internals of a component often change or can be removed in a newer release of the component.
 
 ### API Usage Reporting (IDE Mode)
 
-The Eclipse SDK already provides compiler warnings for discouraged accesses between bundles - which is the same as referencing non-API code. Rather than duplicate this effort, the integrated tooling could just report illegal implementing, sub-classing, and instantiation. Problem markers would be created incrementally, similar to the support for binary compatibility.
+The Eclipse SDK already provides compiler warnings for discouraged accesses between bundles - which is the same as referencing non-API code. 
+Rather than duplicate this effort, the integrated tooling could just report illegal implementing, sub-classing, and instantiation. 
+Problem markers would be created incrementally, similar to the support for binary compatibility.
 
 ### API Usage Searching (IDE Mode)
 
-Similar to the extensive search facility provided by JDT for searching projects in the workspace, API tooling could support searching of API profiles. This would allow to search for all uses of a component, type, method, etc., from an API profile or component.
+Similar to the extensive search facility provided by JDT for searching projects in the workspace, API tooling could support searching of API profiles. 
+This would allow to search for all uses of a component, type, method, etc., from an API profile or component.
 
 ### Version Management
 
 In addition to reporting missing `@since` tags and incorrect bundle version numbers (based on the Eclipse bundle versioning scheme), the tooling will provide quick fixes to correct these problems.
 
-As well, the tooling will assist developers on determining compatible version ranges of required bundles (plug-ins). Developers often increment the lower bound of version ranges of required bundles in each major release. Usually this makes sense (for example, the debug platform's UI bundle usually requires the latest debug core bundle). However, sometimes this is unnecessary, and a bundle may run perfectly fine with an older version of a required bundle. Given a range of versions of a required bundle, API tooling will be able to determine which versions of the bundle satisfy API (and non-API) accesses.
+As well, the tooling will assist developers on determining compatible version ranges of required bundles (plug-ins). 
+Developers often increment the lower bound of version ranges of required bundles in each major release. 
+Usually this makes sense (for example, the debug platform's UI bundle usually requires the latest debug core bundle). 
+However, sometimes this is unnecessary, and a bundle may run perfectly fine with an older version of a required bundle. 
+Given a range of versions of a required bundle, API tooling will be able to determine which versions of the bundle satisfy API (and non-API) accesses.
 
 ### Building API Components & Baselines
 
