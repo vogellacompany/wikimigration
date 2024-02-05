@@ -32,7 +32,6 @@ Current State
 API tooling has been integrated into the Eclipse SDK and lives in the PDE project. 
 This guide shows developers how to set up and use API tooling features in daily development scenarios.
 
-[Execution Environments User Guide](/PDE/API_Tools/Target_Environment/User_Guide "PDE/API Tools/Target Environment/User Guide")
 
 API Tooling Setup
 -----------------
@@ -113,9 +112,6 @@ API tooling has support to allow you to filter these problems from your workspac
 
 You can add a filter for a specific api problem using the Eclipse 'quickfix' mechanism on any api problem marker.
 
-[Examples of API problems in the problems view](/index.php?title=Special:Upload&wpDestFile=Api_tooling_problems.PNG "File:Api tooling problems.PNG")
-
-  
 Once a filter has been added you can edit / remove it from the 'Api Problem Filters' project property page.
 
 ![Api_tooling_problem_filters_page.PNG](https://raw.githubusercontent.com/eclipse-pde/eclipse.pde/master/docs/images/Api_tooling_problem_filters_page.PNG)
@@ -124,7 +120,6 @@ Ant Tasks
 ---------
 
 API Tools provides a number of ant tasks to integrate the tooling into your build process. 
-For more details see [Ant Tasks](/PDE/API_Tools/Tasks "PDE/API Tools/Tasks").
 
 
 
@@ -431,7 +426,7 @@ If for whatever reason you do not want your documentation to say 'No Implement',
 
 ### Ant Tasks
 
-API Tools provides a number of ant tasks to integrate the tooling into your build process. For more details see [Ant Tasks](/PDE/API_Tools/Tasks "PDE/API Tools/Tasks").
+API Tools provides a number of ant tasks to integrate the tooling into your build process.
 
 
 
@@ -460,17 +455,18 @@ API Tools has been designed to aid developers maintaining good APIs, version num
 
 ### Binary Compatibility Reporting (Batch Mode)
 
-Two versions of the same API profile are compared for [binary compatibility](http://wiki.eclipse.org/Evolving_Java-based_APIs_2). An XML file is produced summarizing any incompatibilities. The comparison tool can be invoked from the command line as a stand alone Java application specifying the profiles to compare and which parts of the profiles to consider (for example, only compare portions of the profile that are deemed to be API).
+Two versions of the same API profile are compared for [binary compatibility](https://github.com/eclipse-platform/eclipse.platform/blob/master/docs/Evolving-Java-based-APIs-2.md). 
+An XML file is produced summarizing any incompatibilities. 
+The comparison tool can be invoked from the command line as a stand alone Java application specifying the profiles to compare and which parts of the profiles to consider (for example, only compare portions of the profile that are deemed to be API).
 
-The report includes errors regarding component version identifiers that have not been incremented properly. As well, if source code is available for the "newer" API profile, the report includes missing `@since` Javadoc tags.
+The report includes errors regarding component version identifiers that have not been incremented properly. 
+As well, if source code is available for the "newer" API profile, the report includes missing `@since` Javadoc tags.
 
 An exclude list should be added to filter out the cases where the binary incompatibility is "under control", i.e. approved by the PMC. The best way to maintain the exclude list would be to have a Javadoc tag in the source code that mentions why this is a breakage. Something like:
 
     @breakage-addition ...... 
     @breakage-remove Type#member .....
     
-
- 
 
 The removals would be located on the parent of the removed member.
 
@@ -487,8 +483,6 @@ An exclude list should be added to filter out the cases where the binary incompa
     @breakage-addition ...... 
     @breakage-remove Type#member .....
     
-
- 
 
 The removals would be located on the parent of the removed member.
 
