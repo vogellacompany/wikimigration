@@ -6,14 +6,21 @@ import 'package:html/dom.dart' as htmlDom;
 import 'package:html2md/html2md.dart' as html2md;
 import 'dart:io';
 
+import '.dart_tool/checklinks.dart';
+
 void main(List<String> arguments) async {
-  var filename = "JFaceSnippets";
+  var filename = "PDE_API_Tools_UseCases";
   if (arguments.isNotEmpty) {
     filename = arguments[0];
   }
-  var wikiPageUrl = 'https://wiki.eclipse.org/${filename}';
-  final imagePageUrl = 'https://wiki.eclipse.org';
+  var wikiPageUrl = 'https://wiki.eclipse.org/PDE/API_Tools/Use_Cases';
+  final imagePageUrl = 'https://wiki.eclipse.org/';
+  //await checkLinks(wikiPageUrl);
+  await creatMDDoc(wikiPageUrl, imagePageUrl, filename);
+}
 
+Future<void> creatMDDoc(
+    String wikiPageUrl, String imagePageUrl, String filename) async {
   try {
     final response = await http.get(Uri.parse(wikiPageUrl));
 
@@ -76,6 +83,9 @@ void main(List<String> arguments) async {
       if (result.contains('[Category]')) {
         result = deleteFromLine(result, '[Category]');
       }
+      if (result.contains('Retrieved from "[')) {
+        result = deleteFromLine(result, 'Retrieved from "[');
+      }
 
       // String result = imagesLinksAdjusted;
       var file =
@@ -110,7 +120,7 @@ String convertFileLinks(String input) {
 
       // Construct the new image URL
       String imageUrl =
-          'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/$fileName.$originalExtension';
+          'https://raw.githubusercontent.com/eclipse-pde/eclipse.pde/master/docs/images/$fileName.$originalExtension';
 
       return '![$altText]($imageUrl)';
     },
@@ -214,4 +224,41 @@ String deleteFromLine(String input, String lineStart) {
   print(endIndex);
   // Return the substring starting from the index after the line
   return input.substring(0, endIndex);
+}
+
+Future<void> checkLinks(String url) async {
+  try {
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final htmlDocument = htmlParser.parse(response.body);
+
+      final links = htmlDocument.getElementsByTagName('a');
+
+      for (var link in links) {
+        final href = link.attributes['href'];
+        if (href != null) {
+          final linkUrl = Uri.parse(href);
+
+          if (linkUrl.isAbsolute) {
+            final linkResponse = await http.head(linkUrl);
+
+            if (linkResponse.statusCode == 200) {
+              print('Link $href is working correctly.');
+            } else {
+              print(
+                  'Link $href is not working. Status code: ${linkResponse.statusCode}');
+            }
+          } else {
+            //print('Relative URL $href found. Unable to check its validity.');
+          }
+        }
+      }
+    } else {
+      print(
+          'Error: Unable to fetch the webpage. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
 }
