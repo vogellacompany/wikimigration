@@ -33,9 +33,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///home/vogella/.pub-cache/hosted/pub.dev/http-1.1.0",
+      "rootUri": "file:///home/vogella/.pub-cache/hosted/pub.dev/http-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "http_parser",
@@ -80,13 +80,19 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "web",
+      "rootUri": "file:///home/vogella/.pub-cache/hosted/pub.dev/web-0.4.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "Wikimgration",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2023-12-21T11:26:14.572950Z",
+  "generated": "2024-02-06T08:33:49.067008Z",
   "generator": "pub",
-  "generatorVersion": "3.1.5"
+  "generatorVersion": "3.2.5"
 }

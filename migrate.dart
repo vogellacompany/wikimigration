@@ -1,12 +1,8 @@
-import 'dart:math';
-
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as htmlParser;
 import 'package:html/dom.dart' as htmlDom;
 import 'package:html2md/html2md.dart' as html2md;
 import 'dart:io';
-
-import '.dart_tool/checklinks.dart';
 
 void main(List<String> arguments) async {
   var filename = "PDE_API_Tools_UseCases";
@@ -15,7 +11,7 @@ void main(List<String> arguments) async {
   }
   var wikiPageUrl = 'https://wiki.eclipse.org/PDE/API_Tools/Use_Cases';
   final imagePageUrl = 'https://wiki.eclipse.org/';
-  //await checkLinks(wikiPageUrl);
+  await checkLinks(wikiPageUrl);
   await creatMDDoc(wikiPageUrl, imagePageUrl, filename);
 }
 
