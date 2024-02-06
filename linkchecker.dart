@@ -20,27 +20,27 @@ const blue = '\x1B[34m';
 
 void main(List<String> args) {
   List<String> rawUrls = [
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Accessibility_Features.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Command_Core_Expressions.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Common_Navigator_Framework.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_Dependency_Injection.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_Contexts.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_EAS_List_of_All_Provided_Services.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Event_Model.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Event_Processing.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_FAQ.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/EclipsePluginDevelopmentFAQ.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse_Corner.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/JFace.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/JFaceDataBinding.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/JFaceSnippets.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/PlatformCommandFramework.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Accessibility_Features.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Command_Core_Expressions.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Common_Navigator_Framework.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_Dependency_Injection.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_Contexts.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_EAS_List_of_All_Provided_Services.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Event_Model.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Event_Processing.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse4_RCP_FAQ.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/EclipsePluginDevelopmentFAQ.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Eclipse_Corner.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/JFace.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/JFaceDataBinding.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/JFaceSnippets.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/PlatformCommandFramework.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Platform_Expression_Framework.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_FAQ.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_How_to.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_Book.md",
-    // "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/CSS.md"
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_FAQ.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_How_to.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_Book.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/CSS.md"
   ];
 
   List<String> rawUrlsPlatform = [
@@ -69,15 +69,15 @@ void main(List<String> args) {
     checkLinks(url, maxUrlLength);
   }
 
-  // Determine the maximum length for the first column
-  // int maxUrlLengthPlatform = 10;
-  // for (var url in rawUrlsPlatform) {
-  //   maxUrlLength = max(maxUrlLength, url.length);
-  // }
+  //Determine the maximum length for the first column
+  int maxUrlLengthPlatform = 10;
+  for (var url in rawUrlsPlatform) {
+    maxUrlLength = max(maxUrlLength, url.length);
+  }
 
-  // for (var url in rawUrlsPlatform) {
-  //   checkLinks(url, maxUrlLengthPlatform);
-  // }
+  for (var url in rawUrlsPlatform) {
+    checkLinks(url, maxUrlLengthPlatform);
+  }
 }
 
 Future<void> checkLinks(String url, int maxUrlLength) async {
