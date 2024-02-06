@@ -59,8 +59,9 @@ void main(List<String> args) {
     "https://raw.githubusercontent.com/eclipse-equinox/equinox/master/docs/Adaptor_Hooks.md",
   ];
 
-  // Determine the maximum length for the first column
   int maxUrlLength = 10;
+  // Determine the maximum length for the first column
+
   for (var url in rawUrls) {
     maxUrlLength = max(maxUrlLength, url.length);
   }
@@ -69,14 +70,13 @@ void main(List<String> args) {
     checkLinks(url, maxUrlLength);
   }
 
-  //Determine the maximum length for the first column
-  int maxUrlLengthPlatform = 10;
+  // Determine the maximum length for the first column
   for (var url in rawUrlsPlatform) {
     maxUrlLength = max(maxUrlLength, url.length);
   }
 
   for (var url in rawUrlsPlatform) {
-    checkLinks(url, maxUrlLengthPlatform);
+    checkLinks(url, maxUrlLength);
   }
 }
 
