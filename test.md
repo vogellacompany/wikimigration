@@ -136,10 +136,10 @@ Also note that IHandlers are not handed an IAction, but the IHandler can return 
 			}
 		}
 	
-		/\*
-		 \* (non-Javadoc)
-		 \* 
-		 \* @see org.eclipse.core.commands.AbstractHandler#isEnabled()
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.eclipse.core.commands.AbstractHandler#isEnabled()
 		 */
 		public boolean isEnabled() {
 			return enabled;
@@ -478,18 +478,14 @@ We can do this by re-using the existing extension points; tweaking as necessary 
 The menu extension can declaratively specify that the menu item is a dynamic menu, and provide a dynamic menu callback class that implements `IDynamicMenu`. When the menu item is about to show, the callback class will be handed an `IMenuCollection`, which contains a modifiable list of menu elements. As an example:
 
 	public interface IDynamicMenu {
-		/\*\*
-		 \* Called just before the given menu is about to show. This allows the
-		 \* implementor of this interface to modify the list of menu elements before
-		 \* the menu is actually shown.
-		 \* 
-		 \* @param menu
-		 \*            The menu that is about to show. This value is never
-		 \*            
-	
-	    null
-	
-	.
+		/**
+		 * Called just before the given menu is about to show. This allows the
+		 * implementor of this interface to modify the list of menu elements before
+		 * the menu is actually shown.
+		 * 
+		 * @param menu
+		 *            The menu that is about to show. This value is never
+		 *            null.
 		 */ 
 		public void aboutToShow(IMenuCollection menu); 
 	}
@@ -498,62 +494,62 @@ And the `IMenuCollection` allows the modification of the menu that's about to sh
 Assume that `MenuElement` is the new flavour of `IContributionItem`/`IContributionManager`
 
 	public interface IMenuCollection {
-		/\*\*
-		 \* Appends a menu element to the end of the collection.
-		 \* 
-		 \* @param element
-		 \*            The element to append. Must not be null, and
-		 \*            must be of the appropriate type for the type of collection.
+		/**
+		 * Appends a menu element to the end of the collection.
+		 * 
+		 * @param element
+		 *            The element to append. Must not be null, and
+		 *            must be of the appropriate type for the type of collection.
 		 */
 		public void add(MenuElement element);
 	
-		/\*\*
-		 \* Adds a menu element at the given index.
-		 \* 
-		 \* @param index
-		 \*            The index at which to insert.
-		 \* @param element
-		 \*            The element to append. Must not be null, and
-		 \*            must be of the appropriate type for the type of collection.
+		/**
+		 * Adds a menu element at the given index.
+		 * 
+		 * @param index
+		 *            The index at which to insert.
+		 * @param element
+		 *            The element to append. Must not be null, and
+		 *            must be of the appropriate type for the type of collection.
 		 */
 		public void add(int index, MenuElement element);
 	
-		/\*\*
-		 \* Removes all elements from the collection.
+		/**
+		 * Removes all elements from the collection.
 		 */
 		public void clear();
 	
-		/\*\*
-		 \* Gets the element at a given index.
-		 \* 
-		 \* @param index
-		 \*            The index at which to retrieve the element.
-		 \* @return The element at the index.
+		/**
+		 * Gets the element at a given index.
+		 * 
+		 * @param index
+		 *            The index at which to retrieve the element.
+		 * @return The element at the index.
 		 */
 		public MenuElement get(int index);
 	
-		/\*\*
-		 \* Removes the element at a given index.
-		 \* 
-		 \* @param index
-		 \*            The index at which to remove the element.
-		 \* @return The element that has been removed.
+		/**
+		 * Removes the element at a given index.
+		 * 
+		 * @param index
+		 *            The index at which to remove the element.
+		 * @return The element that has been removed.
 		 */
 		public MenuElement remove(int index);
 	
-		/\*\*
-		 \* Removes the given menu element, if it exists.
-		 \* 
-		 \* @param element
-		 \*            The element to remove.
-		 \* @return true if the object was removed; false if it could not be found.
+		/**
+		 * Removes the given menu element, if it exists.
+		 * 
+		 * @param element
+		 *            The element to remove.
+		 * @return true if the object was removed; false if it could not be found.
 		 */
 		public boolean remove(MenuElement element);
 	
-		/\*\*
-		 \* Returns the number of elements in the collection.
-		 \* 
-		 \* @return The size of the collection.
+		/**
+		 * Returns the number of elements in the collection.
+		 * 
+		 * @return The size of the collection.
 		 */
 		public int size();
 	}
