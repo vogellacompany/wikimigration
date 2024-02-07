@@ -6,22 +6,21 @@ import 'dart:io';
 
 void main(List<String> arguments) async {
   const String imagePageUrl = 'https://wiki.eclipse.org/';
-  const String imageRepository = 'eclipse-platform/eclipse.platform.ui';
+  const String imageRepository = 'eclipse-platform/eclipse.platform';
 
   List<String> wikiPageUrls = [
-    // "https://wiki.eclipse.org/Javadoc",
-    // "https://wiki.eclipse.org/Coding_Conventions",
-    // "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
-    // "https://wiki.eclipse.org/Eclipse_Doc_Style_Guide",
-    // "https://wiki.eclipse.org/Eclipse/API_Central",
-    // "https://wiki.eclipse.org/Internationalization",
-    // "https://wiki.eclipse.org/How_to_add_things_to_the_Eclipse_doc",
+    "https://wiki.eclipse.org/Javadoc",
+    "https://wiki.eclipse.org/Coding_Conventions",
+    "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
+    "https://wiki.eclipse.org/Eclipse_Doc_Style_Guide",
+    "https://wiki.eclipse.org/Eclipse/API_Central",
+    "https://wiki.eclipse.org/Internationalization",
+    "https://wiki.eclipse.org/How_to_add_things_to_the_Eclipse_doc",
     // Ab hier platform UI
     "https://wiki.eclipse.org/Platform_UI_Command_Design",
     "https://wiki.eclipse.org/Platform_UI_Error_Handling",
     "https://wiki.eclipse.org/Menu_Contributions",
     "https://wiki.eclipse.org/Rich_Client_Platform/Text_Editor_Examples",
-    "https://wiki.eclipse.org/Managing_Multiple_Instances_of_a_View",
   ];
 
   clearOutput();
@@ -116,7 +115,8 @@ Future<void> creatMDDoc(String wikiPageUrl, String imagePageUrl,
 
 String replacePreTags(String htmlContent) {
   // Replace opening <pre> with <pre><code>
-  String updatedHtml = htmlContent.replaceAll('<pre>', '<pre><code>');
+  RegExp prePattern = RegExp(r'<pre .*?>');
+  String updatedHtml = htmlContent.replaceAll(prePattern, '<pre><code>');
 
   // Replace closing </pre> with </code></pre>
   updatedHtml = updatedHtml.replaceAll('</pre>', '</code></pre>');
