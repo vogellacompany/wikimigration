@@ -34,7 +34,8 @@ Contents
 Placement and visibility
 ========================
 
-The 4 extension points that deal with menus now org.eclipse.ui.actionSets, org.eclipse.ui.viewActions, org.eclipse.ui.editorActions, and org.eclipse.ui.popupMenus specify both menu placement and their visibility criteria. In the new menu mechanism they are separate concepts, placement and visibility.
+The 4 extension points that deal with menus now org.eclipse.ui.actionSets, org.eclipse.ui.viewActions, org.eclipse.ui.editorActions, and org.eclipse.ui.popupMenus specify both menu placement and their visibility criteria. 
+In the new menu mechanism they are separate concepts, placement and visibility.
 
 Example Matrix
 ==============
@@ -66,7 +67,7 @@ Declarative information ... this needs to be cleaned up.
 
 Some constraints on the system:
 
-1.  Identifiers (id) for <menu/> elements must be globally unique.
+1.  Identifiers (id) for _<menu/>_ elements must be globally unique.
 2.  Identifiers (id) for <command/> elements must be globally unique if they are specified.
 3.  You can reference a <menu/> by id.
 4.  If you are just creating menu items for your commands, you can leave them with only a command id. You don't have to specify an item id.
