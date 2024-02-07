@@ -1,9 +1,9 @@
-
-
 Platform UI Command Design
 ==========================
 
-Starting point for menu and toolbar placement of commands in 3.3. Please contribute comments and suggestions in the discussion area or on [Bug 154130 -KeyBindings- Finish re-work of commands and key bindings](https://bugs.eclipse.org/bugs/show_bug.cgi?id=154130). Here is a page with concrete example cases: [Menu Item Placement Examples](/Menu_Item_Placement_Examples "Menu Item Placement Examples")
+Starting point for menu and toolbar placement of commands in 3.3. 
+Please contribute comments and suggestions in the discussion area or on [Bug 154130 -KeyBindings- Finish re-work of commands and key bindings](https://bugs.eclipse.org/bugs/show_bug.cgi?id=154130). 
+Here is a page with concrete example cases: [Menu Item Placement Examples](/Menu_Item_Placement_Examples "Menu Item Placement Examples")
 
   
 
@@ -14,15 +14,15 @@ Contents
 *   [2 Current Framework](#Current-Framework)
 *   [3 Menus and ToolBars](#Menus-and-ToolBars)
     *   [3.1 Programmatic Contributions and Delegates](#Programmatic-Contributions-and-Delegates)
-        *   [3.1.1 I*ActionDelegate](#I.2AActionDelegate)
+        *   [3.1.1 I*ActionDelegate](#iactiondelegate)
         *   [3.1.2 IObjectActionDelegate](#IObjectActionDelegate)
         *   [3.1.3 EditorActionBars](#EditorActionBars)
         *   [3.1.4 PluginActionBuilder subclasses](#PluginActionBuilder-subclasses)
-    *   [3.2 org.eclipse.ui.actionSets](#org.eclipse.ui.actionSets)
-    *   [3.3 org.eclipse.ui.editorActions](#org.eclipse.ui.editorActions)
-    *   [3.4 org.eclipse.ui.viewActions](#org.eclipse.ui.viewActions)
-    *   [3.5 org.eclipse.ui.popupMenus](#org.eclipse.ui.popupMenus)
-*   [4 Framework Enhancements for 3.3](#Framework-Enhancements-for-3.3)
+    *   [3.2 org.eclipse.ui.actionSets](#orgeclipseuiactionSets)
+    *   [3.3 org.eclipse.ui.editorActions](#orgeclipseuieditorActions)
+    *   [3.4 org.eclipse.ui.viewActions](#orgeclipseuiviewActions)
+    *   [3.5 org.eclipse.ui.popupMenus](#orgeclipseuipopupMenus)
+*   [4 Framework Enhancements for 3.3](#Framework-Enhancements-for-33)
     *   [4.1 Issues to Address](#Issues-to-Address)
         *   [4.1.1 Issue 101 - PluginActions disconnected from Handlers](#Issue-101---PluginActions-disconnected-from-Handlers)
         *   [4.1.2 Issue 102 - Commands implementation of label changing](#Issue-102---Commands-implementation-of-label-changing)
@@ -30,8 +30,8 @@ Contents
         *   [4.1.4 Issue 104 - Dynamic menus need a good story](#Issue-104---Dynamic-menus-need-a-good-story)
     *   [4.2 Menu Proposal 1](#Menu-Proposal-1)
     *   [4.3 Menu Proposal 2](#Menu-Proposal-2)
-        *   [4.3.1 Proposal "A" (Eric's World...;-):](#Proposal-.22A.22-.28Eric.27s-World....3B-.29:)
-            *   [4.3.1.1 Proposal "A" - item 3 - Dynamic Menu interface](#Proposal-.22A.22---item-3---Dynamic-Menu-interface)
+        *   [4.3.1 Proposal "A" (Eric's World...;-):](#proposal-a-erics-world-)
+            *   [4.3.1.1 Proposal "A" - item 3 - Dynamic Menu interface](#proposal-a---item-3---dynamic-menu-interface)
         *   [4.3.2 Menu Proposal 2 UseCases](#Menu-Proposal-2-UseCases)
             *   [4.3.2.1 Menu Placement Locations](#Menu-Placement-Locations)
     *   [4.4 Menu Proposal 3](#Menu-Proposal-3)
@@ -687,4 +687,5 @@ Actions were defined in XML using several extension points. This XML syntax had 
 `
 
 `Aside from these main points, there are handful of other significant problems we hope to address – either directly or indirectly. These include dynamic menus, ordering of contribution items, performance problems, and better macro and instrumentation support.`
+
 
