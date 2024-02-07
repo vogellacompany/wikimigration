@@ -8,9 +8,19 @@ void main(List<String> arguments) async {
   const String imagePageUrl = 'https://wiki.eclipse.org/';
 
   List<String> wikiPageUrls = [
-    "https://wiki.eclipse.org/Version_Numbering",
+    "https://wiki.eclipse.org/Javadoc",
+    "https://wiki.eclipse.org/Coding_Conventions",
     "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
+    "https://wiki.eclipse.org/Eclipse_Doc_Style_Guide",
     "https://wiki.eclipse.org/Eclipse/API_Central",
+    "https://wiki.eclipse.org/Internationalization",
+    "https://wiki.eclipse.org/How_to_add_things_to_the_Eclipse_doc",
+    // Ab hier platform UI
+    "https://wiki.eclipse.org/Platform_UI_Command_Design",
+    "https://wiki.eclipse.org/Platform_UI_Error_Handling",
+    "https://wiki.eclipse.org/Menu_Contributions",
+    "https://wiki.eclipse.org/Rich_Client_Platform/Text_Editor_Examples",
+    "https://wiki.eclipse.org/Managing_Multiple_Instances_of_a_View",
   ];
 
   clearOutput();
@@ -29,7 +39,6 @@ Future<void> creatMDDoc(
     if (response.statusCode == 200) {
       final htmlDocument = htmlParser.parse(response.body);
 
-      convertPreTo2CodeBlocks(htmlDocument.body);
       // extract and load images
       List<htmlDom.Element> images =
           htmlDocument.getElementsByClassName("image");
@@ -42,9 +51,11 @@ Future<void> creatMDDoc(
         //  print(imageUrl);
         download(imageUrl);
       }
+
+      String htmlDocumentString = htmlDocument.body?.innerHtml ?? '';
+      String preTagsFixed = replacePreTags(htmlDocumentString);
       // Use html2md to convert HTML to markdown
-      final String markdownContent =
-          html2md.convert(htmlDocument.body?.innerHtml ?? '');
+      final String markdownContent = html2md.convert(preTagsFixed);
 
       // replace the header understore with hythen
       RegExp pattern = RegExp(r'\(#(.*?)\)');
@@ -101,6 +112,16 @@ Future<void> creatMDDoc(
   }
 }
 
+String replacePreTags(String htmlContent) {
+  // Replace opening <pre> with <pre><code>
+  String updatedHtml = htmlContent.replaceAll('<pre>', '<pre><code>');
+
+  // Replace closing </pre> with </code></pre>
+  updatedHtml = updatedHtml.replaceAll('</pre>', '</code></pre>');
+
+  return updatedHtml;
+}
+
 String convertFileLinks(String input) {
   // Define the regular expression pattern
   RegExp pattern = RegExp(
@@ -139,47 +160,6 @@ void download(String URL) {
       fileSave.writeAsBytes(_downloadData);
     });
   });
-}
-
-void convertPreToCodeBlocks(htmlDom.Element? element) {
-  if (element == null) return;
-
-  // Find all <pre> elements
-  final preElements = element.querySelectorAll('pre');
-
-  // Process each <pre> element
-  for (final preElement in preElements) {
-    // Create a new parent element, e.g., <div>
-    final newParentElement = htmlDom.Element.tag('div');
-
-    // Create a new <code> element
-    final codeBlock = htmlDom.Element.tag('code')..text = preElement.text;
-
-    // Add the <code> element within the new parent element
-    newParentElement.children.add(codeBlock);
-
-    // Replace the original <pre> element with the new structure
-    preElement.replaceWith(newParentElement);
-    print(preElement);
-  }
-}
-
-void convertPreTo2CodeBlocks(htmlDom.Element? element) {
-  if (element == null) return;
-
-  // Find all <pre> elements
-  final preElements = element.querySelectorAll('pre');
-
-  // Process each <pre> element
-  for (final preElement in preElements) {
-    // Create a new <code> element
-    final codeBlock = htmlDom.Element.tag('code')..text = preElement.text;
-
-    // Add the <code> element within the original <pre> element
-    preElement.children.add(codeBlock);
-    // preElement.replaceWith(codeBlock);
-    print(preElement);
-  }
 }
 
 void clearOutputFolder(String folderPath) {
