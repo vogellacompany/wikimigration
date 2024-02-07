@@ -54,7 +54,9 @@ I'm not sure of an appropriate way to wrap [org.eclipse.ui.IActionDelegate](http
 	public void run(IAction action);
 	public void selectionChanged(IAction action, ISelection selection);
 
-run(*) is the execution method, so that is pretty straight forward. The selectionChanged(*) method is called as the workbench selection changes, often times it updates the IAction enablement ... but moving forward there is no IAction enablement. However, an IHandler can be a selection listener and update its own enablement state directly.
+`run(*)` is the execution method, so that is pretty straight forward. 
+The `selectionChanged(*) method is called as the workbench selection changes, often times it updates the IAction enablement ... but moving forward there is no IAction enablement. 
+However, an IHandler can be a selection listener and update its own enablement state directly.
 
 The current action delegate proxy, ActionDelegateHandlerProxy, creates a bogus IAction. It allows the action delegates to continue working, but it is disconnected from any state.
 
