@@ -632,8 +632,6 @@ Just use paths of the form `/type/id/path`. They'll be IPath elements within ecl
 *   The text editor context menu additions group marker: `/popup/#EditorContext/additions`
 *   An object contribution additions group marker: `/popup/org.eclipse.ui.menu.any/additions`
 
-`
-
   
 The usecases are being moved to [Menu Item Placement Examples](/Menu_Item_Placement_Examples "Menu Item Placement Examples")
 
