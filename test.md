@@ -81,27 +81,26 @@ Creating an equivalent IHandler for IWorkbenchWindowActionDelegate that has acce
 
   
 
-public class SampleAction extends AbstractHandler {
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = null;
-		ISelection selection = null;
-
-		Object appContextObj = event.getApplicationContext();
-		if (appContextObj instanceof IEvaluationContext) {
-			IEvaluationContext appContext = (IEvaluationContext) appContextObj;
-			window = (IWorkbenchWindow) appContext
-					.getVariable(ISources.ACTIVE\_WORKBENCH\_WINDOW_NAME);
-			selection = (ISelection) appContext
-					.getVariable(ISources.ACTIVE\_CURRENT\_SELECTION_NAME);
+	public class SampleAction extends AbstractHandler {
+		public Object execute(ExecutionEvent event) throws ExecutionException {
+			IWorkbenchWindow window = null;
+			ISelection selection = null;
+	
+			Object appContextObj = event.getApplicationContext();
+			if (appContextObj instanceof IEvaluationContext) {
+				IEvaluationContext appContext = (IEvaluationContext) appContextObj;
+				window = (IWorkbenchWindow) appContext
+						.getVariable(ISources.ACTIVE\_WORKBENCH\_WINDOW_NAME);
+				selection = (ISelection) appContext
+						.getVariable(ISources.ACTIVE\_CURRENT\_SELECTION_NAME);
+			}
+			if (window != null) {
+				MessageDialog.openInformation(window.getShell(), "Editor Plug-in",
+						"Hello, Eclipse world");
+			}
+			return null;
 		}
-		if (window != null) {
-			MessageDialog.openInformation(window.getShell(), "Editor Plug-in",
-					"Hello, Eclipse world");
-		}
-		return null;
 	}
-
-}
 
   
 At the moment, a wrapper for an existing **I*ActionDelegate** is the ActionDelegateHandlerProxy.
