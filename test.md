@@ -10,46 +10,39 @@ Here is a page with concrete example cases: [Menu Item Placement Examples](/Menu
 Contents
 --------
 
-*   [1 Command Architecture Overview](#Command-Architecture-Overview)
-*   [2 Current Framework](#Current-Framework)
-*   [3 Menus and ToolBars](#Menus-and-ToolBars)
-    *   [3.1 Programmatic Contributions and Delegates](#Programmatic-Contributions-and-Delegates)
-        *   [3.1.1 I*ActionDelegate](#iactiondelegate)
-        *   [3.1.2 IObjectActionDelegate](#IObjectActionDelegate)
-        *   [3.1.3 EditorActionBars](#EditorActionBars)
-        *   [3.1.4 PluginActionBuilder subclasses](#PluginActionBuilder-subclasses)
-    *   [3.2 org.eclipse.ui.actionSets](#orgeclipseuiactionSets)
-    *   [3.3 org.eclipse.ui.editorActions](#orgeclipseuieditorActions)
-    *   [3.4 org.eclipse.ui.viewActions](#orgeclipseuiviewActions)
-    *   [3.5 org.eclipse.ui.popupMenus](#orgeclipseuipopupMenus)
-*   [4 Framework Enhancements for 3.3](#Framework-Enhancements-for-33)
-    *   [4.1 Issues to Address](#Issues-to-Address)
-        *   [4.1.1 Issue 101 - PluginActions disconnected from Handlers](#Issue-101---PluginActions-disconnected-from-Handlers)
-        *   [4.1.2 Issue 102 - Commands implementation of label changing](#Issue-102---Commands-implementation-of-label-changing)
-        *   [4.1.3 Issue 103 - Menu items map to ParameterizedCommands](#Issue-103---Menu-items-map-to-ParameterizedCommands)
-        *   [4.1.4 Issue 104 - Dynamic menus need a good story](#Issue-104---Dynamic-menus-need-a-good-story)
-    *   [4.2 Menu Proposal 1](#Menu-Proposal-1)
-    *   [4.3 Menu Proposal 2](#Menu-Proposal-2)
-        *   [4.3.1 Proposal "A" (Eric's World...;-):](#proposal-a-erics-world-)
-            *   [4.3.1.1 Proposal "A" - item 3 - Dynamic Menu interface](#proposal-a---item-3---dynamic-menu-interface)
-        *   [4.3.2 Menu Proposal 2 UseCases](#Menu-Proposal-2-UseCases)
-            *   [4.3.2.1 Menu Placement Locations](#Menu-Placement-Locations)
-    *   [4.4 Menu Proposal 3](#Menu-Proposal-3)
-*   [5 Historical Information](#Historical-Information)
-    *   [5.1 Original Requirements](#Original-Requirements)
-    *   [5.2 Rational](#Rational)
+*   [1 Current Framework](#Current-Framework)
+*   [2 Menus and ToolBars](#Menus-and-ToolBars)
+    *   [2.1 Programmatic Contributions and Delegates](#Programmatic-Contributions-and-Delegates)
+        *   [2.1.1 I*ActionDelegate](#iactiondelegate)
+        *   [2.1.2 IObjectActionDelegate](#IObjectActionDelegate)
+        *   [2.1.3 EditorActionBars](#EditorActionBars)
+        *   [2.1.4 PluginActionBuilder subclasses](#PluginActionBuilder-subclasses)
+    *   [2.2 org.eclipse.ui.actionSets](#orgeclipseuiactionSets)
+    *   [2.3 org.eclipse.ui.editorActions](#orgeclipseuieditorActions)
+    *   [2.4 org.eclipse.ui.viewActions](#orgeclipseuiviewActions)
+    *   [2.5 org.eclipse.ui.popupMenus](#orgeclipseuipopupMenus)
+*   [3 Framework Enhancements for 3.3](#Framework-Enhancements-for-33)
+    *   [3.1 Issues to Address](#Issues-to-Address)
+        *   [3.1.1 Issue 101 - PluginActions disconnected from Handlers](#Issue-101---PluginActions-disconnected-from-Handlers)
+        *   [3.1.2 Issue 102 - Commands implementation of label changing](#Issue-102---Commands-implementation-of-label-changing)
+        *   [3.1.3 Issue 103 - Menu items map to ParameterizedCommands](#Issue-103---Menu-items-map-to-ParameterizedCommands)
+        *   [3.1.4 Issue 104 - Dynamic menus need a good story](#Issue-104---Dynamic-menus-need-a-good-story)
+    *   [3.2 Menu Proposal 1](#Menu-Proposal-1)
+    *   [3.3 Menu Proposal 2](#Menu-Proposal-2)
+        *   [3.3.1 Proposal "A" (Eric's World...;-):](#proposal-a-erics-world-)
+            *   [3.3.1.1 Proposal "A" - item 3 - Dynamic Menu interface](#proposal-a---item-3---dynamic-menu-interface)
+        *   [3.3.2 Menu Proposal 2 UseCases](#Menu-Proposal-2-UseCases)
+            *   [3.3.2.1 Menu Placement Locations](#Menu-Placement-Locations)
+    *   [3.4 Menu Proposal 3](#Menu-Proposal-3)
+*   [4 Historical Information](#Historical-Information)
+    *   [4.1 Original Requirements](#Original-Requirements)
+    *   [4.2 Rational](#Rational)
 
-Command Architecture Overview
-=============================
-
-[http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/platform-ui-home/R3\_1/contributions-proposal/requestForComments\_html_m41374bdb.png](http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/platform-ui-home/R3_1/contributions-proposal/requestForComments_html_m41374bdb.png)
-
-Figure 1: High Level Architecture
 
 Current Framework
 =================
 
-See [Platform\_Command\_Framework](/Platform_Command_Framework "Platform Command Framework")
+See [Platform\_Command\_Framework](https://github.com/vogellacompany/eclipse.platform.ui/blob/master/docs/PlatformCommandFramework.md)
 
 Menus and ToolBars
 ==================
@@ -687,5 +680,4 @@ Actions were defined in XML using several extension points. This XML syntax had 
 `
 
 `Aside from these main points, there are handful of other significant problems we hope to address – either directly or indirectly. These include dynamic menus, ordering of contribution items, performance problems, and better macro and instrumentation support.`
-
 
