@@ -51,8 +51,8 @@ Menu and toolbar placement is managed by 4 extension points, and through program
 
 I'm not sure of an appropriate way to wrap [org.eclipse.ui.IActionDelegate](http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/org/eclipse/ui/IActionDelegate.html). It is the base class and provides 2 methods to all of the **I*ActionDelegates**.
 
-public void run(IAction action);
-public void selectionChanged(IAction action, ISelection selection);
+	public void run(IAction action);
+	public void selectionChanged(IAction action, ISelection selection);
 
 run(*) is the execution method, so that is pretty straight forward. The selectionChanged(*) method is called as the workbench selection changes, often times it updates the IAction enablement ... but moving forward there is no IAction enablement. However, an IHandler can be a selection listener and update its own enablement state directly.
 
