@@ -13,7 +13,7 @@ Contents
     *   [1.2 See the error](#See-the-error)
     *   [1.3 What does it mean to me the user?](#What-does-it-mean-to-me-the-user)
     *   [1.4 What can I do next?](#What-can-I-do-next)
-*   [2 Status manager & Status handlers](#Status-manager-.26-Status-handlers)
+*   [2 Status manager & Status handlers](#Status-manager--Status-handlers)
     *   [2.1 Status manager](#Status-manager)
     *   [2.2 Styles](#Styles)
     *   [2.3 Status handlers](#Status-handlers)
