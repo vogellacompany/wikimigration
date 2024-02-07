@@ -6,6 +6,7 @@ import 'dart:io';
 
 void main(List<String> arguments) async {
   const String imagePageUrl = 'https://wiki.eclipse.org/';
+  const String imageRepository = 'eclipse-pde/eclipse.pde';
 
   List<String> wikiPageUrls = [
     "https://wiki.eclipse.org/Javadoc",
@@ -27,12 +28,12 @@ void main(List<String> arguments) async {
 
   for (var wikiPageUrl in wikiPageUrls) {
     var filename = extractLastSegmentWithoutExtension(wikiPageUrl);
-    await creatMDDoc(wikiPageUrl, imagePageUrl, filename);
+    await creatMDDoc(wikiPageUrl, imagePageUrl, filename, imageRepository);
   }
 }
 
-Future<void> creatMDDoc(
-    String wikiPageUrl, String imagePageUrl, String filename) async {
+Future<void> creatMDDoc(String wikiPageUrl, String imagePageUrl,
+    String filename, String imageRepository) async {
   try {
     final response = await http.get(Uri.parse(wikiPageUrl));
 
@@ -66,7 +67,8 @@ Future<void> creatMDDoc(
       });
 
       // // Fix image link
-      String imagesLinksAdjusted = convertFileLinks(headerReplaced);
+      String imagesLinksAdjusted =
+          convertFileLinks(headerReplaced, imageRepository);
 
       String folderPath = 'docs/';
 
@@ -122,7 +124,7 @@ String replacePreTags(String htmlContent) {
   return updatedHtml;
 }
 
-String convertFileLinks(String input) {
+String convertFileLinks(String input, String imageRespository) {
   // Define the regular expression pattern
   RegExp pattern = RegExp(
       r'\[\!\[(.*?)\]\((/images/.+?/)([^/]+)\.(png|jpg|jpeg|gif)\)\]\(/File:(.*?)\.(png|jpg|jpeg|gif)\)');
@@ -140,7 +142,7 @@ String convertFileLinks(String input) {
 
       // Construct the new image URL
       String imageUrl =
-          'https://raw.githubusercontent.com/eclipse-pde/eclipse.pde/master/docs/images/$fileName.$originalExtension';
+          'https://raw.githubusercontent.com/$imageRepository/master/docs/images/$fileName.$originalExtension';
 
       return '![$altText]($imageUrl)';
     },
