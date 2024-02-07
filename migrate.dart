@@ -191,7 +191,7 @@ String deleteUpToLine(String input, String lineStart) {
 }
 
 String deleteFromLine(String input, String lineStart) {
-  print(input.length);
+  // print(input.length);
 
   // Find the index of the line that starts with the specified text
   int endIndex = input.indexOf(lineStart);
@@ -200,7 +200,7 @@ String deleteFromLine(String input, String lineStart) {
     throw Exception('Line starting with "$lineStart" not found.');
   }
 
-  print(endIndex);
+  // print(endIndex);
   // Return the substring starting from the index after the line
   return input.substring(0, endIndex);
 }
