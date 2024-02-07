@@ -9,13 +9,14 @@ void main(List<String> arguments) async {
   const String imageRepository = 'eclipse-platform/eclipse.platform.ui';
 
   List<String> wikiPageUrls = [
-    // "https://wiki.eclipse.org/Javadoc",
-    // "https://wiki.eclipse.org/Coding_Conventions",
-    // "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
-    // "https://wiki.eclipse.org/Eclipse_Doc_Style_Guide",
-    // "https://wiki.eclipse.org/Eclipse/API_Central",
-    // "https://wiki.eclipse.org/Internationalization",
-    // "https://wiki.eclipse.org/How_to_add_things_to_the_Eclipse_doc",
+    "https://wiki.eclipse.org/Javadoc",
+    "https://wiki.eclipse.org/Coding_Conventions",
+    "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
+    "https://wiki.eclipse.org/Eclipse_Doc_Style_Guide",
+    "https://wiki.eclipse.org/Eclipse/API_Central",
+    "https://wiki.eclipse.org/Internationalization",
+    "https://wiki.eclipse.org/How_to_add_things_to_the_Eclipse_doc",
+    "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
     // Ab hier platform UI
     "https://wiki.eclipse.org/Platform_UI_Command_Design",
     "https://wiki.eclipse.org/Platform_UI_Error_Handling",

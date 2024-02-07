@@ -56,6 +56,8 @@ void main(List<String> args) {
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Export-Package.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Provisional_API_Guidelines.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Naming_Conventions.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Eclipse_Project_Update_Sites.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Internationalization.md",
     "https://raw.githubusercontent.com/eclipse-pde/eclipse.pde/master/docs/API_Tools.md",
     "https://raw.githubusercontent.com/eclipse-equinox/equinox/master/docs/Adaptor_Hooks.md",
   ];
