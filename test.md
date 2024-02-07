@@ -151,6 +151,7 @@ Below is a sample for 2 items:
 *   org.eclipse.ui.views.problems.sorting.item from menu:org.eclipse.ui.views.ProblemView
 *   org.eclipse.ui.views.problems.resolveMarker.item from popup:org.eclipse.ui.views.ProblemView
 
+````
     <menu-hook>
       <actions>
         <action id="org.eclipse.ui.views.problems.sorting.item">
@@ -186,6 +187,7 @@ Below is a sample for 2 items:
         </popup>
       </menus>
     </menu-hook>
+````
 
 Some thoughts:
 
