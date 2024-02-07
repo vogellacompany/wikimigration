@@ -1,408 +1,419 @@
 
 
-Menu Contributions
-==================
+Platform UI Error Handling
+==========================
 
-Placement examples that describe the proposed new way of placing menu items for **3.3**. Please contribute comments and suggestions in the discussion area or on [Bug 154130 -KeyBindings- Finish re-work of commands and key bindings](https://bugs.eclipse.org/bugs/show_bug.cgi?id=154130).
+This proposal is for error messages only. It does not include Log, trace or Application Life Cycle linked to errors in a software application. Yet, this proposal should fit very nicely in above mentioned features.
 
 Contents
 --------
 
-*   [1 Placement and visibility](#Placement-and-visibility)
-*   [2 Example Matrix](#Example-Matrix)
-*   [3 Menu XML](#Menu-XML)
-    *   [3.1 Declarative menus - some constraints](#Declarative-menus---some-constraints)
-    *   [3.2 Menu URIs](#Menu-URIs)
-        *   [3.2.1 menu:](#menu)
-        *   [3.2.2 toolbar:](#toolbar)
-        *   [3.2.3 popup:](#popup)
-    *   [3.3 Using Expressions in <visibleWhen/>](#Uusing-expressions-in-visiblewhen)
-    *   [3.4 Ideas that were considered but not implemented](#Ideas-that-were-considered-but-not-implemented)
-        *   [3.4.1 Menu - JSR198](#Menu---JSR198)
-        *   [3.4.2 Menu - XUL](#Menu---XUL)
-        *   [3.4.3 Expression Templates original suggestion](#Expression-Templates-original-suggestion)
-        *   [3.4.4 Another Expression Alternative: Specify Context at Extension Level](#Another-Expression-Alternative-Specify-Context-at-Extension-Level)
-*   [4 Updating the menu and toolbar appearance](#Updating-the-menu-and-toolbar-appearance)
-    *   [4.1 UIElements represent each UI visible instance of a command](#UIElements-represent-each-UI-visible-instance-of-a-command)
-    *   [4.2 State associated with the command is propogated to UI visible elements](#State-associated-with-the-command-is-propogated-to-UI-visible-elements)
+*   [1 Use cases](#Use-cases)
+    *   [1.1 Issue to solve](#Issue-to-solve)
+    *   [1.2 See the error](#See-the-error)
+    *   [1.3 What does it mean to me the user?](#What-does-it-mean-to-me-the-user)
+    *   [1.4 What can I do next?](#What-can-I-do-next)
+*   [2 Status manager & Status handlers](#Status-manager-.26-Status-handlers)
+    *   [2.1 Status manager](#Status-manager)
+    *   [2.2 Styles](#Styles)
+    *   [2.3 Status handlers](#Status-handlers)
+    *   [2.4 StatusAdapter](#StatusAdapter)
+    *   [2.5 The facility and Platform](#The-facility-and-Platform)
+*   [3 WorkbenchStatusHandler and IDEWorkbenchStatusHandler](#WorkbenchStatusHandler-and-IDEWorkbenchStatusHandler)
+*   [4 Error Messages: User Interface](#Error-Messages-User-Interface)
+    *   [4.1 Error Messages User Interface Use Cases](#Error-Messages-User-Interface-Use-Cases)
+        *   [4.1.1 Eclipse mapping](#Eclipse-mapping)
+        *   [4.1.2 Use cases](#Use-cases-2)
+    *   [4.2 Main requirements](#Main-requirements)
+    *   [4.3 New StatusDialog](#New-StatusDialog)
+        *   [4.3.1 Overview](#Overview)
+        *   [4.3.2 Use cases](#Use-cases-3)
+        *   [4.3.3 Usage](#Usage)
+        *   [4.3.4 Bugs](#Bugs)
+    *   [4.4 Work plan for 3.4.1 & 3.5](#Work-plan-for-341-26-35)
 
+Use cases
+---------
 
-Placement and visibility
-========================
+We will use 4 different customers to ensure the proposal is scalable
 
-The 4 extension points that deal with menus now org.eclipse.ui.actionSets, org.eclipse.ui.viewActions, org.eclipse.ui.editorActions, and org.eclipse.ui.popupMenus specify both menu placement and their visibility criteria. 
-In the new menu mechanism they are separate concepts, placement and visibility.
+*   BigCompany is using Eclipse 3.3. They decide to buy different features from different companies. They want an AJAX feature from company AjaxWorldCom and they decide on a database tooling feature from SQLForever Company. All user will have the same desktop feature and all call should be routed to the BigCompany’s help desk. Users do not have access to the web.
 
-Example Matrix
-==============
+*   TaxInc develops an Tax Solution software. It has RCP clients and a server. TaxRUS bought the tax solution. They installed a server internally and deployed the RCP client to 250 employees around the world. The employees are not developers. They just use the RCP application to do Tax related tasks. They have an internal help desk.
 
-A (hopefully) growing list of menu contribution examples.
+*   BigSoftware develops a set of Eclipse feature for a product named: J2EE development 13.0. User can buy the product off the shelf or order a large amount of products and install them in their enterprise. BigSoftware has a huge support center. BigSoftware also ships 3rd party features it supports in its tooling.
 
-| Example | comments |
-| --- | --- |
-| [Menu Contributions/Dropdown Command](/Menu_Contributions/Dropdown_Command "Menu Contributions/Dropdown Command") | Dropdown tool items can have their menus filled in using menu contributions |
-| [Menu Contributions/Problems View Example](/Menu_Contributions/Problems_View_Example "Menu Contributions/Problems View Example") | An example showing how the Problems View might be converted |
-| [Menu Contributions/Populating a dynamic submenu](/Menu_Contributions/Populating_a_dynamic_submenu "Menu Contributions/Populating a dynamic submenu") | A menu contribution to populate a Problems View dynamic submenu |
-| [Menu Contributions/Toggle Mark Occurrences](/Menu_Contributions/Toggle_Mark_Occurrences "Menu Contributions/Toggle Mark Occurrences") | Placing the toggle mark occurrences button |
-| [Menu Contributions/Toggle Button Command](/Menu_Contributions/Toggle_Button_Command "Menu Contributions/Toggle Button Command") | Contribute a toggle state menu item thru commands |
-| [Menu Contributions/Radio Button Command](/Menu_Contributions/Radio_Button_Command "Menu Contributions/Radio Button Command") | Similar to updating toggle state, you can create radio buttons using menu contributions |
-| [Menu Contributions/Update checked state](/Menu_Contributions/Update_checked_state "Menu Contributions/Update checked state") | The active handler can update the checked state (and other attributes) of its button |
-| [Menu Contributions/Search Menu](/Menu_Contributions/Search_Menu "Menu Contributions/Search Menu") | Adding the Java Search options to the Search menu |
-| [Menu Contributions/IFile objectContribution](/Menu_Contributions/IFile_objectContribution "Menu Contributions/IFile objectContribution") | A menu contribution for context menus when the selection is an IFile |
-| [Menu Contributions/TextEditor viewerContribution](/Menu_Contributions/TextEditor_viewerContribution "Menu Contributions/TextEditor viewerContribution") | A menu contribution for the text editor context menu |
-| [Menu Contributions/Widget in a toolbar](/Menu_Contributions/Widget_in_a_toolbar "Menu Contributions/Widget in a toolbar") | A menu contribution adding a control into the main toolbar |
-| [Menu Contributions/RCP removes the Project menu](/Menu_Contributions/RCP_removes_the_Project_menu "Menu Contributions/RCP removes the Project menu") | An RCP application removes the Project menu. Note: this will probably not be in 3.3 |
-| [Menu Contributions/Workbench wizard contribution](/Menu_Contributions/Workbench_wizard_contribution "Menu Contributions/Workbench wizard contribution") | Contributing workbench wizards to Menu |
+*   John is a Java Perl developer. He downloaded Eclipse 3.3 and a Perl feature from the open source web site.
 
-Menu XML
-========
+### Issue to solve
 
-Declarative information ... this needs to be cleaned up.
+This is the main issue to solve for the 4 customers
 
-### Declarative menus - some constraints
+When an error occurs in the tooling (Error message, error dialog, error in the console view, error in the log view, error in the job dialog or any other error), Eclipse needs to provide a way for the users to:
 
-Some constraints on the system:
+*   see what the error is
+*   understand what it means to the them
+*   how can they act on the error.
 
-1.  Identifiers (id) for `<menu/>` elements must be globally unique.
-2.  Identifiers (id) for `<command/>` elements must be globally unique if they are specified.
-3.  You can reference a `<menu/>` by id.
-4.  If you are just creating menu items for your commands, you can leave them with only a command id. You don't have to specify an item id.
-5.  You can reference a `<command/>` for placement options (after, before, etc.) by id.
-6.  `<separator/>` ids only have to be unique within that menu level. This is changed to name instead of id in **3.3M5**.
-7.  You can provide a `<command/>` label attribute. If none is provided, it will take the command name.
-8.  In this design the item contains most of the same rendering information that `<action/>` did.
-9.  `<menu/>` and `<command/>` can have `<visibleWhen/>` clauses. If a menu's `<visibleWhen/>` evaluates to false, we will never ask the items contained in that menu.
-10.  All of the displayable attributes are translatable.
-11.  The mnemonic is specified as you place your `<command/>` elements in their respective menus, since it is possible that the same command might need a different mnemonic depending on which menu it is placed. Also, when defaulting to command names, they don't contain any mnemonic information.
+The behavior for each is based on policies.
 
-Menus cannot be re-used, and so they have an intrinsic id value. Separators are unique within one menu level, so they also contain their name.
+*   The feature who threw the error should have a chance to handle the error and help the customer.
+*   The feature should have an idea about what the error handler wants it to do.
+    *   i.e. when there is an error opening a view should we show the error view or not
+    *   also do we prompt when the workbench layout cannot be reset?
+*   The product/branding that is installed can override all feature’s behavior it ships and manage or delegate to them as appropriate.
 
-### Menu URIs
+### See the error
 
-For location placement we need a path and placement modifier, and to specify how the paths are built. 
-First pass we are going to look at URIs.
+It is very important to distinguish between expected and unexpected error.
 
-*   `<scheme>:<menu-id>[?<placement-modifier>]`
+*   Expected Error is when a developer expects the exception to be thrown in particular situation (network not available, resource locked by another person, invalid license etc).
+*   Unexpected Error is an error that should not happen (internal error, NPE etc).
 
-scheme is about how to interpret the URI path. 
-For example, `menu`, `toolbar`, `popup`, `status` (although status may be deprecated).
+Generally expected errors should come with idea how to solve the problem, while it should be easy to report unexpected one and/or to get workaround.
 
-#### menu:
+When an error occurs, the developer may decide to show the error to the user. The code is opening an error dialog. However handler may ignore developer request and handle the error in different way, f.e. log it. Before opening the error dialog, and based on the policy, the flow can be re-routed and the error dialog may never show up like the developer intended to. There should be a hook in the code, based on policy that will express manage the behavior.
 
-For `menu:` valid root ids will be any viewId for that view's menu, and **org.eclipse.ui.main.menu** for the main menu. 
-Then specify the id of the menu this contribution applies to. 
-The placement modifier helps position the menu contribution. ex: `after=<id>`, where `<id>` can be a separator name, menu id, or item id. 
-An example of a path: `menu:org.eclipse.search.menu?after=contextMenuActionsGroup`
+### What does it mean to me the user?
 
-Since menu ids must be unique, you can specify your menu location relative to an existing id: `menu:org.eclipse.search.menu?after=contextMenuActionsGroup`
+Most users are not interested in the ‘stack trace’ of the error. When a user sees an error or actively double clicks on an error we ought to see the information on how to solve the error (without technological background). This presumes the feature or the product or the company provided the data the user can understand and that the associated policy allows such data to be shown.
 
-#### toolbar:
+### What can I do next?
 
-For `toolbar:` valid root ids will be any viewId for that view's toolbar, **org.eclipse.ui.main.toolbar** for the main toolbar, and any toolbar id that is contained in the main toolbar. 
-Toolbars can support **invisible** separators. Toolbars in the main toolbar (technically a coolbar) can have ids as well as separators, but only one level. For example: `toolbar:org.eclipse.ui.edit.text.actionSet.presentation?after=Presentation`
+Based on the policy, it is the responsibility of the feature provider (component provider), the product provider or the company to decide what the ‘what to do next’ action will do. Eclipse could still provide a ‘show log’ button that policy provider can extend (this is a nice to have…)
 
-In this example, **Presentation** is an invisible separator in the **org.eclipse.ui.edit.text.actionSet.presentation** toolbar.
+Status manager & Status handlers
+--------------------------------
 
-The use of **org.eclipse.ui.main.toolbar** might change if all "main" toolbars have ids anyway, so the only options for interpretting the toolbar root is 1) the view toolbar or 2) an IDed main toolbar.
+### Status manager
 
-#### popup:
-
-For `popup:` valid root ids are any registered context id (which defaults to the part id if no context menu id was given at registration time) and **org.eclipse.ui.popup.any** for all registered context menus. 
-For example, to add to the default Text Editor context menu: `popup:#TextEditorContext?after=additions`
-
-Popup submenus are treated like menu submenus, except the form continues to be `popup:submenuId`.
-
-There will be constants defined for the ids that the eclipse workbench provides, probably in `org.eclipse.ui.menus.MenuUtil`.
-
-### Using Expressions in `<visibleWhen/>`
-
-In **3.3M6** an org.eclipse.core.expressions.definitions extension point was added. 
-Used to define a [core expression](/Platform_Expression_Framework "Platform Expression Framework"), the definition can then be referenced from other locations.
-
-    <extension point="org.eclipse.core.expressions.definitions">
-      <definition id="com.example.context">
-        <with variable="activeContexts">
-           <iterate operator="or">
-             <equals value="org.eclipse.ui.contexts.actionSet"/>
-           </iterate>
-        </with>
-      </definition>
-    </extension>
-
-This can be called in a core expression like activeWhen, enabledWhen, visibleWhen, etc using the reference element:
-
-    <reference definitionId="com.example.context"/>
-
-### Ideas that were considered but not implemented
-
-These ideas were considered but not implemented.
-
-#### Menu - JSR198
-
-**Note:** for novelty purposes only.
-
-For comparison, there is a JSR describing how IDEs can contribute menus. 
-Below is a sample for 2 items:
-
-*   org.eclipse.ui.views.problems.sorting.item from menu:org.eclipse.ui.views.ProblemView
-*   org.eclipse.ui.views.problems.resolveMarker.item from popup:org.eclipse.ui.views.ProblemView
-
-````
-    <menu-hook>
-      <actions>
-        <action id="org.eclipse.ui.views.problems.sorting.item">
-          <label>Sorting...</label>
-          <mnemonic>S</mnemonic>
-          <tooltip>Change the Sort order</tooltip>
-          <invoke-class>org.eclipse.ui.views.problems.sorting</invoke-class>
-        </action>
-        <action id="org.eclipse.ui.views.problems.resolveMarker.item">
-          <label>Quick Fix</label>
-          <mnemonic>Q</mnemonic>
-          <iconpath>$nl$/icons/full/elcl16/smartmode_co.gif</iconpath>
-          <invoke-class>org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals</invoke-class>
-          <update-class>org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals</update-class>
-        </action>
-      </actions>
-      <menus>
-        <menubar id="org.eclipse.ui.views.ProblemView">
-          <menu id="org.eclipse.ui.views.ProblemView">
-            <section id="problem.view.section">
-              <command action-ref="org.eclipse.ui.views.problems.sorting.item" />
-              <menu id="org.eclipse.ui.views.problems.groupBy.menu">
-                <label>Group By</label>
-                <mnemonic>G</mnemonic>
-              </menu>
-            </section>
-          </menu>
-        </menubar>
-        <popup id="org.eclipse.ui.views.ProblemView">
-          <section id="group.resolve">
-            <command action-ref="org.eclipse.ui.views.problems.resolveMarker.item" />
-          </section>
-        </popup>
-      </menus>
-    </menu-hook>
-````
-
-Some thoughts:
-
-*   the actions can only specify one icon
-*   the actions can't \*quite\* link to our commands
-*   the menus can't specify dynamic submenus
-
-#### Menu - XUL
-
-**Note:** for novelty purposes only.
+StatusManager is the entry point for all statuses to be reported in the user interface. Handlers are not intended to be used directly. They should be referenced via the StatusManager which selects the handler corresponding to the product to apply. Right now it is impossible to have more than one handler per product because of scalability issues.
 
   
-For comparison, with Mozilla everywhere there is the probability eclipse will include xulrunner. 
-Menu definitions that are consistent with XUL look like:
+The following methods are the API entry points to the StatusManager
 
-    <keyset>
-      <key id="paste-key" modifiers="accel" key="V" />
-    </keyset>
-    <menubar id="org.eclipse.ui.views.ProblemView">
-      <menupopup id="org.eclipse.ui.views.ProblemView">
-        <menuitem id="org.eclipse.ui.views.problems.sorting.item"
-            accesskey="S"
-            key="paste-key"
-            label="Sorting..."
-            oncommand="invokeCommand('org.eclipse.ui.views.problems.sorting')" />
-        <menu id="org.eclipse.ui.views.problems.groupBy.menu"
-            label="Group By"
-            accesskey="G">
-          <menupopup id="groupby.popup">
-            <!-- this is where submenu items would go -->
-          </menupopup>
-        </menu>
-      </menupopup>
-    </menubar>
+    StatusManager#handle(IStatus)
+    
+    StatusManager#handle(IStatus, int)
+    
+    StatusManager#handle(StatusAdapter)
+    
+    StatusManager#handle(StatusAdapter, int)
+    
 
-XUL supports everything as a flavour of a DOM, and javascripting can drive your buttons to perform commands. 
-I suspect the scripting would allow you to dynamically update menus (dynamic menus) on popup, depending on what events the DOM would report to you.
+ 
+
+The StatusManager singleton is accessed using
+
+    StatusManager.getManager()
+    
+
+ 
+
+The `int` parameter are for supplying style for handling. See [Acceptable styles](/Platform_UI_Error_Handling#Styles "Platform UI Error Handling").
+
+**NOTE!** the style is a suggestion and may not be honoured by the current handler. For instance a handler may choose to not show the user anything when the SHOW flag is sent. See [Status handlers](/Platform_UI_Error_Handling#Status_handlers "Platform UI Error Handling") for more details.
+
+The StatusManager gets it's list of handlers from the extension point `org.eclipse.ui.statusHandlers`. Should none of those handlers process the status it will fall through to the default handler (the the SDk this is `WorkbenchAdvisor#getWorkbenchErrorHandler()`). If a handler is associated with a product, it is used instead of this defined in advisor.
+
+### Styles
+
+Below is a list of StatusManager styles which can be combined with logical OR.
+
+*   NONE - a style indicating that the status should not be acted on. This is used by objects such as log listeners that do not want to report a status twice
+*   LOG - a style indicating that the status should be logged only
+*   SHOW - a style indicating that handlers should show a problem to an user without blocking the calling method while awaiting user response. This is generally done using a non modal dialog
+*   BLOCK - a style indicating that the handling should block the calling method until the user has responded. This is generally done using a modal window such as a dialog
+
+### Status handlers
+
+Status handlers are part of the status handling facility. The handlers are responsible for presenting statuses by logging or showing appropriate feedback to the user (generally dialogs). All status handlers extend `org.eclipse.ui.statushandlers.AbstractStatusHandler` which requires each handler to implement `handle(StatusAdapter status, int style)`. This method handles statuses based on a handling style. The style indicates how status handler should handle a status. See [Acceptable styles](/Platform_UI_Error_Handling#Styles "Platform UI Error Handling").
+
+There are two ways for adding handlers to the handling flow.
+
+*   using extension point `org.eclipse.ui.statusHandlers`
+*   by the workbench advisor and its method {@link WorkbenchAdvisor#getWorkbenchErrorHandler()}.
+
+If a handler is associated with a product, it is used instead of this defined in advisor.
+
+  
+A status handler has the id and a set of parameters. The handler can use them during handling. If the handler is added as an extension, both are set during initialization of the handler using elements and attributes of `statusHandler` element.
+
+  
+**WARNING!** We have to take the extra action when something has to be logged using the default logging mechanism, because the facility is hooked into it. See [Hooking the facility into Platform](/Platform_UI_Error_Handling#Hooking_the_facility_into_Platform "Platform UI Error Handling"). For this special case the status manager provides API.
+
+ 
+
+      StatusManager#addLoggedStatus(IStatus status)
+    
+
+ 
+
+And below is the example of `addLoggedStatus(IStatus status)` proper usage.
+
+ 
+
+      public void handle(final StatusAdapter statusAdapter, int style) {
+      
+        ...
+    
+        if ((style & StatusManager.LOG) == StatusManager.LOG) {
+          StatusManager.getManager().addLoggedStatus(statusAdapter.getStatus());
+            WorkbenchPlugin.getDefault().getLog().log(statusAdapter.getStatus());
+        }
+      }
+    
+
+ 
+
+### StatusAdapter
+
+The StatusAdapter wraps an instance of IStatus subclass and can hold additional information either by using properties or by adding a new adapter. Used during status handling process.
+
+### The facility and Platform
+
+The places where the facility is hooked in
+
+*   `WorkbenchAdvisor#eventLoopException(Throwable)` \- it handles all uncaught exceptions from main application loop
+*   Jobs framework
+*   Error log file (all logged messages are forwarded to the facility with the LOG style)
+*   Exceptions from opening a part (the error view and error editor)
+
+Platform is still under refactoring aimed at introducing the status handling facility.
+
+  
+**WARNING!** The facility isn't hooked into JFace ErrorDialog or MessageDialog in any way. The code has to be refactored if the facility is to be used.
+
+The old code
+
+ 
+
+      ErrorDialog.openError(...);
+    
+
+ 
+
+or
+
+ 
+
+      MessageDialog.openError(...);
+    
+
+ 
+
+should be refactored into
+
+ 
+
+      StatusManager.getManager().handle(..., StatusManager.SHOW);
+    
+
+ 
+
+WorkbenchStatusHandler and IDEWorkbenchStatusHandler
+----------------------------------------------------
+
+There are two implementation of status handlers
+
+*   org.eclipse.ui.application.WorkbenchErrorHandler which is assigned to WorkbenchAdvisor
+*   org.eclipse.ui.internal.ide.IDEWorkbenchErrorHandler assigned to IDEWorkbenchAdvisor
+
+The current advisor indicates which handler is the workbench one.
+
+Error Messages: User Interface
+------------------------------
+
+### Error Messages User Interface Use Cases
+
+There are three types of user interfaces that will present a message, an error or a warning to a user. The three categories are
+
+*   Message that requires user’s action now
+*   Message that requires user’s action that can be done later
+*   List of messages.
+
+Message that requires action now.
+
+They are typically represented in a modal dialog box. The user has to act on it or he/she will not be able to finish the task. Such a dialog should provide a standard view with an icon and a message. The message can provide an advanced view, in which case a ‘details’ or ‘advanced’ button is present on the standard view. When the user selects the details button, the advanced information about the message are displayed. The provider of the message or the Error handler will provide the user interface that will be embedded in the dialog. The user can pres the details button again, and this will collapse the advanced view. Messages must be persisted in an external file. The message in the modal window is the most relevant to the user and is decided by the ErrorHandler. If the message has offspring, they will be rendered in the advanced user interface.
+
+Message that can have action later.
+
+They are messages that can be error, but do not prevent the user from pursuing his/her task. All message may need to be solved at a certain point, but do not require immediate action. They are usually represented by information and icon in the user interface. The user can finish some other part of the interface before solving the message. Concrete examples are wizard pages and editors. In wizard pages the message is presented at the top of the page, in an editor it is usually embedded in the form editor or on the side of the editor (right or left side) To get more information about the message, the user clicks on it. A modeless window opens with the information. When the user clicks elsewhere, the window closes. Messages do not have to be persistent. The owner of the user interface can decide to save them or decide to recalculate the messages when the user interface is reopened. The owner of the user interface can decide to not allow the task to be saved or finished if the message is not act upon.
+
+List of errors
+
+The user is presented with a double pane view. One pane represents the list of messages. The user can filter them and reorganized them. Some filter could be based on the resources, the format (tree, table) or the dependency (ex: acting on this message will also resolve the following messages…). The filtering mechanism should be lighter in its usage than the current one. When the user selects a message, the second pane is filled with the details of the message. This will show the exact same information as #1. The messages are persistent. PS: the semantic of this user interface is like an ‘email reader’ where you select the email message to see the content of the email. A provider could replace the first pane of the list of errors. ErrorView and Problem view should be merged in a unique view.
+
+#### Eclipse mapping
+
+MessageDialog and ErrorDialog are of type 1.
+
+The user must act of them. The best practice is that only error message should appear to the user using this format. Warning and Information messages should not. The error handler can decide if a message is worth showing or not and will also provide the details.
+
+Errors in a background process are of type 2.
+
+We should not open a modal dialog when an issue occurs. The user can ‘glance’ in the result in the bottom right corner, click on it to see the list of errors and click on an error to see a detail.
+
+Wizard messages are of type 1.
+
+The user must act on them to go to the next page but also clicking on them will open a pop up. There is no ‘details’ button in the wizard user interface
+
+Error log is of type 3
+
+The view shows the different errors from the log. The user can click on an error in the list to see more details.
+
+#### Use cases
+
+The User Interface behavior will depend from the context of the error. If an error occurs during a Job, we will not prompt the user but rather notify the Job View. If the same error occurs in the plug-in itself, we will open a modal window.
+
+The error manager framework must keep track of the context and if the error handler decides to show the error to the user, the Error Manager Framework should use the appropriate User Interface.
+
+Context of the use cases
+
+The plug-in is looking for a file named ‘result.txt’ on a web site. When executing, the plug-in is unable to connect to the web server. The plug-in throws an error using the error handler mechanism. The error is modified to notify the user that the remote site does not answer and that the user should check if there is any proxy of if the site is actually down.
+
+Use Case 1
+
+Modal Dialog
+
+The framework realizes the context and opens an ErrorDialog. The ErrorDialog detail is filled with content from the plug-in error handler.
+
+Use Case 2
+
+Job Error
+
+The framework realizes the context and modifies the user interface for the Job. A red ‘x’ appears in the bottom right hand corner of eclipse. The User double clicks on the red ‘x’ and a window opens, showing the message of the error. When the user clicks on the message; the framework opens a modal window like in use case #1.
+
+Use Case 3
+
+Wizard
+
+The framework realizes the context and updates the top of the wizard with the message. When the user hovers over the message a pop up appears. If the user wants to see more details, a modal window opens.
+
+Use Case 4
+
+Error Log
+
+The error handler decided to not show the user about the error. It decided to only log it. The error appears in the error log view. The user clicks on the entry and a modal dialog (like in #1) opens.
+
+### Main requirements
+
+*   shows list of the problems
+*   shows details of the problems
+*   shows view which helps user to handle or report the problems
+
+Each problem on the list should have error reporting view associated to it. This relation can be set in error handler which handles the problem. This reporting view will be showed in the tray part of the dialog.
+
+For workbench handler it can be simply a basic view with stack trace. For product handler it can be a html view with a form for registering the problem or for checking the state of the problem.
+
+### New StatusDialog
+
+#### Overview
+
+New Status Dialog is integrated with Status Handling facility. Unless no other handler is specified, the default dialog will be used.
+
+**Main concepts**
+
+*   Message - This is the most important piece of information.
+*   Details - Sometimes there is not enough place to display all necessary info on the dialog, or we do not want to scary the user. Then we can place leading message on the dialog, and all other things make accessible via details area. Currently it is possible to set up one kind of details area provider, but there is no further requirement.
+*   Support - It is possible to place some contact form on the dialog, so the user will know where to look for help or will be able to easily contact vendor.
+
+Support and Details are terms introduced to distinct the behavior and functionality although they extend common abstract class. One should remember that user expects more information after pressing "Details >>>" button.
+
+**Messages hierarchy**
+
+Status Dialog uses following messages hierarchy:
+
+*   Job name (if available)
+*   StatusAdapter title
+*   IStatus message
+*   MultiStatus information (applies only if MultiStatus is handled).
+*   message extracted from exception
+*   exception name
+
+Status Dialog displays always two the most important messages. If first one is not found then the dialog should give information about general error instead. If the second one is not found, dialog should point to the details.
+
+**User interface**
+
+*   Only one status is handled
+    *   First message displayed is the most important message.
+    *   Second message displayed is the second most important message.
+    *   Timestamp is displayed in the details (if available)
+*   More statuses handled - the selection list appears
+    *   There is the most important message used on the selection list.
+    *   The second most important message is displayed right to the severity icon.
+    *   Timestamp (if available) is appended to the message in the selection list.
+
+**Extensions**
+
+*   Details area can be replaced - it does not display stack trace anymore, rather the error hierarchy (message from Status, Exception, Nested statuses, etc) by default. Product may decide to provide some high level description, or even retrieve description from database.
+*   Support area can be added - product may hook into the error dialog and place there f.e. browser with url pointing to the helpdesk, or some reporting mechanism.
+
+The basic idea is that even unexperienced user should be able to understand what is going on while looking at details, and should be able to report/get help using support area.
+
+**Examples:**
+
+*   Only one status is reported. Primary message and secondary message should be displayed. Secondary message should have timestamp if one is available.
+
+![Singlestatus2.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Singlestatus2.jpg)
+
+*   Job reported an error. Display message informing which job, and primary message.
+
+![Singlejob2.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Singlejob2.jpg)
 
   
 
-#### Expression Templates original suggestion
+*   Multiple errors occured. On the list should be displayed job name or primary message of the status. In the title primary message should appear for jobs and secondary for statuses.
 
-You can see that the `<activeWhen/>`, `<enabledWhen/>`, and probably the `<visibleWhen/>` are likely to be replicated over and over again. 
-A possible option is some kind of expression template markup ... either in its own extension or supported by our UI extensions that can use core expressions.
+![Manystatuses.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Manystatuses.jpg)
 
-Here's an example of using expression templates in its own extension point.
+*   One stastus has been reported and support is available.
 
-    <extension point="org.eclipse.core.expression.templates">
-      <expression id="isPartActive">
-        <parameter id="partId" />
-        <with variable="activePartId">
-          <equals value="$partId" />
-        </with>
-      </expression>
-      <expression id="isActionSetActive">
-        <parameter id="actionSetId" />
-        <with variable="activeContexts">
-          <iterator operator="or">
-            <equals value="$actionSetId" />
-          </iterator>
-        </with>
-      </expression>
-      <expression id="isContextActive">
-        <parameter id="contextId" />
-        <with variable="activeContexts">
-          <iterator operator="or">
-            <equals value="$contextId" />
-          </iterator>
-        </with>
-      </expression>
-      <expression id="isSelectionAvailable">
-        <not>
-          <count value="0" />
-        </not>
-      </expression>
-    </extension>
+[![Statusdialogwithsupport.JPG](/images/8/8f/Statusdialogwithsupport.JPG)](/File:Statusdialogwithsupport.JPG)
 
-This could be used to simplify the handler definitions:
+after pressing bug icon:
 
-    <extension point="org.eclipse.ui.handlers">
-      <handler commandId="org.eclipse.ui.edit.copy"
-          class="org.eclipse.ui.views.markers.internal.CopyMarkerHandler">
-        <enabledWhen>
-          <evaluate ref="isSelectionAvailable" />
-        </enabledWhen>
-        <activeWhen>
-          <evaluate ref="isPartActive">
-            <parameter id="partId" value="org.eclipse.ui.views.ProblemView" />
-          </evaluate>
-        </activeWhen>
-      </handler>
-    </extension>
+[![Statusdialogwithsupportopened.JPG](/images/a/ab/Statusdialogwithsupportopened.JPG)](/File:Statusdialogwithsupportopened.JPG)
 
-If we allow recursive template definitions, that would allow you to specify the concrete expression once and then reference it throughout your view.
+and many statuses. The selected in the list Status is a base for support area.
 
-    <extension point="org.eclipse.core.expression.templates">
-      <expression id="isProblemViewActive">
-        <evaluate ref="isPartActive">
-          <parameter id="partId" value="org.eclipse.ui.views.ProblemView" />
-        </evaluate>
-      </expression>
-    </extension>
-    <extension point="org.eclipse.ui.handlers">
-      <handler commandId="org.eclipse.ui.edit.copy"
-          class="org.eclipse.ui.views.markers.internal.CopyMarkerHandler">
-        <enabledWhen>
-          <evaluate ref="isSelectionAvailable" />
-        </enabledWhen>
-        <activeWhen>
-          <evaluate ref="isProblemViewActive" />
-        </activeWhen>
-      </handler>
-    </extension>
+[![Manystatuseswithsupportopened.JPG](/images/f/fe/Manystatuseswithsupportopened.JPG)](/File:Manystatuseswithsupportopened.JPG)
 
-This reduces the handler definition even more.
+#### Use cases
 
-  
-A similar option to reuse expressions as much as possible without turning them into their own procedural language would be to allow global definitions and then reuse them. 
-No parameters and no expression composition:
+To be done
 
-    <extension point="org.eclipse.core.expression.templates">
-      <expression id="isProblemViewActive">
-        <with variable="activePartId">
-          <equals value="org.eclipse.ui.views.ProblemView" />
-        </with>
-      </expression>
-      <expression id="isSelectionAvailable">
-        <not>
-          <count value="0" />
-        </not>
-      </expression>
-    </extension>
-    <extension point="org.eclipse.ui.handlers">
-      <handler commandId="org.eclipse.ui.edit.copy"
-          class="org.eclipse.ui.views.markers.internal.CopyMarkerHandler">
-        <enabledWhen ref="isSelectionAvailable" />
-        <activeWhen ref="isProblemViewActive" />
-      </handler>
-    </extension>
+#### Usage
 
-#### Another Expression Alternative: Specify Context at Extension Level
+**Note for WorkbenchStatusDialog clients**  
+Please note that WorkbenchStatusDialog#getPrimaryMessage & WorkbenchStatusDialog#getSecondaryMessage begin searching for the message from StatusAdapter title. It means that when we are handling job statuses we display:
 
-Since `enabledWhen` and `activeWhen` specify context and the simple way to specify context in XML is enclosure, how about scoping context to the extension point rather than the handler:
+*   single status
+    *   job name as the first message
+    *   WorkbenchStatusDialog#getPrimaryMessage result as second message
+*   list
+    *   job name (and eventually timestamp) as the position on the list.
+    *   WorkbenchStatusDialog#getPrimaryMessage result right to the severity icon.
 
-    <extension point="org.eclipse.ui.handlers">
-      <enabledWhen>  <!-- context of all  handlers in this extension -->
-        <not>
-          <count value="0" />
-        </not>
-      </enabledWhen>
-      <activeWhen>
-        <with variable="activePartId">
-          <equals value="org.eclipse.ui.views.ProblemView" />
-        </with>
-      </activeWhen>
-      <handler commandId="org.eclipse.ui.edit.copy"
-          class="org.eclipse.ui.views.markers.internal.CopyMarkerHandler" />
-      <handler commandId="org.eclipse.ui.edit.paste"
-          class="org.eclipse.ui.views.markers.internal.PasteMarkerHandler" />
-      <handler commandId="org.eclipse.ui.edit.delete"
-          class="org.eclipse.ui.views.markers.internal.RemoveMarkerHandler" />
-      <handler commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
-          class="org.eclipse.ui.views.markers.internal.ResolveMarkerHandler" />
-      <handler commandId="org.eclipse.ui.edit.selectAll"
-          class="org.eclipse.ui.views.markers.internal.SelectAllMarkersHandler" />
-      <handler commandId="org.eclipse.ui.file.properties"
-          class="org.eclipse.ui.views.markers.internal.ProblemPropertiesHandler" />
-    </extension>
+#### Bugs
 
-This gives compact markup without inventing a new language. 
-Elements nested in the handler element could override the extension-wide settings.
+| No | Task | Assigne | Status | Bug id |
+| --- | --- | --- | --- | --- |
+| 1. | Create new StatusDialog exteds TrayDialog | krzysztof.michalski@pl.ibm.com | done | 193612 |
+| 2. | Merge old StatusDialog and StatusNotificatonsManager functionality | krzysztof.michalski@pl.ibm.com | done |  |
+| 3. | Add possibility of set label provider on StatusListView | krzysztof.michalski@pl.ibm.com | done |  |
+| 4. | Add slection change Listener on StatusListView which recreate reportingView | krzysztof.michalski@pl.ibm.com | done |  |
+| 5. | Create ReportingTray extends DialogTray | krzysztof.michalski@pl.ibm.com | done |  |
+| 6. | Create InternalDialog to manage modal of window | krzysztof.michalski@pl.ibm.com | done |  |
+| 7. | Add possibility of create reporting view: by method createReportingView, setStatusAdapter | krzysztof.michalski@pl.ibm.com | in progress |  |
+| 8. | Creating reporting view by Policy | krzysztof_daniel@pl.ibm.com | done | 180300 |
+| 9. | Explanation and Action in IStatus | krzysztof_daniel@pl.ibm.com | done | 179373 |
+| 10. | User decides if open support area | krzysztof.michalski@pl.ibm.com | done | 179375 |
 
-Updating the menu and toolbar appearance
-========================================
+### Work plan for 3.4.1 & 3.5
 
-It was suggested in 3.2 that state on the command could be used to implement the old contribution story behaviours:
-
-1.  changing label text and tooltips
-2.  changing icons
-3.  changing enablement
-4.  setting the item state (like checked state)
-
-In 3.3 the enablement is tied to the command, and for the other behaviours we've decided to go with UIElements approach.
-
-UIElements represent each UI visible instance of a command
-----------------------------------------------------------
-
-The command service keeps a list of registered UI elements, which can be updated by the active handler. 
-The checked state can be updated through UIElement#setChecked(boolean); (note that updateElement below is from IElementUpdater):
-
-    private boolean isChecked() {
-        return getStore().getBoolean(
-                PreferenceConstants.EDITOR_MARK_OCCURRENCES);
-    }
-     
-    public void updateElement(UIElement element, Map parameters) {
-        element.setChecked(isChecked());
-    }
-
-When the toggle handler runs, it can request that any UI elements have their appearance updated from its execute(*) method:
-
-    ICommandService service = (ICommandService) serviceLocator
-            .getService(ICommandService.class);
-    service.refreshElements(IJavaEditorActionDefinitionIds.TOGGLE_MARK_OCCURRENCES, null);
-
-State associated with the command is propogated to UI visible elements
-----------------------------------------------------------------------
-
-First define the toggle mark occurrences command. 
-Pretty straight forward, although it needs a "STYLE" state since it can be toggled. 
-To allow handlers to update the label for the menu/toolbar items, we also add the "NAME" state.
-
-    <extension point="org.eclipse.ui.commands">
-      <command categoryId="org.eclipse.jdt.ui.category.source"
-          description="%jdt.ui.ToggleMarkOccurrences.description"
-          id="org.eclipse.jdt.ui.edit.text.java.toggleMarkOccurrences"
-          name="%jdt.ui.ToggleMarkOccurrences.name">
-        <state id="NAME" class="org.eclipse.jface.menus.TextState" />
-        <state id="STYLE" class="org.eclipse.jface.commands.ToggleState:true" />
-      </command>
-    </extension>
+| No | Task | When | Assigne | Status | Bug id |
+| --- | --- | --- | --- | --- | --- |
+| 1. | Update this document to reflect real Status Handling capabilities | 3.4.1 | krzysztof_daniel@pl.ibm.com | in progress |  |
+| 2. | Incorporate ErrorDialog into status handling | 3.5 | krzysztof_daniel@pl.ibm.com |  |  |
 
