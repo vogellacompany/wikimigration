@@ -359,17 +359,12 @@ The basic idea is that even unexperienced user should be able to understand what
 
 *   Job reported an error. Display message informing which job, and primary message.
 
-![Singlejob2.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Singlejob2.jpg)
-
-  
 
 *   Multiple errors occured. On the list should be displayed job name or primary message of the status. In the title primary message should appear for jobs and secondary for statuses.
 
 ![Manystatuses.jpg](https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/images/Manystatuses.jpg)
 
 *   One stastus has been reported and support is available.
-
-[![Statusdialogwithsupport.JPG](/images/8/8f/Statusdialogwithsupport.JPG)](/File:Statusdialogwithsupport.JPG)
 
 after pressing bug icon:
 
