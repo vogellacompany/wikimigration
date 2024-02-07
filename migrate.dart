@@ -5,14 +5,20 @@ import 'package:html2md/html2md.dart' as html2md;
 import 'dart:io';
 
 void main(List<String> arguments) async {
-  var filename = "PDE_API_Tools_UseCases";
-  if (arguments.isNotEmpty) {
-    filename = arguments[0];
+  const String imagePageUrl = 'https://wiki.eclipse.org/';
+
+  List<String> wikiPageUrls = [
+    "https://wiki.eclipse.org/Version_Numbering",
+    "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
+    "https://wiki.eclipse.org/Eclipse/API_Central",
+  ];
+
+  clearOutput();
+
+  for (var wikiPageUrl in wikiPageUrls) {
+    var filename = extractLastSegmentWithoutExtension(wikiPageUrl);
+    await creatMDDoc(wikiPageUrl, imagePageUrl, filename);
   }
-  var wikiPageUrl = 'https://wiki.eclipse.org/PDE/API_Tools/Use_Cases';
-  final imagePageUrl = 'https://wiki.eclipse.org/';
-  await checkLinks(wikiPageUrl);
-  await creatMDDoc(wikiPageUrl, imagePageUrl, filename);
 }
 
 Future<void> creatMDDoc(
@@ -60,9 +66,6 @@ Future<void> creatMDDoc(
         // Create the folder
         outputDirectory.createSync(recursive: true);
       }
-
-      // Delete the content of the "output" folder
-      clearOutputFolder(folderPath);
 
       Directory imageOutputPath = Directory(folderPath + "/images");
 
@@ -222,39 +225,25 @@ String deleteFromLine(String input, String lineStart) {
   return input.substring(0, endIndex);
 }
 
-Future<void> checkLinks(String url) async {
-  try {
-    final response = await http.get(Uri.parse(url));
+String extractLastSegmentWithoutExtension(String url) {
+  var uri = Uri.parse(url);
+  var segments = uri.pathSegments;
 
-    if (response.statusCode == 200) {
-      final htmlDocument = htmlParser.parse(response.body);
-
-      final links = htmlDocument.getElementsByTagName('a');
-
-      for (var link in links) {
-        final href = link.attributes['href'];
-        if (href != null) {
-          final linkUrl = Uri.parse(href);
-
-          if (linkUrl.isAbsolute) {
-            final linkResponse = await http.head(linkUrl);
-
-            if (linkResponse.statusCode == 200) {
-              print('Link $href is working correctly.');
-            } else {
-              print(
-                  'Link $href is not working. Status code: ${linkResponse.statusCode}');
-            }
-          } else {
-            //print('Relative URL $href found. Unable to check its validity.');
-          }
-        }
-      }
-    } else {
-      print(
-          'Error: Unable to fetch the webpage. Status code: ${response.statusCode}');
+  if (segments.isNotEmpty) {
+    var lastSegment = segments.last;
+    // Remove file extension if exists
+    var indexOfDot = lastSegment.lastIndexOf('.');
+    if (indexOfDot != -1) {
+      return lastSegment.substring(0, indexOfDot);
     }
-  } catch (e) {
-    print('Error: $e');
+    return lastSegment;
   }
+
+  return ''; // Return an empty string if the URL does not have path segments
+}
+
+void clearOutput() {
+  String folderPath = 'docs/';
+  // Delete the content of the "output" folder
+  clearOutputFolder(folderPath);
 }

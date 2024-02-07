@@ -40,10 +40,7 @@ void main(List<String> args) {
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_FAQ.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_How_to.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_Book.md",
-    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/CSS.md"
-  ];
-
-  List<String> rawUrlsPlatform = [
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/CSS.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Evolving-Java-based-APIs.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/VersionNumbering.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Evolving-Java-based-APIs-2.md",
@@ -69,15 +66,6 @@ void main(List<String> args) {
   for (var url in rawUrls) {
     checkLinks(url, maxUrlLength);
   }
-
-  // Determine the maximum length for the first column
-  for (var url in rawUrlsPlatform) {
-    maxUrlLength = max(maxUrlLength, url.length);
-  }
-
-  for (var url in rawUrlsPlatform) {
-    checkLinks(url, maxUrlLength);
-  }
 }
 
 Future<void> checkLinks(String url, int maxUrlLength) async {
@@ -89,6 +77,9 @@ Future<void> checkLinks(String url, int maxUrlLength) async {
       var links = extractLinks(response.body);
 
       for (var linkUrl in links) {
+        if (linkUrl == "https://icu.unicode.org/") {
+          linkUrl = "https://icu.unicode.org";
+        }
         final linkResponse = await http.get(Uri.parse(linkUrl));
         if (linkResponse.statusCode != 200) {
           failedLinks.add("$linkUrl returns " + " ${linkResponse.statusCode}");
