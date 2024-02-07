@@ -30,7 +30,7 @@ Contents
         *   [4.3.2 Use cases](#Use-cases-3)
         *   [4.3.3 Usage](#Usage)
         *   [4.3.4 Bugs](#Bugs)
-    *   [4.4 Work plan for 3.4.1 & 3.5](#Work-plan-for-341-26-35)
+    *   [4.4 Work plan for 3.4.1 & 3.5](#work-plan-for-341--35)
 
 Use cases
 ---------
