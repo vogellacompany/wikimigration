@@ -183,7 +183,7 @@ They're created when the first editor of that type is loaded and exist until the
 *   PluginActionSetBuilder - for org.eclipse.ui.actionSets, it creates an ActionSetContribution and the ActionDescriptors with ActionDescriptor.T\_WORKBENCH or ActionDescriptor.T\_WORKBENCH_PULLDOWN. It fills in each PluginActionSet provided by the ActionSetRegistry. Each PluginActionSet provides the IActionBars.
 *   EditorActionBuilder - for org.eclipse.ui.editorActions, it creates an EditorContribution and ActionDescriptors with ActionDescriptor.T_EDITOR. The EditorContributions are added to an ExternalContributor. These are added to the [EditorActionBars](#EditorActionBars).
 *   ViewActionBuilder - for org.eclipse.ui.viewActions, it creates a BasicContribution and the ActionDescriptors with ActionDescriptor.T_VIEW. The BasicContributions are added to the IViewSite IActionBars.
-*   ViewerActionBuilder - this is part of the org.eclipse.ui.popupMenus extension point. This is used after IPartSite#registerContextMenu(\*) creates a PopupMenuExtender. It creates a ViewerContribution and stores ActionDescriptors with ActionDescriptor.T\_EDITOR or ActionDescriptor.T\_VIEW. It's contributed to the popup menu by PopupMenuExtender#menuAboutToShow(*) - viewerContributions are called "static" contributions.
+*   ViewerActionBuilder - this is part of the org.eclipse.ui.popupMenus extension point. This is used after IPartSite#registerContextMenu(*) creates a PopupMenuExtender. It creates a ViewerContribution and stores ActionDescriptors with ActionDescriptor.T\_EDITOR or ActionDescriptor.T\_VIEW. It's contributed to the popup menu by PopupMenuExtender#menuAboutToShow(*) - viewerContributions are called "static" contributions.
 *   ObjectActionContributor - also for org.eclipse.ui.popupMenus, it stores the ActionDescriptions of type ActionDescriptor.T_POPUP in an ObjectContribution. This goes back to the ObjectActionContributorManager, which is called into from PopupMenuExtender#menuAboutToShow(*).
 
   
@@ -463,13 +463,11 @@ We can do this by re-using the existing extension points; tweaking as necessary 
 4.  Extend the 'menuBarPath' & 'tooBarPath' to allow for new conventions specific to siting an action anywhere within the workbench. This should allow us to deprecate View/Editor Actions -and- ObjectContributions.
 
 *   EditorContributions:
-
-*   `editor: <editorId>[/groupPath]`
+	*   `editor: <editorId>[/groupPath]`
 
 *   ViewContributions:
-
-*   `view-context:<viewId>[/groupPath]` - Site it in the given view's context menu
-*   `view-chevron:<viewId>[/groupPath]` - Site it in the given view's chevron menu \[in the given group\]
+	*   `view-context:<viewId>[/groupPath]` - Site it in the given view's context menu
+	*   `view-chevron:<viewId>[/groupPath]` - Site it in the given view's chevron menu \[in the given group\]
 
 *   "any context menu" - Replacement for the current ObjectContribution mechanism. The 'visibleWhen' core expression can determine whether the selection context is appropriate...
 
