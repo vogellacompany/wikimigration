@@ -55,6 +55,7 @@ void main(List<String> args) {
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_How_to.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_Book.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/CSS.md",
+    "https://github.com/eclipse-platform/eclipse.platform/blob/master/docs/Eclipse_Project_Update_Sites.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Evolving-Java-based-APIs.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/API_Central.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Coding_Conventions.md",
