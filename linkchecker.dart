@@ -20,6 +20,20 @@ const blue = '\x1B[34m';
 
 void main(List<String> args) {
   List<String> rawUrls = [
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Dropdown_Command.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Problems_View_Example.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Populating_a_dynamic_submenu.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Toggle_Mark_Occurrences.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Toggle_Button_Command.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Radio_Button_Command.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Update_checked_state.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Search_Menu.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/IFile_objectContribution.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/TextEditor_viewerContribution.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Widget_in_a_toolbar.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/RCP_removes_the_Project_menu.md',
+    'https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Menu_Contributions/Workbench_wizard_contribution.md',
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Accessibility_Features.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Command_Core_Expressions.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Common_Navigator_Framework.md",
@@ -44,7 +58,7 @@ void main(List<String> args) {
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Evolving-Java-based-APIs.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/API_Central.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Coding_Conventions.md",
-    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/blob/master/docs/Eclipse_Doc_Style_Guide.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Eclipse_Doc_Style_Guide.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Javadoc.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/VersionNumbering.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Evolving-Java-based-APIs-2.md",
@@ -56,6 +70,8 @@ void main(List<String> args) {
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Export-Package.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Provisional_API_Guidelines.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Naming_Conventions.md",
+//    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Eclipse_Project_Update_Sites.md",
+    "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Internationalization.md",
     "https://raw.githubusercontent.com/eclipse-pde/eclipse.pde/master/docs/API_Tools.md",
     "https://raw.githubusercontent.com/eclipse-equinox/equinox/master/docs/Adaptor_Hooks.md",
   ];
@@ -79,11 +95,10 @@ Future<void> checkLinks(String url, int maxUrlLength) async {
     if (response.statusCode == 200) {
       // links
       var links = extractLinks(response.body);
+      var linksInternal = extractMarkdownLinks(response.body);
+      links.addAll(linksInternal);
 
       for (var linkUrl in links) {
-        if (linkUrl == "https://icu.unicode.org/") {
-          linkUrl = "https://icu.unicode.org";
-        }
         final linkResponse = await http.get(Uri.parse(linkUrl));
         if (linkResponse.statusCode != 200) {
           failedLinks.add("$linkUrl returns " + " ${linkResponse.statusCode}");
@@ -132,6 +147,15 @@ List<String> extractLinks(String text) {
     }
     return url;
   }).toList();
+
+  return links;
+}
+
+List<String> extractMarkdownLinks(String text) {
+  RegExp linkPattern = RegExp(r'\]\((.*?\.md)\)', multiLine: true);
+
+  Iterable<Match> matches = linkPattern.allMatches(text);
+  List<String> links = matches.map((match) => match.group(1)!).toList();
 
   return links;
 }

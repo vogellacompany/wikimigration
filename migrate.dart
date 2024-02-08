@@ -16,6 +16,7 @@ void main(List<String> arguments) async {
     "https://wiki.eclipse.org/Eclipse/API_Central",
     "https://wiki.eclipse.org/Internationalization",
     "https://wiki.eclipse.org/How_to_add_things_to_the_Eclipse_doc",
+    "https://wiki.eclipse.org/Eclipse_Project_Update_Sites",
     // Ab hier platform UI
     "https://wiki.eclipse.org/Platform_UI_Command_Design",
     "https://wiki.eclipse.org/Platform_UI_Error_Handling",
