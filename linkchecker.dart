@@ -55,7 +55,6 @@ void main(List<String> args) {
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_How_to.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/Rich_Client_Platform/Rich_Client_Platform_Book.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.ui/master/docs/CSS.md",
-    "https://github.com/eclipse-platform/eclipse.platform/blob/master/docs/Eclipse_Project_Update_Sites.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Evolving-Java-based-APIs.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/API_Central.md",
     "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform/master/docs/Coding_Conventions.md",
@@ -90,6 +89,8 @@ void main(List<String> args) {
 }
 
 Future<void> checkLinks(String url, int maxUrlLength) async {
+  String internalLinkStart = extractLeadingUrl(url);
+
   List<String> failedLinks = [];
   try {
     final response = await http.get(Uri.parse(url));
@@ -97,7 +98,15 @@ Future<void> checkLinks(String url, int maxUrlLength) async {
       // links
       var links = extractLinks(response.body);
       var linksInternal = extractMarkdownLinks(response.body);
-      links.addAll(linksInternal);
+
+      for (var element in linksInternal) {
+        if (element.startsWith("./")) {
+          element = element.substring(2, element.length);
+        }
+        links.add(internalLinkStart + element);
+        // print("   " + internalLinkStart + element);
+      }
+      // links.addAll(linksInternal);
 
       for (var linkUrl in links) {
         final linkResponse = await http.get(Uri.parse(linkUrl));
@@ -110,7 +119,8 @@ Future<void> checkLinks(String url, int maxUrlLength) async {
           'Error: Unable to fetch the $url webpage. Status code: ${response.statusCode}');
     }
   } catch (e) {
-    print('Error: $e');
+    failedLinks.add('$red Error: $e \u2718 Failure$reset');
+    // print('$red Error: $e \u2718 Failure$reset');
   }
   if (failedLinks.isEmpty) {
     print("${url.padRight(maxUrlLength)} $green\u2714 Success$reset");
@@ -153,12 +163,26 @@ List<String> extractLinks(String text) {
 }
 
 List<String> extractMarkdownLinks(String text) {
-  RegExp linkPattern = RegExp(r'\]\((.*?\.md)\)', multiLine: true);
+  RegExp linkPattern = RegExp(r'\]\(((?!http).*?\.md)', multiLine: true);
 
   Iterable<Match> matches = linkPattern.allMatches(text);
   List<String> links = matches.map((match) => match.group(1)!).toList();
 
   return links;
+}
+
+String extractLeadingUrl(String url) {
+  var uri = Uri.parse(url);
+  var segments = uri.pathSegments;
+
+  if (segments.isNotEmpty) {
+    var lastSegment = segments.last;
+    String result = url.substring(0, (url.length - lastSegment.length));
+
+    return result;
+  }
+
+  return ''; // Return an empty string if the URL does not have path segments
 }
 
 void printSuccess() {
