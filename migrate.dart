@@ -6,7 +6,7 @@ import 'dart:io';
 
 void main(List<String> arguments) async {
   const String imagePageUrl = 'https://wiki.eclipse.org/';
-  const String imageRepository = 'eclipse-platform/eclipse.platform';
+  const String imageRepository = 'eclipse/gef-classic';
 
   List<String> faq = [
     'https://wiki.eclipse.org/The_Official_Eclipse_FAQs',
@@ -405,23 +405,24 @@ void main(List<String> arguments) async {
   ];
 
   List<String> wikiPageUrls = [
-    'https://wiki.eclipse.org//Menu_Contributions/Dropdown_Command',
-    'https://wiki.eclipse.org//Menu_Contributions/Problems_View_Example',
-    'https://wiki.eclipse.org//Menu_Contributions/Populating_a_dynamic_submenu',
-    'https://wiki.eclipse.org//Menu_Contributions/Toggle_Mark_Occurrences',
-    'https://wiki.eclipse.org//Menu_Contributions/Toggle_Button_Command',
-    'https://wiki.eclipse.org//Menu_Contributions/Radio_Button_Command',
-    'https://wiki.eclipse.org//Menu_Contributions/Update_checked_state',
-    'https://wiki.eclipse.org//Menu_Contributions/Search_Menu',
-    'https://wiki.eclipse.org//Menu_Contributions/IFile_objectContribution',
-    'https://wiki.eclipse.org//Menu_Contributions/TextEditor_viewerContribution',
-    'https://wiki.eclipse.org//Menu_Contributions/Widget_in_a_toolbar',
-    'https://wiki.eclipse.org//Menu_Contributions/RCP_removes_the_Project_menu',
-    'https://wiki.eclipse.org//Menu_Contributions/Workbench_wizard_contribution',
-
-    "https://wiki.eclipse.org/Menu_Contributions",
-    "https://wiki.eclipse.org/Rich_Client_Platform/Text_Editor_Examples",
-    "//https://wiki.eclipse.org/IRC_FAQ",
+    'https://wiki.eclipse.org/GEF_Description',
+    'https://wiki.eclipse.org/GEF_Description2',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Dropdown_Command',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Problems_View_Example',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Populating_a_dynamic_submenu',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Toggle_Mark_Occurrences',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Toggle_Button_Command',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Radio_Button_Command',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Update_checked_state',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Search_Menu',
+    // 'https://wiki.eclipse.org//Menu_Contributions/IFile_objectContribution',
+    // 'https://wiki.eclipse.org//Menu_Contributions/TextEditor_viewerContribution',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Widget_in_a_toolbar',
+    // 'https://wiki.eclipse.org//Menu_Contributions/RCP_removes_the_Project_menu',
+    // 'https://wiki.eclipse.org//Menu_Contributions/Workbench_wizard_contribution',
+    // "https://wiki.eclipse.org/Menu_Contributions",
+    // "https://wiki.eclipse.org/Rich_Client_Platform/Text_Editor_Examples",
+    // "//https://wiki.eclipse.org/IRC_FAQ",
     // "https://wiki.eclipse.org/The_Official_Eclipse_FAQs",
     // "https://wiki.eclipse.org/Javadoc",
     // "https://wiki.eclipse.org/Eclipse/Repository_retention_policy",
@@ -441,12 +442,15 @@ void main(List<String> arguments) async {
     // "https://wiki.eclipse.org/Managing_Multiple_Instances_of_a_View",
   ];
 
-  clearOutput();
+  String directoryPath = 'docs/';
+  clearOutput(directoryPath);
 
-  for (var wikiPageUrl in wikiPageUrls) {
+  for (var wikiPageUrl in faq) {
     var filename = extractLastSegmentWithoutExtension(wikiPageUrl);
     await creatMDDoc(wikiPageUrl, imagePageUrl, filename, imageRepository);
   }
+
+  cleanMarkdownFiles(directoryPath);
 }
 
 Future<void> creatMDDoc(String wikiPageUrl, String imagePageUrl,
@@ -679,8 +683,42 @@ String extractLastSegmentWithoutExtension(String url) {
   return ''; // Return an empty string if the URL does not have path segments
 }
 
-void clearOutput() {
-  String folderPath = 'docs/';
+void clearOutput(String directoryPath) {
   // Delete the content of the "output" folder
-  clearOutputFolder(folderPath);
+  clearOutputFolder(directoryPath);
 }
+
+Future<void> cleanMarkdownFiles(String directoryPath) async {
+  final directory = Directory(directoryPath);
+
+  // Check if the directory exists
+  if (!await directory.exists()) {
+    print('Directory does not exist');
+    return;
+  }
+
+  // List all .md files
+  await for (FileSystemEntity entity
+      in directory.list(recursive: false, followLinks: false)) {
+    if (entity is File && entity.path.endsWith('.md')) {
+      // Read the file
+      String content = await entity.readAsString();
+
+      // Replace or remove the specified characters
+      String modifiedContent = content
+          .replaceAll('&#147;', '')
+          .replaceAll('&#148;', '')
+          .replaceAll('&#153;', '')
+          .replaceAll('&#146;', "'")
+          .replaceAll('&#151;', "-");
+
+      // Write the changes back to the file
+      await entity.writeAsString(modifiedContent);
+      print('Processed ${entity.path}');
+    }
+  }
+}
+
+// &#147; -> Remove
+// &#148; -> Remove
+// &#146; -> Replace with '
