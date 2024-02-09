@@ -7,7 +7,7 @@ import 'dart:io';
 void main(List<String> arguments) async {
   const String imagePageUrl = 'https://wiki.eclipse.org/';
   const String imageRepository = 'eclipse/gef-classic';
-
+// https://raw.githubusercontent.com/vogellacompany/eclipse.platform/faq/docs/
   List<String> faq = [
     'https://wiki.eclipse.org/The_Official_Eclipse_FAQs',
     'https://wiki.eclipse.org//FAQ_What_is_Eclipse%3F',
@@ -710,7 +710,9 @@ Future<void> cleanMarkdownFiles(String directoryPath) async {
           .replaceAll('&#148;', '')
           .replaceAll('&#153;', '')
           .replaceAll('&#146;', "'")
-          .replaceAll('&#151;', "-");
+          .replaceAll('&#151;', "-")
+          .replaceAll('http://www.eclipse.org/', "https://www.eclipse.org/")
+          .replaceAll('http://help.eclipse.org/', "https://help.eclipse.org/");
 
       // Write the changes back to the file
       await entity.writeAsString(modifiedContent);
@@ -722,3 +724,4 @@ Future<void> cleanMarkdownFiles(String directoryPath) async {
 // &#147; -> Remove
 // &#148; -> Remove
 // &#146; -> Replace with '
+// manual check, search for \[
