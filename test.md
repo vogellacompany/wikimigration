@@ -22,8 +22,8 @@ Contents
 | Guideline | Example |
 | --- | --- |
 | A topic's _title_ (heading) is marked with a heading value that matches the topic's position in the table of contents. The topic shown here is at the top level, so it is tagged as an `<h1>`. | `<h1>A Tour of the Workbench</h1>` |
-| The text in a topic's <title\> must match the text in the heading. | From concepts-2.htm:           <title>The Workbench</title>   ...   <h1>Workbench</h1>       |
-| A topic's <title\> must be _unique_ to enable users to make a correct choice after a search.  Use sentence capitalization for all titles.   | Results of searching for **workbench**:           88% The workbench (concepts-2.htm)       74% Workbench (ref-10.htm)       70% The workbench (qs-02a.htm)      Better titles:           88% What is the workbench? (concepts-2.htm)       74% Workbench reference (ref-10.htm)       70% Launching the workbench (qs-02a.htm)       |
+| The text in a topic's <title\> must match the text in the heading. | From concepts-2.htm:<br> `<title>The Workbench</title>   ...  <h1>Workbench</h1>`       |
+| A topic's <title\> must be _unique_ to enable users to make a correct choice after a search.  Use sentence capitalization for all titles.   | Results of searching for **workbench**: <br> `88% The workbench (concepts-2.htm)       74% Workbench (ref-10.htm)       70% The workbench (qs-02a.htm)`  <br>    Better titles: <br> `88% What is the workbench? (concepts-2.htm)       74% Workbench reference (ref-10.htm)       70% Launching the workbench (qs-02a.htm)`       |
 | Begin "task" and "getting started" titles with a [gerund](http://en.wikipedia.org/wiki/Gerund). | **Creating a project** |
 
 ### Lists
