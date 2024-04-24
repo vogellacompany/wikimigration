@@ -1,6 +1,8 @@
 # Dart script to migrate wiki pages to markdown
 
 This is a Dart script written to migrate wiki pages to markdown.
+Requires dart installed on the machine.
+
 It:
 
 * Downloads the images
@@ -19,7 +21,7 @@ Classification tags in the wiki are present in the output, you may want to delet
 
 Afterwards run the script, output is copied into the "docs" folder (can be changed in the script)
 
-dart migrate.dart 
+`dart migrate.dart`
 
 # Checking the merge result
 
